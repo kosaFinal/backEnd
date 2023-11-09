@@ -1,7 +1,6 @@
-package users.service;
+package userss.service;
 
 import org.springframework.stereotype.Service;
-import users.entity.Users;
 
 @Service
 public class UsersService {

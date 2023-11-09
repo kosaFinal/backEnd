@@ -1,4 +1,4 @@
-package users.dto;
+package userss.dto;
 
 public class UsersDto {
 }
