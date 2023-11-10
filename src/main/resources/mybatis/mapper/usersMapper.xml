@@ -4,6 +4,6 @@
     <select id="getOneUsers" parameterType="int" resultType="users">
         select *
         from users
-        where userName = #{userName}
+        where userName = #userName}
     </select>
 </mapper>
