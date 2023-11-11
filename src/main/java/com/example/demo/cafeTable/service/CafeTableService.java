@@ -1,4 +1,7 @@
 package com.example.demo.cafeTable.service;
 
-public class CafeTableService {
+import java.util.List;
+
+public interface CafeTableService {
+    List<String> getTableNumbers(int cafeId, String tableType);
 }
