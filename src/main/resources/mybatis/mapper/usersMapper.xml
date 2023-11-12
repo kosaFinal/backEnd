@@ -4,6 +4,11 @@
     <select id="getOneUsers" parameterType="int" resultType="users">
         select *
         from users
-        where userName = #userName}
+        where userName = #{userName}
     </select>
+
+    <insert id="signupUsers" parameterType="users">
+        insert into Users (userName, userRealName, password, role, createDate, modifyDate)
+        values (#{userName},#{userRealName},#{password},#{role},SYSDATE,NULL)
+    </insert>
 </mapper>

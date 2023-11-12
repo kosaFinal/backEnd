@@ -1,11 +1,27 @@
 package com.example.demo.userss.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 public class UsersDto {
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserSignupRequestDto{
+        private String userName;
+        private String userRealName;
+        private String password;
+        private String role;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class UserSignupResponseDto{
+        private String userName;
+    }
+
     @Data
     @AllArgsConstructor
     @Getter

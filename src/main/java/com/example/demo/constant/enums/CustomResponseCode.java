@@ -10,6 +10,7 @@ public enum CustomResponseCode {
 
     //bad request(2000)
     NO_AUTHENTICATION(false,2000,"권한이 없는 유저입니다."),
+    NOT_EQUALS_PASSWORD(false,2001,"비밀번호가 틀렸습니다."),
 
     //unauthorized(권한 없을 때)(3000)
 

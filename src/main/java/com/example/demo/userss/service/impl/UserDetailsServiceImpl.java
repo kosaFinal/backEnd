@@ -15,9 +15,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UsersMapper usersMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usersMapper.getOneUsers(username).orElseThrow(()-> {
-                    throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
-                }
+        return usersMapper.getOneUsers(username).orElseThrow(
+                ()-> new GeneralException(CustomResponseCode.USER_NOT_FOUND)
         );
     }
 }

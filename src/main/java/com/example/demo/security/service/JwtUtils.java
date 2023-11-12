@@ -1,12 +1,26 @@
 package com.example.demo.security.service;
 
+import com.example.demo.constant.enums.CustomResponseCode;
+import com.example.demo.constant.exception.GeneralException;
+import com.example.demo.userss.mapper.UsersMapper;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class JwtUtils {
+
+    private final UsersMapper usersMapper;
     //비밀키(누출되면 안됨)
     private static final String secretKey = "secret";
 
@@ -69,6 +83,13 @@ public class JwtUtils {
             e.printStackTrace();
         }
         return validate;
+    }
+
+    public Authentication getAuthentication(String token){
+        UserDetails userDetails = usersMapper.getOneUsers(getUserName(token)).orElseThrow(
+                ()-> new GeneralException(CustomResponseCode.USER_NOT_FOUND)
+        );
+        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
     }
 
 }

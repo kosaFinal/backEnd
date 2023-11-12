@@ -11,5 +11,8 @@
         <typeAlias alias="cafeFeature" type="com.example.demo.cafeFeature.entity.CafeFeature"/>
         <typeAlias alias="cafeTable" type="com.example.demo.cafeTable.entity.CafeTable"/>
         <typeAlias alias="cancleReason" type="com.example.demo.reservation.cancleReason.entity.CancleReason"/>
+
+<!--        dto-->
+
     </typeAliases>
 </configuration>
