@@ -25,13 +25,15 @@ public class UsersDto {
     @Data
     @AllArgsConstructor
     @Getter
-
     public static class UserLoginRequestDto{
         private String userName;
         private String password;
     }
 
     @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UserLoginResponseDto{
         private String userName;
         private String accessToken;
