@@ -27,12 +27,5 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UsersService usersService;
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<UsersDto.UserLoginResponseDto>> login(@RequestBody UsersDto.UserLoginRequestDto userLoginRequestDto){
-        log.info("들어옴!");
-        UsersDto.UserLoginResponseDto userLoginResponseDto = usersService.login(userLoginRequestDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(userLoginResponseDto, CustomResponseCode.SUCCESS));
-    }
 }
