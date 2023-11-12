@@ -7,10 +7,7 @@ import com.example.demo.userss.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
@@ -33,6 +30,16 @@ public class UsersController {
         log.info("들어옴!");
         UsersDto.UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(userLoginResponseDto, CustomResponseCode.SUCCESS));
+    }
+
+    /**
+     * true: 중복 없음
+     * false: 중복
+     */
+    @GetMapping("/check/userName/dup/{userName}")
+    public ResponseEntity<ApiResponse<Boolean>> checkUserName(@PathVariable String userName){
+        Boolean result = userService.checkUserNameDup(userName);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
     }
 
 

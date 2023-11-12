@@ -86,9 +86,10 @@ public class JwtUtils {
     }
 
     public Authentication getAuthentication(String token){
-        UserDetails userDetails = usersMapper.getOneUsers(getUserName(token)).orElseThrow(
-                ()-> new GeneralException(CustomResponseCode.USER_NOT_FOUND)
-        );
+        UserDetails userDetails = usersMapper.getOneUsers(getUserName(token));
+        if(userDetails == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
         return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
     }
 

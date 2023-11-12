@@ -9,7 +9,7 @@ import java.util.Optional;
 @Mapper
 public interface UsersMapper {
 
-    Optional<Users> getOneUsers(String userName);
+    Users getOneUsers(String userName);
 
     void signupUsers(Users user);
 

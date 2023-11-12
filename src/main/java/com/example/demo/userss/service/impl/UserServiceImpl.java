@@ -27,9 +27,11 @@ public class UserServiceImpl implements UsersService {
     @Override
     public UsersDto.UserLoginResponseDto login(UsersDto.UserLoginRequestDto userLoginRequestDto) {
         log.info("service 들어옴");
-        Users user = usersMapper.getOneUsers(userLoginRequestDto.getUserName()).orElseThrow(
-                ()-> new GeneralException(CustomResponseCode.USER_NOT_FOUND)
-        );
+        Users user = usersMapper.getOneUsers(userLoginRequestDto.getUserName());
+        if(user == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
+
         log.info("login서비스 usermapper가 찾은 user: "+user);
 
         if(!passwordEncoder.matches(userLoginRequestDto.getPassword(),user.getPassword())){
@@ -61,5 +63,15 @@ public class UserServiceImpl implements UsersService {
         return UsersDto.UserSignupResponseDto.builder()
                 .userName(user.getUsername())
                 .build();
+    }
+
+    @Override
+    public Boolean checkUserNameDup(String userName) {
+        Boolean result = false;
+        Users users = usersMapper.getOneUsers(userName);
+        if(users == null){
+            result = true;
+        }
+        return result;
     }
 }
