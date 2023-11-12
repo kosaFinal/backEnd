@@ -1,4 +1,28 @@
 package com.example.demo.reservation.reservation.entity;
 
-public class Reservation {
+import com.example.demo.constant.entity.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Reservation extends BaseEntity {
+
+    private int reservationId;
+    private int tableId;
+    private int cafeId;
+    private int userId;
+    private Date reserveStart;
+    private Date reserveEnd;
+    private int personCnt;
+    private String status;
+    private Date reserveDate;
+    private String cancleReasonId;
+
 }

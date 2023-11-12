@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.reservation.reservation.mapper.ReservationMapper">
+
+    <insert id="createReservation" parameterType="com.example.demo.reservation.reservation.dto.ReservationDto$UserReservationReqDto">
+        INSERT INTO reservation (tableId, cafeId, userId, reserveStart, reserveEnd, personCnt, status, reserveDate, createDate)
+        VALUES (#{tableId}, #{cafeId}, #{userId}, TO_DATE(#{reserveStart}, 'HH24:MI:SS'), TO_DATE(#{reserveEnd}, 'HH24:MI:SS'), #{personCnt}, 'A', #{reserveDate}, sysdate)
+    </insert>
+
+</mapper>
