@@ -1,5 +1,6 @@
 package com.example.demo.security.config;
 
+import com.example.demo.constant.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,8 @@ public class WebSecurityConfig {
                 .sessionManagement(
                         management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .exceptionHandling(exceptionHandler -> exceptionHandler
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(
                         request -> request
