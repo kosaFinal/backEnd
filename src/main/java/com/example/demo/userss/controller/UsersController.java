@@ -28,6 +28,13 @@ public class UsersController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(userSignupResponseDto, CustomResponseCode.SUCCESS));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<UsersDto.UserLoginResponseDto>> login(@RequestBody UsersDto.UserLoginRequestDto userLoginRequestDto){
+        log.info("들어옴!");
+        UsersDto.UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(userLoginResponseDto, CustomResponseCode.SUCCESS));
+    }
+
 
 
 }
