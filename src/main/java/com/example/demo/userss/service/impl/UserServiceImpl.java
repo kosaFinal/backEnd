@@ -78,13 +78,14 @@ public class UserServiceImpl implements UsersService {
 
     @Override
     public Boolean validatePw(UserDetails userDetails, UsersDto.UserCheckPwRequestDto userCheckPwRequestDto) {
-        if(passwordEncoder.matches(userCheckPwRequestDto.getPassword(),userDetails.getPassword())){
+        if (passwordEncoder.matches(userCheckPwRequestDto.getPassword(), userDetails.getPassword())) {
             return true;
         }
         return false;
+    }
 
     public Boolean checkUserId(int userId) {
-        Boolean result = false;
+        boolean result = false;
         Users users = usersMapper.getUserByUserId(userId);
         if(users != null){
             result = true;
