@@ -13,5 +13,10 @@ public interface UsersService {
     UsersDto.UserSignupResponseDto signup(UsersDto.UserSignupRequestDto userSignupRequestDto);
 
     Boolean checkUserNameDup(String userName);
+
     Boolean validatePw(UserDetails userDetails, UsersDto.UserCheckPwRequestDto userCheckPwRequestDto);
+
+
+    Boolean checkUserId(int userId);
+
 }
