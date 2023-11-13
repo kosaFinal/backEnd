@@ -19,24 +19,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/exception/entrypoint")
+@RequestMapping("/exception")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
 
-    @GetMapping("/nullToken")
+    @GetMapping("/entrypoint")
+    public void entrypointException() {
+        log.info("entryPoint Controller entered");
+        throw new GeneralException(CustomResponseCode.AUTHENTICATION_FAILED);
+    }
+
+    @GetMapping("/entrypoint/nullToken")
     public void nullTokenException(){
+        log.info("nullToken 컨트롤러 실행");
         throw new GeneralException(CustomResponseCode.NO_TOKEN);
     }
 
-    @GetMapping("/expiredToken")
+    @GetMapping("/entrypoint/expiredToken")
     public void expiredTokenException(){
         throw new GeneralException(CustomResponseCode.EXPIRED_JWT);
     }
 
-    @GetMapping("/badToken")
+    @GetMapping("/entrypoint/badToken")
     public void badTokenException(){
         throw new GeneralException(CustomResponseCode.BAD_JWT);
+    }
+
+    @GetMapping("/accessDenied")
+    public void accessDeniedException() {
+        log.info("accessDeniedException Controller entered");
+        throw new GeneralException(CustomResponseCode.AUTHENTICATION_FAILED);
     }
 
 }

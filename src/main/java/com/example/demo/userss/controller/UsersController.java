@@ -7,10 +7,11 @@ import com.example.demo.userss.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
 @RequiredArgsConstructor
 @Slf4j
 public class UsersController {
@@ -40,6 +41,13 @@ public class UsersController {
     public ResponseEntity<ApiResponse<Boolean>> checkUserName(@PathVariable String userName){
         Boolean result = userService.checkUserNameDup(userName);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
+    }
+
+    @PostMapping("/user/check/password")
+    public ResponseEntity<ApiResponse<Boolean>> checkUserPw(@RequestBody UsersDto.UserCheckPwRequestDto userCheckPwRequestDto, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Boolean check = userService.validatePw(userDetails,userCheckPwRequestDto );
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check,CustomResponseCode.SUCCESS));
     }
 
 

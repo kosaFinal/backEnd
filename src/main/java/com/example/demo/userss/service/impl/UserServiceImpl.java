@@ -10,6 +10,7 @@ import com.example.demo.userss.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,13 @@ public class UserServiceImpl implements UsersService {
             result = true;
         }
         return result;
+    }
+
+    @Override
+    public Boolean validatePw(UserDetails userDetails, UsersDto.UserCheckPwRequestDto userCheckPwRequestDto) {
+        if(passwordEncoder.matches(userCheckPwRequestDto.getPassword(),userDetails.getPassword())){
+            return true;
+        }
+        return false;
     }
 }

@@ -38,4 +38,9 @@ public class UsersDto {
         private String userName;
         private String accessToken;
     }
+
+    @Getter
+    public static class UserCheckPwRequestDto{
+        private String password;
+    }
 }
