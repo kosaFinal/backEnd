@@ -44,12 +44,9 @@ public class UsersController {
     }
 
     @PostMapping("/user/check/password")
-    public ResponseEntity<ApiResponse<Boolean>> checkUserPw(@RequestBody UsersDto.UserCheckPwRequestDto userCheckPwRequestDto, Authentication authentication){
+    public ResponseEntity<ApiResponse<Boolean>> checkUserPw(@RequestBody UsersDto.UserCheckPwRequestDto userCheckPwRequestDto, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Boolean check = userService.validatePw(userDetails,userCheckPwRequestDto );
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(check,CustomResponseCode.SUCCESS));
+        Boolean check = userService.validatePw(userDetails, userCheckPwRequestDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
     }
-
-
-
 }
