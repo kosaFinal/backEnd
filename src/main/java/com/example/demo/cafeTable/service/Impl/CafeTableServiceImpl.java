@@ -1,11 +1,16 @@
 package com.example.demo.cafeTable.service.Impl;
 
+import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.cafeTable.entity.CafeTable;
 import com.example.demo.cafeTable.mapper.CafeTableMapper;
 import com.example.demo.cafeTable.service.CafeTableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,19 @@ public class CafeTableServiceImpl implements CafeTableService {
         if(cafeTable != null){
             result = true;
         }
+        return result;
+    }
+
+    @Override
+    public Map<String, List<CafeTableDto.CafeTableInfo>> getTableInfo(int cafeId) {
+        Map<String, List<CafeTableDto.CafeTableInfo>> result = new HashMap<>();
+        String[] tableTypes = {"O", "T", "F", "M"};
+
+        for(String tableType : tableTypes){
+            List<CafeTableDto.CafeTableInfo> tableInfoList = cafeTableMapper.getTableInfo(cafeId, tableType);
+            result.put(tableType, tableInfoList);
+        }
+
         return result;
     }
 }

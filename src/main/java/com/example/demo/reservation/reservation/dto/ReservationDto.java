@@ -1,11 +1,15 @@
 package com.example.demo.reservation.reservation.dto;
 
+import com.example.demo.cafeTable.dto.CafeTableDto;
+import com.example.demo.cafeTable.entity.CafeTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class ReservationDto {
 
@@ -34,5 +38,19 @@ public class ReservationDto {
             this.cafeName = cafeName;
         }
     }
+
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class RevCafeInfoResDto{
+        private String cafeName;
+        private Map<String, List<CafeTableDto.CafeTableInfo>> tableInfo;
+
+        public RevCafeInfoResDto(String cafeName, Map<String, List<CafeTableDto.CafeTableInfo>> tableInfo) {
+            this.cafeName = cafeName;
+            this.tableInfo = tableInfo;
+        }
+    }
+
 
 }
