@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -66,22 +67,24 @@ public class JwtUtils {
         return userName;
     }
 
+    public Claims parseToken(String token){
+
+        JwtParser parser = Jwts.parser();
+        parser.setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8));
+        Jws<Claims> jws = parser.parseClaimsJws(token);
+        Claims claims = jws.getBody();
+        return claims;
+    }
+
     //JWT 토큰 유효성 검사: 만료일자 확인 true - 유효,
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         boolean validate = false;
-        try {
-            JwtParser parser = Jwts.parser();
-            parser.setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8));
-            Jws<Claims> jws = parser.parseClaimsJws(token);
-            Claims claims = jws.getBody();
-            validate = !claims.getExpiration().before(new Date());
-         /*if(validate) {
-            long remainMillSecs = claims.getExpiration().getTime() - new Date().getTime();
-            logger.info("" + remainMillSecs/1000 + "초 남았음");
-         }*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Claims claims = parseToken(token);
+
+        validate = !claims.getExpiration().before(new Date());
+
+
+
         return validate;
     }
 
@@ -91,6 +94,19 @@ public class JwtUtils {
             throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
         }
         return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
+    }
+
+    public String resolveToken(String token){
+        String accessToken="";
+        if (token != null) {
+            return token.substring("Bearer ".length());
+        } else {
+            return "";
+        }
+//        else {
+//            return httpServletRequest.getParameter("accessToken");
+//        }
+
     }
 
 }

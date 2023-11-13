@@ -1,12 +1,16 @@
 package com.example.demo.security.config;
 
+import com.example.demo.constant.exception.CustomAccessDeniedHandler;
 import com.example.demo.constant.handler.CustomAuthenticationEntryPoint;
+import com.example.demo.security.service.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,36 +24,40 @@ import com.example.demo.security.filter.JwtAuthenticationFilter;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-//@EnableWebSecurity
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtUtils jwtUtils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         return http
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .cors(config->{})
+//                .formLogin(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
                         management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .exceptionHandling(exceptionHandler -> exceptionHandler
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(
                         request -> request
                                 .antMatchers("/user/*").hasRole("USER")
                                 .antMatchers(("/manager/*")).hasRole("MANAGER")
                                 .anyRequest().permitAll()
                 )
+                .httpBasic(Customizer.withDefaults())
+                .exceptionHandling((exceptionHandler) -> exceptionHandler
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }
 
-
+    JwtAuthenticationFilter jwtAuthenticationFilter(){
+        return new JwtAuthenticationFilter(jwtUtils);
+    }
    //비빌번호 인코더 설정
    @Bean
     public PasswordEncoder passwordEncoder() {

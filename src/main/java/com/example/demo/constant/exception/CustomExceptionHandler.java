@@ -21,12 +21,12 @@ public class CustomExceptionHandler {
 //    public ResponseEntity<ApiResponse<String>> handleException(GeneralException e){
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createError(e.getCode()));
 //    }
-//
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<ApiResponse<String>> handleAccessDeniedException(GeneralException e) {
-//        log.error(e.getMessage());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(ApiResponse.createError(e.getCode()));
-//    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<String>> handleAccessDeniedException(GeneralException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.createError(e.getCode()));
+    }
 }
 

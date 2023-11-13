@@ -9,7 +9,7 @@
 
     <insert id="signupUsers" parameterType="users">
         insert into Users (userName, userRealName, password, role, createDate, modifyDate)
-        values (#{userName},#{userRealName},#{password},#{role},SYSDATE,NULL)
+        values (#{userName},#{userRealName},#{password},#{role},SYSDATE,#{modifyDate,jdbcType=DATE})
     </insert>
 
     <select id="getUserByUserId" parameterType="int" resultType="users">
