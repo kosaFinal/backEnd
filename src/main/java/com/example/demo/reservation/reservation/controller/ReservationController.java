@@ -24,6 +24,7 @@ public class ReservationController {
     public ResponseEntity<ApiResponse<ReservationDto.UserReservationResDto>> createReservation(@RequestBody ReservationDto.UserReservationReqDto userReservationReqDto) {
         log.info("예약 생성 요청 받음");
         ReservationDto.UserReservationResDto userReservationResDto = reservationService.createReservation(userReservationReqDto);
+        log.info(String.valueOf(userReservationResDto));
         log.info("apiresponse: "+ApiResponse.createSuccess(userReservationResDto, CustomResponseCode.SUCCESS));
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(userReservationResDto, CustomResponseCode.SUCCESS));

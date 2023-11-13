@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ReservationMapper {
-    void createReservation(ReservationDto.UserReservationReqDto userReservationReqDto);
+    void createReservation(Reservation reservation);
 }

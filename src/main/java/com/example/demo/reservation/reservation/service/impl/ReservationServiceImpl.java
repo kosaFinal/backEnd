@@ -1,6 +1,6 @@
 package com.example.demo.reservation.reservation.service.impl;
 
-import com.example.demo.cafe.mapper.CafeMapper;
+import com.example.demo.cafe.service.CafeService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
@@ -9,6 +9,7 @@ import com.example.demo.reservation.reservation.mapper.ReservationMapper;
 import com.example.demo.reservation.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -24,19 +25,54 @@ import java.util.Date;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationMapper reservationMapper;
-    private final CafeMapper cafeMapper;
+    private final CafeService cafeService;
 
     @Override
     public ReservationDto.UserReservationResDto createReservation(ReservationDto.UserReservationReqDto userReservationReqDto) {
         log.info("서비스 시작");
         log.info(String.valueOf(userReservationReqDto));
-        String cafeName = cafeMapper.findCafeNameByCafeId(userReservationReqDto.getCafeId());
-        log.info(cafeName);
-//        if (cafeName == null) {
-//            throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
-//        }
 
-        reservationMapper.createReservation(userReservationReqDto);
+        String cafeName = cafeService.findCafeNameByCafeId(userReservationReqDto.getCafeId());
+        log.info(cafeName);
+
+        if (cafeName == null) {
+            throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
+        }
+
+        // 시간 포맷 변경
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date reserveStart;
+        Date reserveEnd;
+        Date reserveDate;
+
+        try {
+            reserveStart = timeFormat.parse(userReservationReqDto.getReserveStart());
+            reserveEnd = timeFormat.parse(userReservationReqDto.getReserveEnd());
+            reserveDate = dateFormat.parse(userReservationReqDto.getReserveDate());
+        } catch (ParseException e) {
+            throw new GeneralException(CustomResponseCode.INVALID_TIME_FORMAT);
+        }
+
+        log.info(String.valueOf(reserveStart));
+        log.info(String.valueOf(reserveEnd));
+        log.info(String.valueOf(reserveDate));
+
+        Reservation reservation =  Reservation.builder()
+                .tableId(userReservationReqDto.getTableId())
+                .cafeId(userReservationReqDto.getCafeId())
+                .userId(userReservationReqDto.getUserId())
+                .reserveStart(reserveStart)
+                .reserveEnd(reserveEnd)
+                .personCnt(userReservationReqDto.getPersonCnt())
+                .status("A")
+                .reserveDate(reserveDate)
+                .build();
+
+        log.info(String.valueOf(reservation));
+
+        reservationMapper.createReservation(reservation);
 
         return ReservationDto.UserReservationResDto.builder()
                 .reservationDate(userReservationReqDto.getReserveDate())

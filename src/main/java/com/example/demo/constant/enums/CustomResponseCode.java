@@ -16,10 +16,10 @@ public enum CustomResponseCode {
     //not found(4000)
     USER_NOT_FOUND(false,4000,"해당 유저를  찾을 수 없습니다."),
     CAFE_NOT_FOUND(false,4001,"해당 카페를 찾을 수 없습니다."),
-    RESERVATION_NOT_FOUND(false,4002,"해당 예약을 찾을 수 없습니다.");
+    RESERVATION_NOT_FOUND(false,4002,"해당 예약을 찾을 수 없습니다."),
 
     //internal server error(기타 에러)(5000)
-
+    INVALID_TIME_FORMAT(false, 5000, "날짜 형식이 맞지않습니다.");
 
     private final boolean isSuccess;
     private final int code;
