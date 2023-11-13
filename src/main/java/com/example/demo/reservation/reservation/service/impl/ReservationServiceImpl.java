@@ -35,38 +35,38 @@ public class ReservationServiceImpl implements ReservationService {
     private final UsersService usersService;
 
     @Override
-    public ReservationDto.UserReservationResDto createReservation(ReservationDto.UserReservationReqDto userReservationReqDto) {
+    public ReservationDto.UserReservationResponseDto createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto) {
         log.info("서비스 시작");
-        log.info(String.valueOf(userReservationReqDto));
+        log.info(String.valueOf(userReservationRequestDto));
 
         // 존재하는 카페인지 확인 + res에 담을 cafeName 가져오기
-        String cafeName = cafeService.findCafeNameByCafeId(userReservationReqDto.getCafeId());
+        String cafeName = cafeService.findCafeNameByCafeId(userReservationRequestDto.getCafeId());
         log.info(cafeName);
         if (cafeName == null) {
             throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
         }
 
         // 존재하는 카페테이블인지 확인
-        Boolean resultCafeTable = cafeTableService.checkCafeId(userReservationReqDto.getTableId());
+        Boolean resultCafeTable = cafeTableService.checkCafeId(userReservationRequestDto.getTableId());
         if(resultCafeTable == false){
             throw new GeneralException(CustomResponseCode.CAFETABLE_NOT_FOUND);
         }
 
         // 존재하는 유저인지 확인
-        Boolean resultUserId = usersService.checkUserId(userReservationReqDto.getUserId());
+        Boolean resultUserId = usersService.checkUserId(userReservationRequestDto.getUserId());
         if(resultUserId == false){
             throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
         }
 
         Reservation reservation =  Reservation.builder()
-                .tableId(userReservationReqDto.getTableId())
-                .cafeId(userReservationReqDto.getCafeId())
-                .userId(userReservationReqDto.getUserId())
-                .reserveStart(userReservationReqDto.getReserveStart())
-                .reserveEnd(userReservationReqDto.getReserveEnd())
-                .personCnt(userReservationReqDto.getPersonCnt())
+                .tableId(userReservationRequestDto.getTableId())
+                .cafeId(userReservationRequestDto.getCafeId())
+                .userId(userReservationRequestDto.getUserId())
+                .reserveStart(userReservationRequestDto.getReserveStart())
+                .reserveEnd(userReservationRequestDto.getReserveEnd())
+                .personCnt(userReservationRequestDto.getPersonCnt())
                 .status("A")
-                .reserveDate(userReservationReqDto.getReserveDate())
+                .reserveDate(userReservationRequestDto.getReserveDate())
                 .build();
 
         log.info(String.valueOf(reservation));
@@ -74,8 +74,8 @@ public class ReservationServiceImpl implements ReservationService {
         reservationMapper.createReservation(reservation);
 
 
-        return ReservationDto.UserReservationResDto.builder()
-                .reservationDate(userReservationReqDto.getReserveDate())
+        return ReservationDto.UserReservationResponseDto.builder()
+                .reservationDate(userReservationRequestDto.getReserveDate())
                 .cafeName(cafeName)
                 .build();
     }

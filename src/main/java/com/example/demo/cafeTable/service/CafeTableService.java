@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface CafeTableService {
     Boolean checkCafeId(int tableId);
-    Map<String, List<CafeTableDto.CafeTableInfo>> getTableInfo(int cafeId);
+    Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> getTableInfo(int cafeId);
 }

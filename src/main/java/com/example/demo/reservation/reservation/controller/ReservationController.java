@@ -28,27 +28,27 @@ public class ReservationController {
 
     // 예약 생성
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<ReservationDto.UserReservationResDto>> createReservation(@RequestBody ReservationDto.UserReservationReqDto userReservationReqDto) {
+    public ResponseEntity<ApiResponse<ReservationDto.UserReservationResponseDto>> createReservation(@RequestBody ReservationDto.UserReservationRequestDto userReservationRequestDto) {
         log.info("예약 생성 요청 받음");
-        ReservationDto.UserReservationResDto userReservationResDto = reservationService.createReservation(userReservationReqDto);
-        log.info(String.valueOf(userReservationResDto));
-        log.info("apiresponse: "+ApiResponse.createSuccess(userReservationResDto, CustomResponseCode.SUCCESS));
+        ReservationDto.UserReservationResponseDto userReservationResponseDto = reservationService.createReservation(userReservationRequestDto);
+        log.info(String.valueOf(userReservationResponseDto));
+        log.info("apiresponse: "+ApiResponse.createSuccess(userReservationResponseDto, CustomResponseCode.SUCCESS));
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(userReservationResDto, CustomResponseCode.SUCCESS));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(userReservationResponseDto, CustomResponseCode.SUCCESS));
     }
 
     // 예약할 카페 정보 조회
     @GetMapping("/cafe/{cafeId}")
-    public ResponseEntity<ApiResponse<ReservationDto.RevCafeInfoResDto>> getRevCafeInfo(@PathVariable int cafeId){
+    public ResponseEntity<ApiResponse<ReservationDto.RevCafeInfoResponseDto>> getRevCafeInfo(@PathVariable int cafeId){
         String cafeName = cafeService.findCafeNameByCafeId(cafeId);
 
         if (cafeName == null) {
             throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
         }
 
-        Map<String, List<CafeTableDto.CafeTableInfo>> tableInfo = cafeTableService.getTableInfo(cafeId);
+        Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo = cafeTableService.getTableInfo(cafeId);
 
-        ReservationDto.RevCafeInfoResDto revCafeInfoResDto = ReservationDto.RevCafeInfoResDto.builder()
+        ReservationDto.RevCafeInfoResponseDto revCafeInfoResDto = ReservationDto.RevCafeInfoResponseDto.builder()
                 .cafeName(cafeName)
                 .tableInfo(tableInfo)
                 .build();

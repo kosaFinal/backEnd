@@ -9,5 +9,5 @@ import java.util.List;
 @Mapper
 public interface CafeTableMapper {
     CafeTable checkTableId(int tableId);
-    List<CafeTableDto.CafeTableInfo> getTableInfo(int cafeId, String tableType);
+    List<CafeTableDto.CafeTableInfoResponseDto> getTableInfo(int cafeId, String tableType);
 }
