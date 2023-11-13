@@ -4,8 +4,14 @@
 
     <select id="checkTableId" parameterType="int" resultType="cafeTable">
         select *
-        from cafeTable
+        from cafetable
         where tableId = #{tableId}
+    </select>
+
+    <select id="getTableInfo" resultType="com.example.demo.cafeTable.dto.CafeTableDto$CafeTableInfo">
+        select tableId, tableNumber
+        from cafetable
+        where cafeId = #{cafeId} AND tableType = #{tableType}
     </select>
 
 </mapper>
