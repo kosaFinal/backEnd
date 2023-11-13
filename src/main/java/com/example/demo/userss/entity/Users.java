@@ -1,8 +1,7 @@
 package com.example.demo.userss.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.example.demo.userss.dto.UsersDto;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +10,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-
+@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Users implements UserDetails {
+
 
     private int usersId;
     private String userName;
@@ -29,12 +33,12 @@ public class Users implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.getUsername();
+        return this.userName;
     }
 
     @Override
@@ -55,5 +59,13 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    public Users(UsersDto.UserSignupRequestDto signup, String password, String role){
+        this.userName = signup.getUserName();
+        this.password = password;
+        this.userRealName = signup.getUserRealName();
+        this.role = role;
     }
 }

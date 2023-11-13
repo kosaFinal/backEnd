@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @JsonPropertyOrder({"isSuccess","code","message","data"})
 public class ApiResponse<T> {
 
@@ -35,10 +37,4 @@ public class ApiResponse<T> {
         return new ApiResponse<>(code.isSuccess(), code.getCode(), code.getMessage(),null);
     }
 
-    public ApiResponse(boolean isSuccess, int code, String message, T data) {
-        this.isSuccess = isSuccess;
-        this.code = code;
-        this.message = message;
-        this.data = data;
-    }
 }

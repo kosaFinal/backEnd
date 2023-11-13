@@ -24,11 +24,10 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
-
+    private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("필터");
         String accessToken = null;
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
@@ -38,12 +37,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         else{
             accessToken = request.getParameter("accessToken");
         }
-        if(accessToken != null && !accessToken.trim().equals("")){
+        if(accessToken != null && !accessToken.trim().isEmpty()){
             if(JwtUtils.validateToken(accessToken)){
-                String userName = JwtUtils.getUserName(accessToken);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
                 //인증객체 생성
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userName,"",userDetails.getAuthorities());
+                Authentication authentication = jwtUtils.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
