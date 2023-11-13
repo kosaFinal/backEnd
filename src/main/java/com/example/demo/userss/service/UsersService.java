@@ -2,6 +2,7 @@ package com.example.demo.userss.service;
 
 import com.example.demo.userss.dto.UsersDto;
 import com.example.demo.userss.entity.Users;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -12,4 +13,9 @@ public interface UsersService {
     UsersDto.UserSignupResponseDto signup(UsersDto.UserSignupRequestDto userSignupRequestDto);
 
     Boolean checkUserNameDup(String userName);
+
+    Boolean validatePw(UserDetails userDetails, UsersDto.UserCheckPwRequestDto userCheckPwRequestDto);
+
+    Boolean checkUserId(int userId);
+
 }

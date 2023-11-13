@@ -1,9 +1,11 @@
 package com.example.demo.cafe.entity;
 
 import com.example.demo.userss.entity.Users;
+import lombok.Getter;
 
 import java.util.Date;
 
+@Getter
 public class Cafe {
 
     private int cafeId;
@@ -15,9 +17,8 @@ public class Cafe {
     private String longtitude; //경도
     private String latitude; //위도
     private String cafeTel;
-    private String wifi;
-    private String consent;
     private String study;
     private Users user;
+    private byte[] cafeRepImg;
 
 }

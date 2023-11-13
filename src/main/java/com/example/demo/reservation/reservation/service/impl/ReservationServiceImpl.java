@@ -9,6 +9,9 @@ import com.example.demo.reservation.reservation.dto.ReservationDto;
 import com.example.demo.reservation.reservation.entity.Reservation;
 import com.example.demo.reservation.reservation.mapper.ReservationMapper;
 import com.example.demo.reservation.reservation.service.ReservationService;
+import com.example.demo.userss.entity.Users;
+import com.example.demo.userss.mapper.UsersMapper;
+import com.example.demo.userss.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,22 +31,32 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationMapper reservationMapper;
     private final CafeService cafeService;
+    private final CafeTableService cafeTableService;
+    private final UsersService usersService;
 
     @Override
     public ReservationDto.UserReservationResDto createReservation(ReservationDto.UserReservationReqDto userReservationReqDto) {
         log.info("서비스 시작");
         log.info(String.valueOf(userReservationReqDto));
 
+        // 존재하는 카페인지 확인 + res에 담을 cafeName 가져오기
         String cafeName = cafeService.findCafeNameByCafeId(userReservationReqDto.getCafeId());
         log.info(cafeName);
-
         if (cafeName == null) {
             throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
         }
 
+        // 존재하는 카페테이블인지 확인
+        Boolean resultCafeTable = cafeTableService.checkCafeId(userReservationReqDto.getTableId());
+        if(resultCafeTable == false){
+            throw new GeneralException(CustomResponseCode.CAFETABLE_NOT_FOUND);
+        }
 
-
-
+        // 존재하는 유저인지 확인
+        Boolean resultUserId = usersService.checkUserId(userReservationReqDto.getUserId());
+        if(resultUserId == false){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
 
         Reservation reservation =  Reservation.builder()
                 .tableId(userReservationReqDto.getTableId())

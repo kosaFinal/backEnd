@@ -7,5 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class GeneralException extends RuntimeException{
+
     CustomResponseCode code;
 }
