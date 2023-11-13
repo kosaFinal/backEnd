@@ -1,4 +1,5 @@
 package com.example.demo.cafe.service;
 
-public class CafeService {
+public interface CafeService {
+    String findCafeNameByCafeId(int cafeId);
 }

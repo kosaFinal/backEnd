@@ -24,7 +24,6 @@ public enum CustomResponseCode {
 
     //internal server error(기타 에러)(5000)
 
-
     private final boolean isSuccess;
     private final int code;
     private final String message;
