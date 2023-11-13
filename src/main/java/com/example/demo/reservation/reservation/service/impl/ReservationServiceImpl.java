@@ -1,6 +1,8 @@
 package com.example.demo.reservation.reservation.service.impl;
 
+import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.cafe.service.CafeService;
+import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
@@ -39,40 +41,25 @@ public class ReservationServiceImpl implements ReservationService {
             throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
         }
 
-        // 시간 포맷 변경
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        Date reserveStart;
-        Date reserveEnd;
-        Date reserveDate;
 
-        try {
-            reserveStart = timeFormat.parse(userReservationReqDto.getReserveStart());
-            reserveEnd = timeFormat.parse(userReservationReqDto.getReserveEnd());
-            reserveDate = dateFormat.parse(userReservationReqDto.getReserveDate());
-        } catch (ParseException e) {
-            throw new GeneralException(CustomResponseCode.INVALID_TIME_FORMAT);
-        }
 
-        log.info(String.valueOf(reserveStart));
-        log.info(String.valueOf(reserveEnd));
-        log.info(String.valueOf(reserveDate));
 
         Reservation reservation =  Reservation.builder()
                 .tableId(userReservationReqDto.getTableId())
                 .cafeId(userReservationReqDto.getCafeId())
                 .userId(userReservationReqDto.getUserId())
-                .reserveStart(reserveStart)
-                .reserveEnd(reserveEnd)
+                .reserveStart(userReservationReqDto.getReserveStart())
+                .reserveEnd(userReservationReqDto.getReserveEnd())
                 .personCnt(userReservationReqDto.getPersonCnt())
                 .status("A")
-                .reserveDate(reserveDate)
+                .reserveDate(userReservationReqDto.getReserveDate())
                 .build();
 
         log.info(String.valueOf(reservation));
 
         reservationMapper.createReservation(reservation);
+
 
         return ReservationDto.UserReservationResDto.builder()
                 .reservationDate(userReservationReqDto.getReserveDate())

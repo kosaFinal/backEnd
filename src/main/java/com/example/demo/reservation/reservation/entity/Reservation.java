@@ -18,11 +18,11 @@ public class Reservation extends BaseEntity {
     private int tableId;
     private int cafeId;
     private int userId;
-    private Date reserveStart;
-    private Date reserveEnd;
+    private String reserveStart;
+    private String reserveEnd;
     private int personCnt;
     private String status;
-    private Date reserveDate;
+    private String reserveDate;
     private String cancleReasonId;
 
 }
