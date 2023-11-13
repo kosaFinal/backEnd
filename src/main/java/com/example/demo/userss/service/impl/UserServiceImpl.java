@@ -74,4 +74,14 @@ public class UserServiceImpl implements UsersService {
         }
         return result;
     }
+
+    @Override
+    public Boolean checkUserId(int userId) {
+        Boolean result = false;
+        Users users = usersMapper.getUserByUserId(userId);
+        if(users != null){
+            result = true;
+        }
+        return result;
+    }
 }

@@ -12,4 +12,6 @@ public interface UsersService {
     UsersDto.UserSignupResponseDto signup(UsersDto.UserSignupRequestDto userSignupRequestDto);
 
     Boolean checkUserNameDup(String userName);
+
+    Boolean checkUserId(int userId);
 }
