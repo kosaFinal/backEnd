@@ -2,6 +2,7 @@ package com.example.demo.reservation.reservation.dto;
 
 import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.cafeTable.entity.CafeTable;
+import com.example.demo.reservation.reservation.entity.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,25 +19,9 @@ public class ReservationDto {
     @NoArgsConstructor
     public static class UserReservationRequestDto{
         private int tableId;
-        private int cafeId;
-        private int userId;
-        private String reserveStart;
-        private String reserveEnd;
+        private List<Reservation.TimeSlot> reserveTime;
         private int personCnt;
         private String reserveDate;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @Builder
-    public static class UserReservationResponseDto{
-        private String reservationDate;
-        private String cafeName;
-
-        public UserReservationResponseDto(String reservationDate, String cafeName) {
-            this.reservationDate = reservationDate;
-            this.cafeName = cafeName;
-        }
     }
 
     @Data

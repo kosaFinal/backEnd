@@ -18,7 +18,7 @@ import java.util.Collection;
 public class Users implements UserDetails {
 
 
-    private int usersId;
+    private int userId;
     private String userName;
     private String password;
     private String userRealName;
