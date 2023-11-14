@@ -21,7 +21,7 @@ public class CafeTableServiceImpl implements CafeTableService {
     @Override
     public Boolean checkCafeId(int tableId) {
         Boolean result = false;
-        CafeTable cafeTable = cafeTableMapper.checkTableId(tableId);
+        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(tableId);
         if(cafeTable != null){
             result = true;
         }
@@ -29,15 +29,16 @@ public class CafeTableServiceImpl implements CafeTableService {
     }
 
     @Override
-    public Map<String, List<CafeTableDto.CafeTableInfo>> getTableInfo(int cafeId) {
-        Map<String, List<CafeTableDto.CafeTableInfo>> result = new HashMap<>();
+    public Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> getTableInfo(int cafeId) {
+        Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> result = new HashMap<>();
         String[] tableTypes = {"O", "T", "F", "M"};
 
         for(String tableType : tableTypes){
-            List<CafeTableDto.CafeTableInfo> tableInfoList = cafeTableMapper.getTableInfo(cafeId, tableType);
+            List<CafeTableDto.CafeTableInfoResponseDto> tableInfoList = cafeTableMapper.getTableInfo(cafeId, tableType);
             result.put(tableType, tableInfoList);
         }
 
         return result;
     }
+
 }

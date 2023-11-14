@@ -2,7 +2,9 @@ package com.example.demo.reservation.reservation.service;
 
 import com.example.demo.reservation.reservation.dto.ReservationDto;
 
-public interface ReservationService {
+import java.util.List;
 
-    ReservationDto.UserReservationResDto createReservation(ReservationDto.UserReservationReqDto userReservationReqDto);
+public interface ReservationService {
+    ReservationDto.UserReservationResponseDto createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto);
+    List<ReservationDto.TimeSlotResponseDto> getAvailableTimeSlots(String reserveDate, int tableId);
 }
