@@ -3,8 +3,11 @@ package com.example.demo.reservation.reservation.service.impl;
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.cafe.mapper.CafeMapper;
+import com.example.demo.cafe.service.CafeService;
+import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.cafeTable.entity.CafeTable;
 import com.example.demo.cafeTable.mapper.CafeTableMapper;
+import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
@@ -20,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -32,6 +37,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final CafeMapper cafeMapper;
     private final CafeTableMapper cafeTableMapper;
     private final UsersMapper usersMapper;
+    private final CafeTableService cafeTableService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -153,5 +159,31 @@ public class ReservationServiceImpl implements ReservationService {
 
         return newTimeslot;
 
+    }
+
+    @Override
+    public ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId) {
+
+        Cafe cafe = cafeMapper.getOneCafe(cafeId);
+
+        if (cafe == null) {
+            throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
+        }
+
+        if(cafe.getStudy().equals("N")){
+            throw new GeneralException(CustomResponseCode.NO_RESERVATION_CAFE);
+        }
+
+        String cafeName = cafe.getCafeName();
+
+        Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo = cafeTableService.getTableInfo(cafeId);
+
+        ReservationDto.RevCafeInfoResponseDto revCafeInfoResDto = ReservationDto.RevCafeInfoResponseDto.builder()
+                .cafeName(cafeName)
+                .tableInfo(tableInfo)
+                .build();
+
+        log.info(String.valueOf(revCafeInfoResDto));
+        return revCafeInfoResDto;
     }
 }
