@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +22,10 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-    private final UsersMapper usersMapper;
     //비밀키(누출되면 안됨)
     private final String secretKey = "secret";
+
+    private final UserDetailsService userDetailsService;
 
     // JWT 토큰 생성: 사용자 아이디 포함
     public String createToken(String userName) {
@@ -89,7 +91,8 @@ public class JwtUtils {
     }
 
     public Authentication getAuthentication(String token){
-        UserDetails userDetails = usersMapper.getOneUsers(getUserName(token));
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserName(token));
         if(userDetails == null){
             throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
         }
