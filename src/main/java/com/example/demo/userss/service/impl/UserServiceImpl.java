@@ -39,7 +39,7 @@ public class UserServiceImpl implements UsersService {
             throw new GeneralException(CustomResponseCode.NOT_EQUALS_PASSWORD);
         }
 
-        String accessToken = JwtUtils.createToken(userLoginRequestDto.getUserName());
+        String accessToken = jwtUtils.createToken(userLoginRequestDto.getUserName());
         log.info("accessToken: "+accessToken);
         return UsersDto.UserLoginResponseDto.builder()
                 .userName(userLoginRequestDto.getUserName())

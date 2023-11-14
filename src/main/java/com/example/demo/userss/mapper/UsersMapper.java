@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface UsersMapper {
 
     Users getOneUsers(String userName);
+
     Users getUserByUserId(int userId);
 
     void signupUsers(Users user);
