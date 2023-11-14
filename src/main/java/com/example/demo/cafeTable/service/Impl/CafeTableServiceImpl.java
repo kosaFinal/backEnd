@@ -21,7 +21,7 @@ public class CafeTableServiceImpl implements CafeTableService {
     @Override
     public Boolean checkCafeId(int tableId) {
         Boolean result = false;
-        CafeTable cafeTable = cafeTableMapper.checkTableId(tableId);
+        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(tableId);
         if(cafeTable != null){
             result = true;
         }
@@ -40,4 +40,5 @@ public class CafeTableServiceImpl implements CafeTableService {
 
         return result;
     }
+
 }

@@ -52,5 +52,20 @@ public class ReservationDto {
         }
     }
 
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class TimeSlotResponseDto{
+        private String reserveStart;
+        private String reserveEnd;
+        private String available;
+
+        public TimeSlotResponseDto(String reserveStart, String reserveEnd, String available) {
+            this.reserveStart = reserveStart;
+            this.reserveEnd = reserveEnd;
+            this.available = available;
+        }
+    }
+
 
 }

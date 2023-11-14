@@ -8,6 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface CafeTableMapper {
-    CafeTable checkTableId(int tableId);
+    CafeTable getOneCafeTable(int tableId);
     List<CafeTableDto.CafeTableInfoResponseDto> getTableInfo(int cafeId, String tableType);
 }
