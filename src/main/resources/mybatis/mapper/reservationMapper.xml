@@ -6,4 +6,10 @@
         INSERT INTO reservation (tableId, cafeId, userId, reserveStart, reserveEnd, personCnt, status, reserveDate, createDate)
         VALUES (#{tableId}, #{cafeId}, #{userId}, #{reserveStart}, #{reserveEnd}, #{personCnt}, #{status}, #{reserveDate}, sysdate)
     </insert>
+
+    <select id="findReservation" parameterType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE reserveDate = #{reserveDate} AND tableId = #{tableId}
+    </select>
 </mapper>

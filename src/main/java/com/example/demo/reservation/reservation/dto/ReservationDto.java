@@ -16,7 +16,7 @@ public class ReservationDto {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UserReservationReqDto{
+    public static class UserReservationRequestDto{
         private int tableId;
         private int cafeId;
         private int userId;
@@ -29,11 +29,11 @@ public class ReservationDto {
     @Data
     @NoArgsConstructor
     @Builder
-    public static class UserReservationResDto{
+    public static class UserReservationResponseDto{
         private String reservationDate;
         private String cafeName;
 
-        public UserReservationResDto(String reservationDate, String cafeName) {
+        public UserReservationResponseDto(String reservationDate, String cafeName) {
             this.reservationDate = reservationDate;
             this.cafeName = cafeName;
         }
@@ -42,13 +42,28 @@ public class ReservationDto {
     @Data
     @NoArgsConstructor
     @Builder
-    public static class RevCafeInfoResDto{
+    public static class RevCafeInfoResponseDto{
         private String cafeName;
-        private Map<String, List<CafeTableDto.CafeTableInfo>> tableInfo;
+        private Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo;
 
-        public RevCafeInfoResDto(String cafeName, Map<String, List<CafeTableDto.CafeTableInfo>> tableInfo) {
+        public RevCafeInfoResponseDto(String cafeName, Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo) {
             this.cafeName = cafeName;
             this.tableInfo = tableInfo;
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class TimeSlotResponseDto{
+        private String reserveStart;
+        private String reserveEnd;
+        private String available;
+
+        public TimeSlotResponseDto(String reserveStart, String reserveEnd, String available) {
+            this.reserveStart = reserveStart;
+            this.reserveEnd = reserveEnd;
+            this.available = available;
         }
     }
 

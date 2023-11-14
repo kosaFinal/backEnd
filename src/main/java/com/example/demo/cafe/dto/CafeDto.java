@@ -1,6 +1,7 @@
 package com.example.demo.cafe.dto;
 
 import com.example.demo.cafe.entity.Cafe;
+import lombok.Builder;
 import lombok.Data;
 
 public class CafeDto {
@@ -34,6 +35,18 @@ public class CafeDto {
             this.cafeName = cafe.getCafeName();
             this.cafeReqImg = cafe.getCafeRepImg();
             this.cafeTel = cafe.getCafeTel();
+        }
+    }
+
+    @Data
+    @Builder
+    public static class CafeTimeResponseDto{
+        private String startTime;
+        private String endTime;
+
+        public CafeTimeResponseDto(String startTime, String endTime) {
+            this.startTime = startTime;
+            this.endTime = endTime;
         }
     }
 }
