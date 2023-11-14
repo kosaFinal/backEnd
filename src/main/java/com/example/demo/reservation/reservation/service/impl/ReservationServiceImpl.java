@@ -109,9 +109,12 @@ public class ReservationServiceImpl implements ReservationService {
         // 오픈시간부터 마감시간까지의 timeslot 만들기(default avilable이 Y)
         List<ReservationDto.TimeSlotResponseDto> newTimeslot = new ArrayList<>();
         for(int i=startHour; i<endHour; i++){
+            String start = String.format("%02d:00", i); // "%02d"는 두 자리 정수로 포맷팅하는 역할을 합니다.
+            String end = String.format("%02d:00", i + 1);
+
             ReservationDto.TimeSlotResponseDto timeslot = ReservationDto.TimeSlotResponseDto.builder()
-                    .reserveStart(String.valueOf(i))
-                    .reserveEnd(String.valueOf(i+1))
+                    .reserveStart(start)
+                    .reserveEnd(end)
                     .available("Y")
                     .build();
 
