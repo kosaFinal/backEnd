@@ -28,17 +28,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
 	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
 	testImplementation 'org.springframework.security:spring-security-test'
-
-	//토큰
-	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-
-	// https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
-	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-
 }
 
 tasks.named('test') {
