@@ -27,17 +27,23 @@
                 AND EXISTS (
                     SELECT
                     1
-                    FROM users u
+                    FROM cafeTable ct
                     WHERE
-                        u.userId = c.userId
-                        AND u.preferSeat = #{preferSeat}
+                        ct.cafeId = c.cafeId
+                        AND ct.tableType = #{preferSeat}
                 )
-                AND TO_DATE(c.startTime, 'YYYY-MM-DD HH24:MI:SS') >= TO_DATE(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
-                AND TO_DATE(c.endTime, 'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
-                AND f.featureName IN
-                    <foreach item="feature" collection="features" open="(" separator="," close=")">
-                        #{feature}
-                    </foreach>
+                AND TO_DATE(c.startTime, 'HH24:MI') >= TO_DATE(#{startTime}, 'HH24:MI')
+                AND TO_DATE(c.endTime, 'HH24:MI') <= TO_DATE(#{endTime}, 'HH24:MI')
+                <if test="features != null and features.size() > 0">
+                    AND f.featureName IN
+                        <foreach item="feature" collection="features" open="(" separator="," close=")">
+                            #{feature}
+                        </foreach>
+                </if>
+                <if>
+                    AND f.featureName IS NULL
+                </if>
         ]]>
     </select>
+
 </mapper>
