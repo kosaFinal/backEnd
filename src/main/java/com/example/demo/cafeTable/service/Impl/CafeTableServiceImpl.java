@@ -18,15 +18,6 @@ import java.util.Map;
 public class CafeTableServiceImpl implements CafeTableService {
 
     private final CafeTableMapper cafeTableMapper;
-    @Override
-    public Boolean checkCafeId(int tableId) {
-        Boolean result = false;
-        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(tableId);
-        if(cafeTable != null){
-            result = true;
-        }
-        return result;
-    }
 
     @Override
     public Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> getTableInfo(int cafeId) {

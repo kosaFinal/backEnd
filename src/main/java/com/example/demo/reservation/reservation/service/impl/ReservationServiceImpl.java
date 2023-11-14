@@ -5,18 +5,19 @@ import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.cafe.mapper.CafeMapper;
 import com.example.demo.cafeTable.entity.CafeTable;
 import com.example.demo.cafeTable.mapper.CafeTableMapper;
-import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
 import com.example.demo.reservation.reservation.entity.Reservation;
 import com.example.demo.reservation.reservation.mapper.ReservationMapper;
 import com.example.demo.reservation.reservation.service.ReservationService;
-import com.example.demo.userss.service.UsersService;
+import com.example.demo.userss.entity.Users;
+import com.example.demo.userss.mapper.UsersMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,54 +31,49 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationMapper reservationMapper;
     private final CafeMapper cafeMapper;
     private final CafeTableMapper cafeTableMapper;
-    private final CafeTableService cafeTableService;
-    private final UsersService usersService;
+    private final UsersMapper usersMapper;
 
     @Override
-    public ReservationDto.UserReservationResponseDto createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName) {
         log.info("서비스 시작");
         log.info(String.valueOf(userReservationRequestDto));
 
-        // 존재하는 카페인지 확인 + res에 담을 cafeName 가져오기
-        Cafe cafe = cafeMapper.getOneCafe(userReservationRequestDto.getCafeId());
-        String cafeName = cafe.getCafeName();
-        log.info(cafeName);
-        if (cafeName == null) {
-            throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
-        }
-
         // 존재하는 카페테이블인지 확인
-        Boolean resultCafeTable = cafeTableService.checkCafeId(userReservationRequestDto.getTableId());
-        if(resultCafeTable == false){
+        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(userReservationRequestDto.getTableId());
+        if(cafeTable == null){
             throw new GeneralException(CustomResponseCode.CAFETABLE_NOT_FOUND);
         }
 
         // 존재하는 유저인지 확인
-        Boolean resultUserId = usersService.checkUserId(userReservationRequestDto.getUserId());
-        if(resultUserId == false){
+        Users user = usersMapper.getOneUsers(userName);
+        if(user == null){
             throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
         }
 
-        Reservation reservation =  Reservation.builder()
-                .tableId(userReservationRequestDto.getTableId())
-                .cafeId(userReservationRequestDto.getCafeId())
-                .userId(userReservationRequestDto.getUserId())
-                .reserveStart(userReservationRequestDto.getReserveStart())
-                .reserveEnd(userReservationRequestDto.getReserveEnd())
-                .personCnt(userReservationRequestDto.getPersonCnt())
-                .status("A")
-                .reserveDate(userReservationRequestDto.getReserveDate())
-                .build();
 
-        log.info(String.valueOf(reservation));
+        for (Reservation.TimeSlot timeSlot : userReservationRequestDto.getReserveTime()) {
+            Reservation reservation = Reservation.builder()
+                    .tableId(userReservationRequestDto.getTableId())
+                    .userId(user.getUserId())
+                    .cafeId(cafeTable.getCafeId())
+                    .reserveStart(timeSlot.getReserveStart())
+                    .reserveEnd(timeSlot.getReserveEnd())
+                    .personCnt(userReservationRequestDto.getPersonCnt())
+                    .status("A")
+                    .reserveDate(userReservationRequestDto.getReserveDate())
+                    .build();
 
-        reservationMapper.createReservation(reservation);
+            log.info(String.valueOf(reservation));
 
-
-        return ReservationDto.UserReservationResponseDto.builder()
-                .reservationDate(userReservationRequestDto.getReserveDate())
-                .cafeName(cafeName)
-                .build();
+            try {
+                reservationMapper.createReservation(reservation);
+            } catch (Exception e) {
+                log.info(e.getMessage());
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

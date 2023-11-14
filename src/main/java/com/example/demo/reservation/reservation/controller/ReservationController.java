@@ -12,6 +12,8 @@ import com.example.demo.reservation.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,14 +31,14 @@ public class ReservationController {
 
     // 예약 생성
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<ReservationDto.UserReservationResponseDto>> createReservation(@RequestBody ReservationDto.UserReservationRequestDto userReservationRequestDto) {
+    public ResponseEntity<ApiResponse<Boolean>> createReservation(@RequestBody ReservationDto.UserReservationRequestDto userReservationRequestDto, Authentication authentication) {
         log.info("예약 생성 요청 받음");
 
-        ReservationDto.UserReservationResponseDto userReservationResponseDto = reservationService.createReservation(userReservationRequestDto);
-        log.info(String.valueOf(userReservationResponseDto));
-        log.info("apiresponse: "+ApiResponse.createSuccess(userReservationResponseDto, CustomResponseCode.SUCCESS));
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(userReservationResponseDto, CustomResponseCode.SUCCESS));
+        Boolean check = reservationService.createReservation(userReservationRequestDto,username);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
     }
 
     // 예약할 카페 정보 조회
@@ -66,6 +68,7 @@ public class ReservationController {
         log.info("시간 가져오기 시작");
         List<ReservationDto.TimeSlotResponseDto> timeSlotResponseDto = reservationService.getAvailableTimeSlots(date, tableId);
         log.info(timeSlotResponseDto.toString());
+        log.info("apiresponse: "+ApiResponse.createSuccess(timeSlotResponseDto, CustomResponseCode.SUCCESS));
         return ResponseEntity.ok().body(ApiResponse.createSuccess(timeSlotResponseDto, CustomResponseCode.SUCCESS));
     }
 
