@@ -23,10 +23,10 @@ public class JwtUtils {
 
     private final UsersMapper usersMapper;
     //비밀키(누출되면 안됨)
-    private static final String secretKey = "secret";
+    private final String secretKey = "secret";
 
     // JWT 토큰 생성: 사용자 아이디 포함
-    public static String createToken(String userName) {
+    public String createToken(String userName) {
         String token = null;
         JwtBuilder builder = Jwts.builder();
         builder.setHeaderParam("typ", "JWT"); //토큰의 종류
@@ -39,7 +39,7 @@ public class JwtUtils {
     }
 
     //JWT 토큰에서 모든 내용(Claims) 얻기
-    public static Claims getClaims(String token) {
+    public Claims getClaims(String token) {
         Claims claims = null;
         try {
             JwtParser parser = Jwts.parser();
@@ -53,7 +53,7 @@ public class JwtUtils {
     }
 
     //JWT 토큰에서 사용자 이름 얻기
-    public static String getUserName(String token) {
+    public String getUserName(String token) {
         String userName = null;
         try {
             JwtParser parser = Jwts.parser();
