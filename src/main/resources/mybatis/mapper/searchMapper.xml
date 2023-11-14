@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.search.mapper.SearchMapper">
+
+    <select id="search" resultType="cafe">
+        <![CDATA[
+            SELECT
+                c.cafeId,
+                c.cafeName,
+                c.cafeType,
+                c.startTime,
+                c.endTime,
+                c.address,
+                c.longitude,
+                c.latitude,
+                c.cafeTel,
+                c.study,
+                cf.featureId
+            FROM cafe c
+                LEFT JOIN
+                    cafeFeature cf ON c.cafeId = cf.cafeId
+                LEFT JOIN
+                    feature f ON cf.featureId = f.featureId
+            WHERE
+                c.cafeType = #{cafeType}
+                AND c.study = #{studyEnable}
+                AND EXISTS (
+                    SELECT
+                    1
+                    FROM users u
+                    WHERE
+                        u.userId = c.userId
+                        AND u.preferSeat = #{preferSeat}
+                )
+                AND TO_DATE(c.startTime, 'YYYY-MM-DD HH24:MI:SS') >= TO_DATE(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+                AND TO_DATE(c.endTime, 'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+                AND f.featureName IN
+                    <foreach item="feature" collection="features" open="(" separator="," close=")">
+                        #{feature}
+                    </foreach>
+        ]]>
+    </select>
+</mapper>
