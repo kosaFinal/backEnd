@@ -17,4 +17,12 @@
         from users
         where userId = #{userId}
     </select>
+
+    <select id="getOneUserId" parameterType="string" resultType="int">
+        select userId
+        from users
+        where userName = #{userName}
+    </select>
+
+
 </mapper>

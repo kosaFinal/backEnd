@@ -12,6 +12,7 @@ public class CafeDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CafeRegisterRequestDto{
+        private int cafeId;
         private String cafeName;
         private String cafeType;
         private String startTime;
@@ -33,10 +34,13 @@ public class CafeDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CafeRegisterResponseDto{
+        int cafeId;
         String cafeName;
         int userId;
-        public CafeRegisterResponseDto(int userId){
+        byte[] studyImg;
+        public CafeRegisterResponseDto(int userId, byte[] studyImg){
             this.userId = userId;
+            this.studyImg = studyImg;
         }
     }
 
