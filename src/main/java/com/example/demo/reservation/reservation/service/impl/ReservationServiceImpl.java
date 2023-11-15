@@ -3,8 +3,11 @@ package com.example.demo.reservation.reservation.service.impl;
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.cafe.mapper.CafeMapper;
+import com.example.demo.cafe.service.CafeService;
+import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.cafeTable.entity.CafeTable;
 import com.example.demo.cafeTable.mapper.CafeTableMapper;
+import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
@@ -20,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -32,15 +37,15 @@ public class ReservationServiceImpl implements ReservationService {
     private final CafeMapper cafeMapper;
     private final CafeTableMapper cafeTableMapper;
     private final UsersMapper usersMapper;
+    private final CafeTableService cafeTableService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName) {
+    public Boolean createReservation(ReservationDto.UserReservationRequestDto requestDto, String userName) {
         log.info("서비스 시작");
-        log.info(String.valueOf(userReservationRequestDto));
 
         // 존재하는 카페테이블인지 확인
-        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(userReservationRequestDto.getTableId());
+        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(requestDto.getTableId());
         if(cafeTable == null){
             throw new GeneralException(CustomResponseCode.CAFETABLE_NOT_FOUND);
         }
@@ -51,26 +56,44 @@ public class ReservationServiceImpl implements ReservationService {
             throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
         }
 
+        log.info(requestDto.getReserveDate()); // 지금 date
 
-        for (Reservation.TimeSlot timeSlot : userReservationRequestDto.getReserveTime()) {
-            Reservation reservation = Reservation.builder()
-                    .tableId(userReservationRequestDto.getTableId())
+        // 예약 중복인지 확인
+        List<Reservation> reservationTime = reservationMapper.findReservation(requestDto.getReserveDate(), requestDto.getTableId());
+
+        for (Reservation.TimeSlot timeSlot : requestDto.getReserveTime()) {
+            String requestStart = timeSlot.getReserveStart();
+            boolean isChecked = false;
+
+            for (Reservation reservation : reservationTime) {
+                String reservationStart = reservation.getReserveStart();
+
+                if (reservationStart.equals(requestStart)) {
+                    isChecked = true;
+                    break;
+                }
+            }
+
+            if (isChecked) {
+                throw new GeneralException(CustomResponseCode.NO_RESERVATION_TIME);
+            }
+
+            Reservation saveReservation = Reservation.builder()
+                    .tableId(requestDto.getTableId())
                     .userId(user.getUserId())
                     .cafeId(cafeTable.getCafeId())
-                    .reserveStart(timeSlot.getReserveStart())
+                    .reserveStart(requestStart)
                     .reserveEnd(timeSlot.getReserveEnd())
-                    .personCnt(userReservationRequestDto.getPersonCnt())
+                    .personCnt(requestDto.getPersonCnt())
                     .status("A")
-                    .reserveDate(userReservationRequestDto.getReserveDate())
+                    .reserveDate(requestDto.getReserveDate())
                     .build();
 
-            log.info(String.valueOf(reservation));
-
             try {
-                reservationMapper.createReservation(reservation);
+                reservationMapper.createReservation(saveReservation);
             } catch (Exception e) {
                 log.info(e.getMessage());
-                return false;
+                throw new GeneralException(CustomResponseCode.CREATE_RESERVATION_FAILED);
             }
         }
         return true;
@@ -109,9 +132,12 @@ public class ReservationServiceImpl implements ReservationService {
         // 오픈시간부터 마감시간까지의 timeslot 만들기(default avilable이 Y)
         List<ReservationDto.TimeSlotResponseDto> newTimeslot = new ArrayList<>();
         for(int i=startHour; i<endHour; i++){
+            String start = String.format("%02d:00", i); // 두 자리 정수로 포맷팅
+            String end = String.format("%02d:00", i + 1);
+
             ReservationDto.TimeSlotResponseDto timeslot = ReservationDto.TimeSlotResponseDto.builder()
-                    .reserveStart(String.valueOf(i))
-                    .reserveEnd(String.valueOf(i+1))
+                    .reserveStart(start)
+                    .reserveEnd(end)
                     .available("Y")
                     .build();
 
@@ -122,7 +148,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         // date 형식 변환
         String formatDate = reserveDate.substring(0, 4) + "-" + reserveDate.substring(4, 6) + "-" + reserveDate.substring(6);
-        log.info(formatDate);
+        log.info("formatDate"+formatDate);
 
         // 예약날짜와 tableId로 예약 내역 가져오기
         List<Reservation> reservations = reservationMapper.findReservation(formatDate, tableId);
@@ -134,12 +160,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         for (Reservation reservation : reservations) {
             String reserveStartTime = reservation.getReserveStart();
-            String formatReserveStartTime = reserveStartTime.split(":")[0];
 
             for (ReservationDto.TimeSlotResponseDto timeSlot : newTimeslot) {
                 String timeSlotStartTime = timeSlot.getReserveStart();
 
-                if (formatReserveStartTime.equals(timeSlotStartTime)) {
+                if (reserveStartTime.equals(timeSlotStartTime)) {
                     timeSlot.setAvailable("N");
                 }
             }
@@ -150,5 +175,31 @@ public class ReservationServiceImpl implements ReservationService {
 
         return newTimeslot;
 
+    }
+
+    @Override
+    public ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId) {
+
+        Cafe cafe = cafeMapper.getOneCafe(cafeId);
+
+        if (cafe == null) {
+            throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
+        }
+
+        if(cafe.getStudy().equals("N")){
+            throw new GeneralException(CustomResponseCode.NO_RESERVATION_CAFE);
+        }
+
+        String cafeName = cafe.getCafeName();
+
+        Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo = cafeTableService.getTableInfo(cafeId);
+
+        ReservationDto.RevCafeInfoResponseDto revCafeInfoResDto = ReservationDto.RevCafeInfoResponseDto.builder()
+                .cafeName(cafeName)
+                .tableInfo(tableInfo)
+                .build();
+
+        log.info(String.valueOf(revCafeInfoResDto));
+        return revCafeInfoResDto;
     }
 }

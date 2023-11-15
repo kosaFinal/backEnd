@@ -12,6 +12,8 @@ public enum CustomResponseCode {
     BAD_JWT(false, 2000, "JWT 토큰이 잘못되었습니다."),
     NO_TOKEN(false,2001,"JWT 토큰이 포함되어있지 않습니다."),
     AUTHENTICATION_FAILED(false,2002,"정상적인 JWT가 아닙니다"),
+    NO_RESERVATION_CAFE(false, 2003, "카페 예약이 불가능한 카페입니다."),
+    NO_RESERVATION_TIME(false, 2004, "카페 예약이 불가능한 시간입니다."),
 
     //unauthorized(권한 없을 때)(3000)
     EXPIRED_JWT(false, 3000, "만료된 토큰입니다."),
@@ -22,9 +24,10 @@ public enum CustomResponseCode {
     USER_NOT_FOUND(false,4000,"해당 유저를  찾을 수 없습니다."),
     CAFE_NOT_FOUND(false,4001,"해당 카페를 찾을 수 없습니다."),
     RESERVATION_NOT_FOUND(false,4002,"해당 예약을 찾을 수 없습니다."),
-    CAFETABLE_NOT_FOUND(false,4003,"해당 카페테이블을 찾을 수 없습니다.");
+    CAFETABLE_NOT_FOUND(false,4003,"해당 카페테이블을 찾을 수 없습니다."),
 
     //internal server error(기타 에러)(5000)
+    CREATE_RESERVATION_FAILED(false, 5000, "카페 예약 생성을 실패하였습니다.");
 
     private final boolean isSuccess;
     private final int code;
