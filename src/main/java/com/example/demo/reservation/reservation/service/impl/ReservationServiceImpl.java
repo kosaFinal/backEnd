@@ -59,7 +59,8 @@ public class ReservationServiceImpl implements ReservationService {
         log.info(requestDto.getReserveDate()); // 지금 date
 
         // 예약 중복인지 확인
-        List<Reservation> reservationTime = reservationMapper.findReservation(requestDto.getReserveDate(), requestDto.getTableId());
+        List<Reservation> reservationTime = reservationMapper.getReservationByTableId(requestDto.getReserveDate(), requestDto.getTableId());
+        log.info(reservationTime.toString());
 
         for (Reservation.TimeSlot timeSlot : requestDto.getReserveTime()) {
             String requestStart = timeSlot.getReserveStart();
@@ -151,7 +152,7 @@ public class ReservationServiceImpl implements ReservationService {
         log.info("formatDate"+formatDate);
 
         // 예약날짜와 tableId로 예약 내역 가져오기
-        List<Reservation> reservations = reservationMapper.findReservation(formatDate, tableId);
+        List<Reservation> reservations = reservationMapper.getReservationByTableId(formatDate, tableId);
         log.info(String.valueOf(reservations));
 
         if(reservations == null){

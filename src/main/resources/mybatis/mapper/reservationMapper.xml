@@ -7,7 +7,7 @@
         VALUES (#{tableId}, #{cafeId}, #{userId}, #{reserveStart}, #{reserveEnd}, #{personCnt}, #{status}, #{reserveDate}, sysdate)
     </insert>
 
-    <select id="findReservation" parameterType="reservation">
+    <select id="getReservationByTableId" parameterType="reservation">
         SELECT *
         FROM reservation
         WHERE reserveDate = #{reserveDate} AND tableId = #{tableId}
