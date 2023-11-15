@@ -9,4 +9,6 @@ import java.util.List;
 public interface ReservationMapper {
     void createReservation(Reservation reservation);
     List<Reservation> getReservationByTableId(String reserveDate, int tableId);
+
+    List<Reservation> getReservaionByCafeId(String date, int cafeId);
 }

@@ -52,5 +52,26 @@ public class ReservationDto {
         }
     }
 
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class DateReservationResponseDto{
+        private String userRealName;
+        private String tableNumber;
+        private String tableType;
+        private int personCnt;
+        private String reserveStart;
+        private String reserveEnd;
+
+        public DateReservationResponseDto(String userRealName, String tableNumber, String tableType, int personCnt, String reserveStart, String reserveEnd) {
+            this.userRealName = userRealName;
+            this.tableNumber = tableNumber;
+            this.tableType = tableType;
+            this.personCnt = personCnt;
+            this.reserveStart = reserveStart;
+            this.reserveEnd = reserveEnd;
+        }
+    }
+
 
 }

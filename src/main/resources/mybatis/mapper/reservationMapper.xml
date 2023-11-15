@@ -12,4 +12,11 @@
         FROM reservation
         WHERE reserveDate = #{reserveDate} AND tableId = #{tableId}
     </select>
+
+    <select id="getReservaionByCafeId" parameterType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE reserveDate = #{date} AND cafeId = #{cafeId}
+        ORDER BY USERID, TABLEID, RESERVESTART
+    </select>
 </mapper>

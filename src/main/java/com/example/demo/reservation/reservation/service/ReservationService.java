@@ -7,7 +7,13 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface ReservationService {
+
+    // user
     Boolean createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName);
     List<ReservationDto.TimeSlotResponseDto> getAvailableTimeSlots(String reserveDate, int tableId);
     ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId);
+
+
+    // manager
+    List<ReservationDto.DateReservationResponseDto> getDateReservation(String date, String userName);
 }
