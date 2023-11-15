@@ -22,4 +22,5 @@ public class Cafe {
     private byte[] cafeRepImg;
     private byte[] studyImg;
 
+
 }

@@ -27,7 +27,7 @@ public enum CustomResponseCode {
     CAFETABLE_NOT_FOUND(false,4003,"해당 카페테이블을 찾을 수 없습니다."),
 
     //internal server error(기타 에러)(5000)
-    IMG_OVER_SELECT(false,5000,"최대 5장의 이미지만 업로드 가능합니다");
+    IMG_OVER_SELECT(false,5000,"최대 5장의 이미지만 업로드 가능합니다"),
     CREATE_RESERVATION_FAILED(false, 5000, "카페 예약 생성을 실패하였습니다.");
 
     private final boolean isSuccess;

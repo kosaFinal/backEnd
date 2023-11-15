@@ -51,5 +51,21 @@
         from CAFE
         where CAFENAME LIKE '%'||#{word}||'%'
     </select>
+    
+    <select id="searchByMyLocation" parameterType="Double" resultType="cafe">
+        <![CDATA[
+            SELECT *
+            FROM (
+                SELECT cafe.*,
+                (6371 * ACOS(COS(#{latitude}/57.29577951)
+                * COS(LATITUDE/57.29577951)
+                * COS(LONGITUDE/57.29577951 - #{longitude}/57.29577951)
+                + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
+                FROM cafe
+            )
+            WHERE ROWNUM <= 15
+            ORDER BY distance
+        ]]>
+    </select>
 
 </mapper>

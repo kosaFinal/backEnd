@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Override
     public SearchDto.SearchResponseDto search(SearchDto.SearchRequestDto searchRequestDto) {
-        ArrayList<Cafe> cafeList = searchMapper.search(searchRequestDto);
+        List<Cafe> cafeList = searchMapper.search(searchRequestDto);
 
         return new SearchDto.SearchResponseDto(cafeList);
     }
@@ -43,6 +44,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public SearchDto.SearchResponseDto searchByMyLocation(Double longtitude, Double latitude) {
-        return null;
+        List<Cafe> cafes = searchMapper.searchByMyLocation(longtitude,latitude);
+        return new SearchDto.SearchResponseDto(cafes);
     }
 }

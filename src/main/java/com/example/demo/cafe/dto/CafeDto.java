@@ -39,10 +39,10 @@ public class CafeDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CafeRegisterResponseDto{
-        int cafeId;
-        String cafeName;
-        int userId;
-        byte[] studyImg;
+        private int cafeId;
+        private String cafeName;
+        private int userId;
+        private byte[] studyImg;
         public CafeRegisterResponseDto(int userId, byte[] studyImg){
             this.userId = userId;
             this.studyImg = studyImg;
@@ -79,8 +79,8 @@ public class CafeDto {
 
     @Data
     public static class CafeLocationResponseDto{
-        private String longtitude;
-        private String latitude;
+        private Double longtitude;
+        private Double latitude;
         private String cafeName;
         private byte[] cafeReqImg;
         private String cafeTel;
@@ -122,6 +122,7 @@ public class CafeDto {
     }
 
     @Builder
+    @Data
     public static class CafeTimeResponseDto{
         private String startTime;
         private String endTime;
