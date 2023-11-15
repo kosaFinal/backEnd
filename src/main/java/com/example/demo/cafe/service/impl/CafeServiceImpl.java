@@ -1,5 +1,6 @@
 package com.example.demo.cafe.service.impl;
 
+
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.mapper.CafeImgMapper;
 import com.example.demo.cafe.mapper.CafeMapper;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class CafeServiceImpl implements CafeService {
+
 
     private final CafeMapper cafeMapper;
     private final UsersMapper usersMapper;
@@ -47,7 +49,5 @@ public class CafeServiceImpl implements CafeService {
 //                .studyImg(requestDto.getStudyImg())
 //                .build();
     }
-
-
 
 }

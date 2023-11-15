@@ -1,9 +1,12 @@
 package com.example.demo.cafe.dto;
 
 import com.example.demo.cafe.entity.Cafe;
-import lombok.*;
 
+import lombok.*;
 import java.util.Date;
+import lombok.Builder;
+import lombok.Data;
+
 
 public class CafeDto {
 
@@ -76,4 +79,15 @@ public class CafeDto {
         }
     }
 
+    @Data
+    @Builder
+    public static class CafeTimeResponseDto{
+        private String startTime;
+        private String endTime;
+
+        public CafeTimeResponseDto(String startTime, String endTime) {
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
+    }
 }
