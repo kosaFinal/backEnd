@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -41,28 +42,6 @@ public class ReservationController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
     }
 
-    // 예약할 카페 정보 조회
-    @GetMapping("/cafe/{cafeId}")
-    public ResponseEntity<ApiResponse<ReservationDto.RevCafeInfoResponseDto>> getRevCafeInfo(@PathVariable int cafeId){
-
-//        Cafe cafe = cafeMapper.getOneCafe(cafeId);
-//        String cafeName = cafe.getCafeName();
-//
-//        if (cafeName == null) {
-//            throw new GeneralException(CustomResponseCode.CAFE_NOT_FOUND);
-//        }
-//
-//        Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo = cafeTableService.getTableInfo(cafeId);
-//
-//        ReservationDto.RevCafeInfoResponseDto revCafeInfoResDto = ReservationDto.RevCafeInfoResponseDto.builder()
-//                .cafeName(cafeName)
-//                .tableInfo(tableInfo)
-//                .build();
-//
-//        return ResponseEntity.ok().body(ApiResponse.createSuccess(revCafeInfoResDto, CustomResponseCode.SUCCESS));
-        return null;
-    }
-
     @GetMapping("/time/{date}/{tableId}")
     public ResponseEntity<ApiResponse<List<ReservationDto.TimeSlotResponseDto>>> getRevTimeInfo(@PathVariable String date, @PathVariable int tableId){
         log.info("시간 가져오기 시작");
@@ -72,4 +51,14 @@ public class ReservationController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(timeSlotResponseDto, CustomResponseCode.SUCCESS));
     }
 
+    // 예약할 카페 이름&테이블 조회
+    @GetMapping("/cafe/{cafeId}")
+    public ResponseEntity<ApiResponse<ReservationDto.RevCafeInfoResponseDto>> getRevCafeInfo(@PathVariable int cafeId){
+        log.info("예약할 카페 정보 조회 시작");
+        ReservationDto.RevCafeInfoResponseDto revCafeInfoResponseDto = reservationService.getRevCafeInfo(cafeId);
+        log.info(revCafeInfoResponseDto.toString());
+        log.info("apiresponse: "+ApiResponse.createSuccess(revCafeInfoResponseDto, CustomResponseCode.SUCCESS));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(revCafeInfoResponseDto, CustomResponseCode.SUCCESS));
+    }
+    
 }

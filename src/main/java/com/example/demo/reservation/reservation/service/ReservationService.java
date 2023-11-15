@@ -9,4 +9,5 @@ import java.util.List;
 public interface ReservationService {
     Boolean createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName);
     List<ReservationDto.TimeSlotResponseDto> getAvailableTimeSlots(String reserveDate, int tableId);
+    ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId);
 }

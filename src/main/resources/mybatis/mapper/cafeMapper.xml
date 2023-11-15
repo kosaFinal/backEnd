@@ -2,9 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.cafe.mapper.CafeMapper">
 
+
+    <select id="findCafeNameByCafeId" parameterType="int" resultType="String">
+        SELECT cafeName
+        FROM cafe
+        WHERE cafeId = #{cafeId}
+    </select>
+
     <select id="getOneCafe" parameterType="int" resultType="cafe">
         SELECT *
         FROM cafe
         WHERE cafeId = #{cafeId}
     </select>
+
+    <select id="findUserIdByCafeId" parameterType="int" resultType="int">
+        SELECT cafeId
+        FROM cafe
+        WHERE userId = #{userId}
+    </select>
+
+    <insert id="insertCafe" parameterType="cafe">
+        INSERT INTO cafe (
+            cafename, cafetype, starttime, endtime, address, longtitude, latitude,
+            cafetel, study, userid, caferepimg, studyimg, createdate, modifydate)
+        VALUES (
+                   #{cafeName}, #{cafeType}, #{startTime, jdbcType=VARCHAR}, #{endTime, jdbcType=VARCHAR},
+                   #{address}, #{longtitude}, #{latitude}, #{cafeTel}, #{study}, #{userId},
+                   #{cafeRepImg, jdbcType=BLOB}, #{studyImg, jdbcType=BLOB}, sysdate, sysdate)
+    </insert>
+
 </mapper>
