@@ -34,7 +34,6 @@ public class CafeImgServiceImpl implements CafeImgService{
             cafeImgMapper.insertCafeImg(imgDto);
         }
 
-
     }
 
 }

@@ -2,6 +2,8 @@ package com.example.demo.cafe.controller;
 
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.dto.CafeImgDto;
+import com.example.demo.cafe.entity.CafeFeature;
+import com.example.demo.cafe.service.CafeFeatureService;
 import com.example.demo.cafe.service.CafeImgService;
 import com.example.demo.cafe.service.CafeService;
 import com.example.demo.constant.dto.ApiResponse;
@@ -26,24 +28,28 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/manager")
+@RequestMapping("/cafe")
 @Slf4j
 public class CafeController {
 
     private final CafeService cafeService;
     private final CafeImgService cafeImgService;
-    private final JwtUtils jwtUtils;
+    private final CafeFeatureService cafeFeatureService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<String>> registerCafe (
             @RequestPart(value = "cafeReg") CafeDto.CafeRegisterRequestDto requestDto,
-            @RequestPart(value = "cafeRepImg") MultipartFile cafeRepImgFile,
-            @RequestPart(value = "studyImg") MultipartFile studyImgFile, Authentication authentication,
-            @RequestPart(value = "cafeImgs") List<MultipartFile> cafeDetailImgFiles) throws IOException {
+            @RequestPart(value = "cafeRepImg", required = false) MultipartFile cafeRepImgFile,
+            @RequestPart(value = "cafeStudyImg", required = false) MultipartFile studyImgFile, Authentication authentication,
+            @RequestPart(value = "cafeImgs", required = false) MultipartFile[] cafeDetailImgFiles,
+            @RequestPart(value = "cafeFeature")CafeDto.CafeFeatureRequestDto cafeFeatureRequestDto) throws IOException {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
-        log.info(userName);
+
+        if (cafeDetailImgFiles != null && cafeDetailImgFiles.length > 5) {
+            return ResponseEntity.badRequest().body(ApiResponse.createError(CustomResponseCode.IMG_OVER_SELECT));
+        }
 
         if (cafeRepImgFile != null && !cafeRepImgFile.isEmpty()) {
             requestDto.setCafeRepImg(cafeRepImgFile.getBytes());
@@ -66,10 +72,13 @@ public class CafeController {
             }
         }
 
-
         cafeService.registerCafe(requestDto, userName);
         cafeImgService.insertCafeImg(imgDtos, userName);
+        cafeFeatureService.insertCafeFeatures(cafeFeatureRequestDto, userName);
+
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
     }
+
+
 
 }
