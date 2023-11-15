@@ -1,4 +1,7 @@
 package com.example.demo.feature.service;
 
-public class FeatureService {
+import com.example.demo.feature.entity.Feature;
+
+public interface FeatureService {
+    String getFeatureName(int featureId);
 }

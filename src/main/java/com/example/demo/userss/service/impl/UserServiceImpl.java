@@ -84,12 +84,4 @@ public class UserServiceImpl implements UsersService {
         return false;
     }
 
-    public Boolean checkUserId(int userId) {
-        boolean result = false;
-        Users users = usersMapper.getUserByUserId(userId);
-        if(users != null){
-            result = true;
-        }
-        return result;
-    }
 }

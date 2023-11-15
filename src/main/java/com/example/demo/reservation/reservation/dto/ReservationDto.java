@@ -2,6 +2,7 @@ package com.example.demo.reservation.reservation.dto;
 
 import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.cafeTable.entity.CafeTable;
+import com.example.demo.reservation.reservation.entity.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,12 +17,9 @@ public class ReservationDto {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UserReservationReqDto{
+    public static class UserReservationRequestDto{
         private int tableId;
-        private int cafeId;
-        private int userId;
-        private String reserveStart;
-        private String reserveEnd;
+        private List<Reservation.TimeSlot> reserveTime;
         private int personCnt;
         private String reserveDate;
     }
@@ -29,26 +27,28 @@ public class ReservationDto {
     @Data
     @NoArgsConstructor
     @Builder
-    public static class UserReservationResDto{
-        private String reservationDate;
+    public static class RevCafeInfoResponseDto{
         private String cafeName;
+        private Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo;
 
-        public UserReservationResDto(String reservationDate, String cafeName) {
-            this.reservationDate = reservationDate;
+        public RevCafeInfoResponseDto(String cafeName, Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo) {
             this.cafeName = cafeName;
+            this.tableInfo = tableInfo;
         }
     }
 
     @Data
     @NoArgsConstructor
     @Builder
-    public static class RevCafeInfoResDto{
-        private String cafeName;
-        private Map<String, List<CafeTableDto.CafeTableInfo>> tableInfo;
+    public static class TimeSlotResponseDto{
+        private String reserveStart;
+        private String reserveEnd;
+        private String available;
 
-        public RevCafeInfoResDto(String cafeName, Map<String, List<CafeTableDto.CafeTableInfo>> tableInfo) {
-            this.cafeName = cafeName;
-            this.tableInfo = tableInfo;
+        public TimeSlotResponseDto(String reserveStart, String reserveEnd, String available) {
+            this.reserveStart = reserveStart;
+            this.reserveEnd = reserveEnd;
+            this.available = available;
         }
     }
 

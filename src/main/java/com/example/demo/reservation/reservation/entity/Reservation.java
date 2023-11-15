@@ -25,4 +25,10 @@ public class Reservation extends BaseEntity {
     private String reserveDate;
     private String cancleReasonId;
 
+    @Data
+    public static class TimeSlot {
+        private String reserveStart;
+        private String reserveEnd;
+    }
+
 }
