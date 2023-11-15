@@ -23,8 +23,6 @@ public class ApiResponse<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
-
-
     public static ApiResponse<String> createSuccessWithNoContent(CustomResponseCode code){
         return new ApiResponse<>(true, code.getCode(), code.getMessage(), null);
     }

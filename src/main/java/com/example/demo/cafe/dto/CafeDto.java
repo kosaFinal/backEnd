@@ -1,10 +1,51 @@
 package com.example.demo.cafe.dto;
 
 import com.example.demo.cafe.entity.Cafe;
+
+import lombok.*;
+import java.util.Date;
 import lombok.Builder;
 import lombok.Data;
 
+
 public class CafeDto {
+
+    @Getter
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeRegisterRequestDto{
+        private int cafeId;
+        private String cafeName;
+        private String cafeType;
+        private String startTime;
+        private String endTime;
+        private String address;
+        private String longtitude;
+        private String latitude;
+        private String cafeTel;
+        private String study;
+        private int userId;
+        private byte[] cafeRepImg;
+        private byte[] studyImg;
+        private Date createDate;
+        private Date modifyDate;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeRegisterResponseDto{
+        int cafeId;
+        String cafeName;
+        int userId;
+        byte[] studyImg;
+        public CafeRegisterResponseDto(int userId, byte[] studyImg){
+            this.userId = userId;
+            this.studyImg = studyImg;
+        }
+    }
 
     @Data
     public static class CafeSearchResponseDto{
