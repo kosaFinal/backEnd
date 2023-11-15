@@ -40,6 +40,7 @@ public class UserServiceImpl implements UsersService {
         }
 
         String accessToken = jwtUtils.createToken(userLoginRequestDto.getUserName());
+
         log.info("accessToken: "+accessToken);
         return UsersDto.UserLoginResponseDto.builder()
                 .userName(userLoginRequestDto.getUserName())

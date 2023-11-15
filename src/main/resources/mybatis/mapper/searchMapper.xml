@@ -46,4 +46,10 @@
         ]]>
     </select>
 
+    <select id="searchWord" parameterType="String" resultType="java.lang.String">
+        select CAFENAME
+        from CAFE
+        where CAFENAME LIKE '%'||#{word}||'%'
+    </select>
+
 </mapper>

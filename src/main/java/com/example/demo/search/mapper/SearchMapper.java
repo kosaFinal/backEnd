@@ -10,5 +10,6 @@ import java.util.List;
 @Mapper
 public interface SearchMapper {
     ArrayList<Cafe> search(SearchDto.SearchRequestDto searchRequestDto);
+    List<String> searchWord(String word);
 
 }

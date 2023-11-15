@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 
 @Getter
@@ -23,6 +24,8 @@ public class Users implements UserDetails {
     private String password;
     private String userRealName;
     private String role;
+    private Date createDate;
+    private Date modifyDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

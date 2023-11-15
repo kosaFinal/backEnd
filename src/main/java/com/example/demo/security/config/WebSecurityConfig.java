@@ -35,7 +35,7 @@ public class WebSecurityConfig {
 
         return http
 //                .formLogin(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(config -> {})
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
                         management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

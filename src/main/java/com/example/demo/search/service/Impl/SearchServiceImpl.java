@@ -34,4 +34,15 @@ public class SearchServiceImpl implements SearchService {
 
         return new SearchDto.SearchResponseDto(cafeList);
     }
+
+    @Override
+    public List<String> searchWord(String word) {
+
+        return searchMapper.searchWord(word);
+    }
+
+    @Override
+    public SearchDto.SearchResponseDto searchByMyLocation(Double longtitude, Double latitude) {
+        return null;
+    }
 }

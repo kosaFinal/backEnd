@@ -20,5 +20,4 @@ public class Cafe {
     private String study;
     private Users user;
     private byte[] cafeRepImg;
-
 }
