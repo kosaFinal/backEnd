@@ -8,9 +8,7 @@
         WHERE cafeId = #{cafeId}
     </select>
 
-
-
-    <select id="findUserIdByCafeId" parameterType="int" resultType="int">
+    <select id="findCafeIdByUserId" parameterType="int" resultType="int">
         SELECT cafeId
         FROM cafe
         WHERE userId = #{userId}

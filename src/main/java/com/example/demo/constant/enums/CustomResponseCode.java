@@ -22,9 +22,10 @@ public enum CustomResponseCode {
     USER_NOT_FOUND(false,4000,"해당 유저를  찾을 수 없습니다."),
     CAFE_NOT_FOUND(false,4001,"해당 카페를 찾을 수 없습니다."),
     RESERVATION_NOT_FOUND(false,4002,"해당 예약을 찾을 수 없습니다."),
-    CAFETABLE_NOT_FOUND(false,4003,"해당 카페테이블을 찾을 수 없습니다.");
+    CAFETABLE_NOT_FOUND(false,4003,"해당 카페테이블을 찾을 수 없습니다."),
 
     //internal server error(기타 에러)(5000)
+    IMG_OVER_SELECT(false,5000,"최대 5장의 이미지만 업로드 가능합니다");
 
     private final boolean isSuccess;
     private final int code;

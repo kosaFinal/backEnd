@@ -27,6 +27,8 @@ public class CafeDto {
         private byte[] studyImg;
         private Date createDate;
         private Date modifyDate;
+
+
     }
 
     @Data
@@ -60,6 +62,19 @@ public class CafeDto {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeFeatureRequestDto{
+        private Boolean comfortableSeats;
+        private Boolean hasDesserts;
+        private Boolean quiet;
+        private Boolean noMusic;
+        private Boolean sentimental;
+        private Boolean hasPowerOutlets;
+
+    }
+
+    @Data
     public static class CafeLocationResponseDto{
         private String longtitude;
         private String latitude;
@@ -75,5 +90,33 @@ public class CafeDto {
             this.cafeTel = cafe.getCafeTel();
         }
     }
+
+    @Data
+    public static class CafeReadBasicResponseDto{
+        private int cafeId;
+        private String cafeName;
+        private String cafeType;
+        private String address;
+        private String cafeTel;
+        private int userId;
+    }
+
+    @Data
+    public static class CafeReadDetailResponseDto{
+        private int cafeId;
+        private String startTime;
+        private String endTime;
+        private int userId;
+    }
+
+    @Data
+    public static class CafeReadSettingResponseDto{
+        private int cafeId;
+        private String study;
+        private int userId;
+        private byte[] studyImg;
+
+    }
+
 
 }
