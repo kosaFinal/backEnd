@@ -1,12 +1,7 @@
 package com.example.demo.reservation.reservation.controller;
 
-import com.example.demo.cafe.entity.Cafe;
-import com.example.demo.cafe.mapper.CafeMapper;
-import com.example.demo.cafeTable.dto.CafeTableDto;
-import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.dto.ApiResponse;
 import com.example.demo.constant.enums.CustomResponseCode;
-import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
 import com.example.demo.reservation.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -16,19 +11,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user/reservation/*")
 @Slf4j
-public class ReservationController {
+public class UserReservationController {
 
     private final ReservationService reservationService;
-    private final CafeMapper cafeMapper;
-    private final CafeTableService cafeTableService;
 
     // 예약 생성
     @PostMapping("/register")
@@ -61,5 +52,4 @@ public class ReservationController {
         log.info("apiresponse: "+ApiResponse.createSuccess(revCafeInfoResponseDto, CustomResponseCode.SUCCESS));
         return ResponseEntity.ok().body(ApiResponse.createSuccess(revCafeInfoResponseDto, CustomResponseCode.SUCCESS));
     }
-    
 }

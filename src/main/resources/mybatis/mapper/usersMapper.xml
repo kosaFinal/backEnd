@@ -24,5 +24,11 @@
         where userName = #{userName}
     </select>
 
+    <update id="usersPwUpdate" parameterType="String">
+        update USERS
+        set password = #{password}
+        where userName = #{userName}
+    </update>
+
 
 </mapper>
