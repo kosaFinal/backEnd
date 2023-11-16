@@ -82,6 +82,16 @@ public class CafeController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
     }
 
+    @GetMapping("/basic")
+    public ResponseEntity<ApiResponse<CafeDto.CafeReadBasicResponseDto>> readCafeBasic(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+        log.info(userName);
+        CafeDto.CafeReadBasicResponseDto result = cafeService.findCafeBasicByUserId(userName);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
+    }
+
+
 
 
 }

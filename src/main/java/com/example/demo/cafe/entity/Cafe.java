@@ -18,7 +18,7 @@ public class Cafe {
     private Double latitude; //위도
     private String cafeTel;
     private String study;
-    private Users user;
+    private int userId;
     private byte[] cafeRepImg;
     private byte[] studyImg;
     private String cafeRepImgMine;

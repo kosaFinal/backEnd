@@ -11,8 +11,9 @@ import java.util.List;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 public class CafeDto {
 
     @Getter
@@ -88,8 +89,10 @@ public class CafeDto {
             this.cafeTel = cafe.getCafeTel();
         }
     }
-
+/* 매니저 - 카페 조회 */
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CafeReadBasicResponseDto{
         private int cafeId;
         private String cafeName;
@@ -97,9 +100,19 @@ public class CafeDto {
         private String address;
         private String cafeTel;
         private int userId;
+        public CafeReadBasicResponseDto(Cafe cafe) {
+            this.cafeId = cafe.getCafeId();
+            this.cafeName = cafe.getCafeName();
+            this.cafeType = cafe.getCafeType();
+            this.address = cafe.getAddress();
+            this.cafeTel = cafe.getCafeTel();
+            this.userId = cafe.getUserId();
+        }
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CafeReadDetailResponseDto{
         private int cafeId;
         private String startTime;
@@ -108,6 +121,8 @@ public class CafeDto {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CafeReadSettingResponseDto{
         private int cafeId;
         private String study;
