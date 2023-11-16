@@ -7,11 +7,6 @@
         VALUES (#{cafeId}, #{featureId}, sysdate, sysdate)
     </insert>
 
-    <select id="readCafeFeatures" resultType="cafeFeature">
-        select *
-        from cafeFeafure
-        where cafeId = #{cafeId}
-    </select>
 
 
 </mapper>
