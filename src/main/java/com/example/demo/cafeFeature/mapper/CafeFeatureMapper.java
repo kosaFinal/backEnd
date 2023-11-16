@@ -2,6 +2,7 @@ package com.example.demo.cafeFeature.mapper;
 
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafeFeature.entity.CafeFeature;
+import com.example.demo.feature.entity.Feature;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,5 +11,5 @@ import java.util.List;
 public interface CafeFeatureMapper {
     void insertCafeFeatures(int cafeId, int featureId);
 
-    List<CafeFeature> readCafeFeatures(int cafeId);
+
 }
