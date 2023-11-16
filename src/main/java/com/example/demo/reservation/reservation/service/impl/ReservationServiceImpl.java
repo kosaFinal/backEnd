@@ -3,7 +3,7 @@ package com.example.demo.reservation.reservation.service.impl;
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.cafe.mapper.CafeMapper;
-import com.example.demo.cafe.service.CafeService;
+import com.example.demo.cafe.service.CafeImgService;
 import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.cafeTable.entity.CafeTable;
 import com.example.demo.cafeTable.mapper.CafeTableMapper;
@@ -19,9 +19,13 @@ import com.example.demo.userss.mapper.UsersMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
+import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final CafeTableMapper cafeTableMapper;
     private final UsersMapper usersMapper;
     private final CafeTableService cafeTableService;
+    private final CafeImgService cafeImgService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -59,7 +64,8 @@ public class ReservationServiceImpl implements ReservationService {
         log.info(requestDto.getReserveDate()); // 지금 date
 
         // 예약 중복인지 확인
-        List<Reservation> reservationTime = reservationMapper.findReservation(requestDto.getReserveDate(), requestDto.getTableId());
+        List<Reservation> reservationTime = reservationMapper.getReservationByTableId(requestDto.getReserveDate(), requestDto.getTableId());
+        log.info(reservationTime.toString());
 
         for (Reservation.TimeSlot timeSlot : requestDto.getReserveTime()) {
             String requestStart = timeSlot.getReserveStart();
@@ -151,7 +157,7 @@ public class ReservationServiceImpl implements ReservationService {
         log.info("formatDate"+formatDate);
 
         // 예약날짜와 tableId로 예약 내역 가져오기
-        List<Reservation> reservations = reservationMapper.findReservation(formatDate, tableId);
+        List<Reservation> reservations = reservationMapper.getReservationByTableId(formatDate, tableId);
         log.info(String.valueOf(reservations));
 
         if(reservations == null){
@@ -202,4 +208,83 @@ public class ReservationServiceImpl implements ReservationService {
         log.info(String.valueOf(revCafeInfoResDto));
         return revCafeInfoResDto;
     }
+
+    @Override
+    public List<ReservationDto.DateReservationResponseDto> getDateReservation(String date, String userName) {
+
+        // 날짜 계산
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate inputDate = LocalDate.parse(date, formatter);
+
+        LocalDate today = LocalDate.now();
+        LocalDate before = today.minusDays(30);
+        LocalDate after = today.plusDays(7);
+
+        if (inputDate.isBefore(before) || inputDate.isAfter(after)) {
+            throw new GeneralException(CustomResponseCode.NO_CHECK_DATE);
+        }
+
+
+        // 토큰 값으로 cafeId 가져오기
+        Users manager = usersMapper.getOneUsers(userName);
+        if(manager == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
+
+        // 가져온 userId로 cafeId 가져오기
+//        int cafeId = cafeImgService.findCafeIdByUserName(userName);
+        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+
+        // 카페의 해당 날짜의 전체 예약 불러오기
+
+        String formatDate = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6);
+        List<Reservation> allReservation = reservationMapper.getReservaionByCafeId(formatDate, cafeId);
+        log.info(allReservation.toString());
+
+        List<ReservationDto.DateReservationResponseDto> responseList = new ArrayList<>();
+
+        if(!allReservation.isEmpty()){
+            Reservation current = allReservation.get(0);
+
+            for(int i=1; i<allReservation.size(); i++){
+                Reservation next = allReservation.get(i);
+
+                if((current.getUserId() == next.getUserId())
+                        && (current.getTableId() == next.getTableId())
+                        && (current.getReserveEnd().equals(next.getReserveStart()))) {
+                    log.info("연속된 예약");
+                    current.setReserveEnd(next.getReserveEnd());
+                } else {
+                    log.info("연속아닌 예약");
+                    responseList.add(convertReservationToDto(current));
+                    current = next;
+                }
+            }
+            responseList.add(convertReservationToDto(current)); // 마지막 예약 저장
+        }
+
+        log.info(responseList.toString());
+
+        return responseList;
+    }
+
+    // 날짜별 예약 조회 시 사용 (reservation -> DateReservationResponseDto 변경)
+    private ReservationDto.DateReservationResponseDto convertReservationToDto(Reservation reservation) {
+        Users users = usersMapper.getUserByUserId(reservation.getUserId());
+        String userRealName = users.getUserRealName();
+
+        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(reservation.getTableId());
+        String tableNumber = cafeTable.getTableNumber();
+        String tableType = cafeTable.getTableType();
+
+        return ReservationDto.DateReservationResponseDto.builder()
+                .userRealName(userRealName)
+                .tableNumber(tableNumber)
+                .tableType(tableType)
+                .personCnt(reservation.getPersonCnt())
+                .reserveStart(reservation.getReserveStart())
+                .reserveEnd(reservation.getReserveEnd())
+                .build();
+    }
+
 }
