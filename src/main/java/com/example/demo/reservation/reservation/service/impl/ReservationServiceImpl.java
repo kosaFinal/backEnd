@@ -24,6 +24,8 @@ import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -210,6 +212,19 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDto.DateReservationResponseDto> getDateReservation(String date, String userName) {
 
+        // 날짜 계산
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate inputDate = LocalDate.parse(date, formatter);
+
+        LocalDate today = LocalDate.now();
+        LocalDate before = today.minusDays(30);
+        LocalDate after = today.plusDays(7);
+
+        if (inputDate.isBefore(before) || inputDate.isAfter(after)) {
+            throw new GeneralException(CustomResponseCode.NO_CHECK_DATE);
+        }
+
+
         // 토큰 값으로 cafeId 가져오기
         Users manager = usersMapper.getOneUsers(userName);
         if(manager == null){
@@ -217,10 +232,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         // 가져온 userId로 cafeId 가져오기
-        //int cafeId = cafeImgService.findCafeIdByUserName(userName);
+//        int cafeId = cafeImgService.findCafeIdByUserName(userName);
         int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         // 카페의 해당 날짜의 전체 예약 불러오기
+
         String formatDate = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6);
         List<Reservation> allReservation = reservationMapper.getReservaionByCafeId(formatDate, cafeId);
         log.info(allReservation.toString());
