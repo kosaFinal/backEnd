@@ -20,5 +20,6 @@ public interface ReservationService {
     List<ReservationDto.ManagerReservationResponseDto> getIngReservation(String userName);
 
     Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto);
+    Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto);
 
 }

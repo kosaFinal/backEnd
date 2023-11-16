@@ -31,7 +31,8 @@ public enum CustomResponseCode {
     //internal server error(기타 에러)(5000)
     IMG_OVER_SELECT(false,5000,"최대 5장의 이미지만 업로드 가능합니다"),
     CREATE_RESERVATION_FAILED(false, 5001, "카페 예약 생성을 실패하였습니다."),
-    UPDATE_RESERVATION_FAILED(false, 5002, "카페 예약 확정을 실패하였습니다.");
+    COFIRM_RESERVATION_FAILED(false, 5002, "카페 예약 확정을 실패하였습니다."),
+    CANCLE_RESERVATION_FAILED(false, 5003, "카페 예약 취소를 실패하였습니다.");
 
     private final boolean isSuccess;
     private final int code;

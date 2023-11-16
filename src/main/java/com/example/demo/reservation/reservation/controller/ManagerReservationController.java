@@ -58,10 +58,19 @@ public class ManagerReservationController {
     }
 
     @PatchMapping("/confirm")
-    public ResponseEntity<ApiResponse<Boolean>> createReservation(@RequestBody ReservationDto.CofirmReservationRequestDto cofirmReservationRequestDto) {
+    public ResponseEntity<ApiResponse<Boolean>> confirmReservation(@RequestBody ReservationDto.CofirmReservationRequestDto cofirmReservationRequestDto) {
         log.info("예약 확정 시작");
 
         Boolean check = reservationService.confirmReservation(cofirmReservationRequestDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
+
+    }
+
+    @PatchMapping("/cancle")
+    public ResponseEntity<ApiResponse<Boolean>> cancleReservation(@RequestBody ReservationDto.CancleReservationRequestDto cancleReservationRequestDto) {
+        log.info("예약 확정 시작");
+
+        Boolean check = reservationService.cancleReservation(cancleReservationRequestDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
 
     }

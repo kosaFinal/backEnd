@@ -282,7 +282,30 @@ public class ReservationServiceImpl implements ReservationService {
                 log.info(reservationId+"가 변경됨");
             } catch (Exception e) {
                 log.info(e.getMessage());
-                throw new GeneralException(CustomResponseCode.UPDATE_RESERVATION_FAILED);
+                throw new GeneralException(CustomResponseCode.COFIRM_RESERVATION_FAILED);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto) {
+        List<Integer> reservationIds = requestDto.getReservationIds();
+        String cancleReasonId = requestDto.getCancleReasonId();
+
+        for (Integer reservationId : reservationIds) {
+            Reservation temp = reservationMapper.getRevByRevId(reservationId);
+            if(temp == null){
+                throw new GeneralException(CustomResponseCode.NO_RESERVATION);
+            }
+
+            try{
+                reservationMapper.cancleReservation(reservationId, cancleReasonId);
+                log.info(reservationId+"가 변경됨");
+            } catch (Exception e) {
+                log.info(e.getMessage());
+                throw new GeneralException(CustomResponseCode.CANCLE_RESERVATION_FAILED);
             }
         }
         return true;

@@ -89,6 +89,18 @@ public class ReservationDto {
         }
     }
 
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class CancleReservationRequestDto{
+        private List<Integer> reservationIds;
+        private String cancleReasonId;
+
+        public CancleReservationRequestDto(List<Integer> reservationIds, String cancleReasonId) {
+            this.reservationIds = reservationIds;
+            this.cancleReasonId = cancleReasonId;
+        }
+    }
 
 
 }
