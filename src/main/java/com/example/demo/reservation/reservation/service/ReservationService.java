@@ -15,5 +15,7 @@ public interface ReservationService {
 
 
     // manager
-    List<ReservationDto.DateReservationResponseDto> getDateReservation(String date, String userName);
+    List<ReservationDto.ManagerReservationResponseDto> getDateReservation(String date, String userName);
+    List<ReservationDto.ManagerReservationResponseDto> getBeforeReservation(String userName);
+    List<ReservationDto.ManagerReservationResponseDto> getIngReservation(String userName);
 }

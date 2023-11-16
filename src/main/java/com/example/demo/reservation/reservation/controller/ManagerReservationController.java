@@ -25,13 +25,37 @@ public class ManagerReservationController {
     private final ReservationService reservationService;
 
     @GetMapping("/read/date/{date}")
-    public ResponseEntity<ApiResponse<List<ReservationDto.DateReservationResponseDto>>> getDateReservation(@PathVariable String date, Authentication authentication){
+    public ResponseEntity<ApiResponse<List<ReservationDto.ManagerReservationResponseDto>>> getDateReservation(@PathVariable String date, Authentication authentication){
         log.info("날짜별 조회 시작");
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
 
-        List<ReservationDto.DateReservationResponseDto> responseDto = reservationService.getDateReservation(date, userName);
+        List<ReservationDto.ManagerReservationResponseDto> responseDto = reservationService.getDateReservation(date, userName);
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(responseDto, CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/read/before")
+    public ResponseEntity<ApiResponse<List<ReservationDto.ManagerReservationResponseDto>>> getBeforeReservation(Authentication authentication){
+        log.info("예정된 예약 조회 시작");
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        List<ReservationDto.ManagerReservationResponseDto> responseDto = reservationService.getBeforeReservation(userName);
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(responseDto, CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/read/ing")
+    public ResponseEntity<ApiResponse<List<ReservationDto.ManagerReservationResponseDto>>> getIngReservation(Authentication authentication){
+        log.info("진행중인 예약 조회 시작");
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        List<ReservationDto.ManagerReservationResponseDto> responseDto = reservationService.getIngReservation(userName);
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(responseDto, CustomResponseCode.SUCCESS));
     }
