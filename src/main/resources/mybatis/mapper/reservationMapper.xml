@@ -31,5 +31,17 @@
         FROM reservation
         WHERE cafeId = #{cafeId} AND STATUS = 'P'
     </select>
+
+    <update id="cofirmReservation" parameterType="int">
+        UPDATE reservation
+        SET STATUS = 'P'
+        WHERE reservationId = #{reservationId}
+    </update>
+
+    <select id="getRevByRevId" parameterType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE reservationId = #{reservationId}
+    </select>
     
 </mapper>

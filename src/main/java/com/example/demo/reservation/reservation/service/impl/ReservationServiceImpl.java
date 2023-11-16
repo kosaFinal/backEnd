@@ -265,6 +265,29 @@ public class ReservationServiceImpl implements ReservationService {
         return responseList;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto) {
+
+        List<Integer> reservationIds = requestDto.getReservationIds();
+
+        for (Integer reservationId : reservationIds) {
+            Reservation temp = reservationMapper.getRevByRevId(reservationId);
+            if(temp == null){
+                throw new GeneralException(CustomResponseCode.NO_RESERVATION);
+            }
+
+            try{
+                reservationMapper.cofirmReservation(reservationId);
+                log.info(reservationId+"가 변경됨");
+            } catch (Exception e) {
+                log.info(e.getMessage());
+                throw new GeneralException(CustomResponseCode.UPDATE_RESERVATION_FAILED);
+            }
+        }
+        return true;
+    }
+
     // 토큰 값으로 cafeId 가져오기
     private int getCafIdByUsername (String userName){
 

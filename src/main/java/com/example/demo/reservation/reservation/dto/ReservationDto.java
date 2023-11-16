@@ -78,5 +78,17 @@ public class ReservationDto {
         }
     }
 
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class CofirmReservationRequestDto{
+        private List<Integer> reservationIds;
+
+        public CofirmReservationRequestDto(List<Integer> reservationIds) {
+            this.reservationIds = reservationIds;
+        }
+    }
+
+
 
 }

@@ -15,4 +15,8 @@ public interface ReservationMapper {
     List<Reservation> getOneCafeOneDayRev(String date, int cafeId);
     List<Reservation> getOneCafeBeforeRev(int cafeId);
     List<Reservation> getOneCafeIngRev(int cafeId);
+
+    Reservation getRevByRevId(int reservationId);
+    void cofirmReservation(int reservationId);
+
 }

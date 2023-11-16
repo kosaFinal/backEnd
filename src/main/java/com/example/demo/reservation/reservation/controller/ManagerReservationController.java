@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,5 +55,14 @@ public class ManagerReservationController {
         List<ReservationDto.ManagerReservationResponseDto> responseDto = reservationService.getIngReservation(userName);
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(responseDto, CustomResponseCode.SUCCESS));
+    }
+
+    @PatchMapping("/confirm")
+    public ResponseEntity<ApiResponse<Boolean>> createReservation(@RequestBody ReservationDto.CofirmReservationRequestDto cofirmReservationRequestDto) {
+        log.info("예약 확정 시작");
+
+        Boolean check = reservationService.confirmReservation(cofirmReservationRequestDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
+
     }
 }
