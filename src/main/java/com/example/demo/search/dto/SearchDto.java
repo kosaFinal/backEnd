@@ -32,12 +32,13 @@ public class SearchDto {
         private List<CafeDto.CafeSearchResponseDto> searchCafes;
         private List<CafeDto.CafeLocationResponseDto> locations;
 
-        public SearchResponseDto(ArrayList<Cafe> cafes){
+        public SearchResponseDto(List<Cafe> cafes){
             this.searchCafes = cafes.stream().map(CafeDto.CafeSearchResponseDto::new)
                     .collect(Collectors.toList());
             this.locations = cafes.stream()
                     .map(CafeDto.CafeLocationResponseDto::new)
                     .collect(Collectors.toList());
         }
+
     }
 }

@@ -25,4 +25,5 @@ public class Cafe {
     private String studyImgMine;
 
 
+
 }

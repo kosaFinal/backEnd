@@ -10,6 +10,7 @@ import com.example.demo.userss.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UsersService {
         }
 
         String accessToken = jwtUtils.createToken(userLoginRequestDto.getUserName());
+
         log.info("accessToken: "+accessToken);
         return UsersDto.UserLoginResponseDto.builder()
                 .userName(userLoginRequestDto.getUserName())
@@ -84,12 +86,17 @@ public class UserServiceImpl implements UsersService {
         return false;
     }
 
-    public Boolean checkUserId(int userId) {
-        boolean result = false;
-        Users users = usersMapper.getUserByUserId(userId);
-        if(users != null){
-            result = true;
-        }
-        return result;
+    @Override
+    public void updatePassword(String userName, UsersDto.UserCheckPwRequestDto userPwUpdateRequestDto) {
+        String password = passwordEncoder.encode(userPwUpdateRequestDto.getPassword());
+        usersMapper.usersPwUpdate(userName,password);
+
     }
+
+    @Override
+    public void logout(String userName) {
+
+
+    }
+
 }

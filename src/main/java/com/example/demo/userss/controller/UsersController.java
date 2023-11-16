@@ -49,4 +49,24 @@ public class UsersController {
         Boolean check = userService.validatePw(userDetails, userCheckPwRequestDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
     }
+
+    /**
+     * 비밀번호 변경
+     */
+    @PatchMapping("/user/update/password")
+    public ResponseEntity<ApiResponse<String>> updatePw(
+            @RequestBody UsersDto.UserCheckPwRequestDto updatePwRequestDto,
+            Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userService.updatePassword(userDetails.getUsername(), updatePwRequestDto);
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+    }
+
+    @PostMapping("/user/logout")
+    public ResponseEntity<ApiResponse<String>> logout(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userService.logout(userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+    }
 }

@@ -11,7 +11,7 @@ public class CafeTableDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class CafeTableInfo {
+    public static class CafeTableInfoResponseDto {
         private int tableId;
         private String tableNumber;
     }

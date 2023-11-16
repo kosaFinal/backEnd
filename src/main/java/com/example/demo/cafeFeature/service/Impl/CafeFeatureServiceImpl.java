@@ -1,9 +1,10 @@
-package com.example.demo.cafe.service.impl;
+package com.example.demo.cafeFeature.service.Impl;
 
 import com.example.demo.cafe.dto.CafeDto;
-import com.example.demo.cafe.mapper.CafeFeatureMapper;
+import com.example.demo.cafeFeature.dto.CafeFeatureDto;
+import com.example.demo.cafeFeature.mapper.CafeFeatureMapper;
 import com.example.demo.cafe.mapper.CafeImgMapper;
-import com.example.demo.cafe.service.CafeFeatureService;
+import com.example.demo.cafeFeature.service.CafeFeatureService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class CafeFeatureServiceImpl implements CafeFeatureService {
 
 
     @Override
-    public void insertCafeFeatures(CafeDto.CafeFeatureRequestDto cafeFeatureRequestDto, String userName) {
+    public void insertCafeFeatures(CafeFeatureDto.CafeFeatureRequestDto cafeFeatureRequestDto, String userName) {
         int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
 
         int[] featureIds = new int[]{22, 23, 24, 25, 26, 27}; // 특성 ID 배열

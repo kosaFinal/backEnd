@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.search.mapper.SearchMapper">
+
+    <select id="search" resultType="cafe">
+        <![CDATA[
+            SELECT
+                c.cafeId,
+                c.cafeName,
+                c.cafeType,
+                c.startTime,
+                c.endTime,
+                c.address,
+                c.longitude,
+                c.latitude,
+                c.cafeTel,
+                c.study,
+                cf.featureId
+            FROM cafe c
+                LEFT JOIN
+                    cafeFeature cf ON c.cafeId = cf.cafeId
+                LEFT JOIN
+                    feature f ON cf.featureId = f.featureId
+            WHERE
+                c.cafeType = #{cafeType}
+                AND c.study = #{studyEnable}
+                AND EXISTS (
+                    SELECT
+                    1
+                    FROM cafeTable ct
+                    WHERE
+                        ct.cafeId = c.cafeId
+                        AND ct.tableType = #{preferSeat}
+                )
+                AND TO_DATE(c.startTime, 'HH24:MI') >= TO_DATE(#{startTime}, 'HH24:MI')
+                AND TO_DATE(c.endTime, 'HH24:MI') <= TO_DATE(#{endTime}, 'HH24:MI')
+                <if test="features != null and features.size() > 0">
+                    AND f.featureName IN
+                        <foreach item="feature" collection="features" open="(" separator="," close=")">
+                            #{feature}
+                        </foreach>
+                </if>
+                <if>
+                    AND f.featureName IS NULL
+                </if>
+        ]]>
+    </select>
+
+    <select id="searchWord" parameterType="String" resultType="java.lang.String">
+        select CAFENAME
+        from CAFE
+        where CAFENAME LIKE '%'||#{word}||'%'
+    </select>
+    
+    <select id="searchByMyLocation" parameterType="Double" resultType="cafe">
+        <![CDATA[
+            SELECT *
+            FROM (
+                SELECT cafe.*,
+                (6371 * ACOS(COS(#{latitude}/57.29577951)
+                * COS(LATITUDE/57.29577951)
+                * COS(LONGITUDE/57.29577951 - #{longitude}/57.29577951)
+                + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
+                FROM cafe
+            )
+            WHERE ROWNUM <= 15
+            ORDER BY distance
+        ]]>
+    </select>
+
+</mapper>

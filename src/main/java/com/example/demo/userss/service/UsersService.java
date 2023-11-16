@@ -16,6 +16,8 @@ public interface UsersService {
 
     Boolean validatePw(UserDetails userDetails, UsersDto.UserCheckPwRequestDto userCheckPwRequestDto);
 
-    Boolean checkUserId(int userId);
+    void updatePassword(String userName, UsersDto.UserCheckPwRequestDto userPwUpdateRequestDto);
+
+    void logout(String userName);
 
 }
