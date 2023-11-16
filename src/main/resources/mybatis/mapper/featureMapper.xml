@@ -7,4 +7,14 @@
         from feature
         where featureId = #{featureId}
     </select>
+
+    <select id="readFeatures" resultType="feature">
+        select *
+        from feature f
+        where f.featureId in (
+            select cf.featureId
+            from cafeFeature cf
+            where cafeId = #{cafeId}
+            )
+    </select>
 </mapper>

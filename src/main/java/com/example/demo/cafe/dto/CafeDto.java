@@ -3,6 +3,7 @@ package com.example.demo.cafe.dto;
 import com.example.demo.cafe.entity.Cafe;
 
 import com.example.demo.cafeFeature.dto.CafeFeatureDto;
+import com.example.demo.feature.dto.FeatureDto;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -134,15 +135,16 @@ public class CafeDto {
         private String startTime;
         private String endTime;
         private String cafeTel;
-        private List<CafeFeatureDto.MapSelectFeatureRequestDto> features = new ArrayList<>();
+        private List<FeatureDto.FeatureResponseDto> features;
         private String study;
 
-        public CafeSearchDetailResponseDto(Cafe cafe){
+        public CafeSearchDetailResponseDto(Cafe cafe, List<FeatureDto.FeatureResponseDto> features){
             this.cafeName = cafe.getCafeName();
             this.address = cafe.getAddress();
             this.startTime = cafe.getStartTime();
             this.endTime = cafe.getEndTime();
             this.cafeTel = cafe.getCafeTel();
+            this.features = features;
             this.study = cafe.getStudy();
         }
     }

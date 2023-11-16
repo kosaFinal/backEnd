@@ -3,11 +3,15 @@ package com.example.demo.cafe.service.impl;
 
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.entity.Cafe;
+import com.example.demo.cafeFeature.dto.CafeFeatureDto;
 import com.example.demo.cafeFeature.mapper.CafeFeatureMapper;
 import com.example.demo.cafe.mapper.CafeImgMapper;
 import com.example.demo.cafe.mapper.CafeMapper;
 import com.example.demo.cafe.service.CafeService;
 import com.example.demo.cafeFeature.entity.CafeFeature;
+import com.example.demo.feature.dto.FeatureDto;
+import com.example.demo.feature.entity.Feature;
+import com.example.demo.feature.mapper.FeatureMapper;
 import com.example.demo.userss.entity.Users;
 import com.example.demo.userss.mapper.UsersMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +31,7 @@ public class CafeServiceImpl implements CafeService {
     private final CafeMapper cafeMapper;
     private final UsersMapper usersMapper;
     private final CafeImgMapper cafeImgMapper;
-    private final CafeFeatureMapper cafeFeatureMapper;
+    private final FeatureMapper featureMapper;
 
     @Override
     public int findUserIdByCafeId(int userId) {
@@ -60,7 +65,11 @@ public class CafeServiceImpl implements CafeService {
     @Override
     public CafeDto.CafeSearchDetailResponseDto searchCafeDetail(int cafeId) {
         Cafe cafe = cafeMapper.getOneCafe(cafeId);
-        List<CafeFeature> features = cafeFeatureMapper.readCafeFeatures(cafeId);        return null;
+        List<Feature> features = featureMapper.readFeatures(cafeId);
+        List<FeatureDto.FeatureResponseDto> featureDto = features.stream().map(FeatureDto.FeatureResponseDto::new)
+                .collect(Collectors.toList());
+        log.info(featureDto.toString());
+        return new CafeDto.CafeSearchDetailResponseDto(cafe,featureDto);
     }
 
 }

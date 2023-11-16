@@ -23,7 +23,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/cafe")
 @Slf4j
 public class CafeController {
 
@@ -31,7 +30,7 @@ public class CafeController {
     private final CafeImgService cafeImgService;
     private final CafeFeatureService cafeFeatureService;
 
-    @PostMapping("/register")
+    @PostMapping("/manager/cafe/register")
     public ResponseEntity<ApiResponse<String>> registerCafe (
             @RequestPart(value = "cafeReg") CafeDto.CafeRegisterRequestDto requestDto,
             @RequestPart(value = "cafeRepImg", required = false) MultipartFile cafeRepImgFile,
@@ -75,11 +74,12 @@ public class CafeController {
     }
 
     @GetMapping("/user/cafe/{cafeId}")
-    public ResponseEntity<ApiResponse<String>> readCafeDetail(
+    public ResponseEntity<ApiResponse<CafeDto.CafeSearchDetailResponseDto>> readCafeDetail(
             @PathVariable int cafeId,
             Authentication authentication){
-//CafeDto.CafeSearchDetailResponseDto
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+
+        CafeDto.CafeSearchDetailResponseDto detail = cafeService.searchCafeDetail(cafeId);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(detail,CustomResponseCode.SUCCESS));
     }
 
 

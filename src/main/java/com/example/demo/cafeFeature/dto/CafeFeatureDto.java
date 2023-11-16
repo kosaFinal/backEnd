@@ -1,5 +1,7 @@
 package com.example.demo.cafeFeature.dto;
 
+import com.example.demo.cafeFeature.entity.CafeFeature;
+import com.example.demo.cafeFeature.service.CafeFeatureService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,7 @@ public class CafeFeatureDto {
     @Data
     public static class MapSelectFeatureRequestDto{
         private String featureName;
+
     }
 
     @Data
