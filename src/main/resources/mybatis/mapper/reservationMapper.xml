@@ -7,17 +7,41 @@
         VALUES (#{tableId}, #{cafeId}, #{userId}, #{reserveStart}, #{reserveEnd}, #{personCnt}, #{status}, #{reserveDate}, sysdate)
     </insert>
 
-    <select id="getOneTableRev" parameterType="reservation">
+    <select id="getOneTableRev" resultType="reservation">
         SELECT *
         FROM reservation
         WHERE reserveDate = #{reserveDate} AND tableId = #{tableId} AND STATUS IN ('A','p','F')
     </select>
 
-    <select id="getOneCafeOneDayRev" parameterType="reservation">
+    <select id="getOneCafeOneDayRev" resultType="reservation">
         SELECT *
         FROM reservation
         WHERE reserveDate = #{date} AND cafeId = #{cafeId} AND STATUS IN ('A','P','F')
         ORDER BY USERID, TABLEID, RESERVESTART
+    </select>
+
+    <select id="getOneCafeBeforeRev" resultType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE cafeId = #{cafeId} AND STATUS = 'A'
+    </select>
+
+    <select id="getOneCafeIngRev" resultType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE cafeId = #{cafeId} AND STATUS = 'P'
+    </select>
+
+    <update id="cofirmReservation" parameterType="int">
+        UPDATE reservation
+        SET STATUS = 'P'
+        WHERE reservationId = #{reservationId}
+    </update>
+
+    <select id="getRevByRevId" parameterType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE reservationId = #{reservationId}
     </select>
     
 </mapper>

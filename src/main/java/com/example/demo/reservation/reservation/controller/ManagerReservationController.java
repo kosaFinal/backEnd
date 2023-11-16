@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,14 +22,47 @@ public class ManagerReservationController {
     private final ReservationService reservationService;
 
     @GetMapping("/read/date/{date}")
-    public ResponseEntity<ApiResponse<List<ReservationDto.DateReservationResponseDto>>> getDateReservation(@PathVariable String date, Authentication authentication){
+    public ResponseEntity<ApiResponse<List<ReservationDto.ManagerReservationResponseDto>>> getDateReservation(@PathVariable String date, Authentication authentication){
         log.info("날짜별 조회 시작");
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
 
-        List<ReservationDto.DateReservationResponseDto> responseDto = reservationService.getDateReservation(date, userName);
+        List<ReservationDto.ManagerReservationResponseDto> responseDto = reservationService.getDateReservation(date, userName);
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(responseDto, CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/read/before")
+    public ResponseEntity<ApiResponse<List<ReservationDto.ManagerReservationResponseDto>>> getBeforeReservation(Authentication authentication){
+        log.info("예정된 예약 조회 시작");
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        List<ReservationDto.ManagerReservationResponseDto> responseDto = reservationService.getBeforeReservation(userName);
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(responseDto, CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/read/ing")
+    public ResponseEntity<ApiResponse<List<ReservationDto.ManagerReservationResponseDto>>> getIngReservation(Authentication authentication){
+        log.info("진행중인 예약 조회 시작");
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        List<ReservationDto.ManagerReservationResponseDto> responseDto = reservationService.getIngReservation(userName);
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(responseDto, CustomResponseCode.SUCCESS));
+    }
+
+    @PatchMapping("/confirm")
+    public ResponseEntity<ApiResponse<Boolean>> createReservation(@RequestBody ReservationDto.CofirmReservationRequestDto cofirmReservationRequestDto) {
+        log.info("예약 확정 시작");
+
+        Boolean check = reservationService.confirmReservation(cofirmReservationRequestDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
+
     }
 }
