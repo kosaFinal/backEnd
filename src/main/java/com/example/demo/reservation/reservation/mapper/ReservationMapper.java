@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface ReservationMapper {
     void createReservation(Reservation reservation);
-    List<Reservation> getReservationByTableId(String reserveDate, int tableId);
+    List<Reservation> getOneTableRev(String reserveDate, int tableId);
 
-    List<Reservation> getReservaionByCafeId(String date, int cafeId);
+    List<Reservation> getOneCafeOneDayRev(String date, int cafeId);
 }

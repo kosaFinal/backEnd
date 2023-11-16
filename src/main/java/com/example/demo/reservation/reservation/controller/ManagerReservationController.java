@@ -25,7 +25,7 @@ public class ManagerReservationController {
     private final ReservationService reservationService;
 
     @GetMapping("/read/date/{date}")
-    public ResponseEntity<ApiResponse<List<ReservationDto.DateReservationResponseDto>>> getRevCafeInfo(@PathVariable String date, Authentication authentication){
+    public ResponseEntity<ApiResponse<List<ReservationDto.DateReservationResponseDto>>> getDateReservation(@PathVariable String date, Authentication authentication){
         log.info("날짜별 조회 시작");
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
