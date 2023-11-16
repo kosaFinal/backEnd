@@ -22,7 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user/reservation")
+@RequestMapping("/user/reservation/*")
 @Slf4j
 public class ReservationController {
 
@@ -52,6 +52,7 @@ public class ReservationController {
     }
 
     // 예약할 카페 이름&테이블 조회
+//    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/cafe/{cafeId}")
     public ResponseEntity<ApiResponse<ReservationDto.RevCafeInfoResponseDto>> getRevCafeInfo(@PathVariable int cafeId){
         log.info("예약할 카페 정보 조회 시작");
