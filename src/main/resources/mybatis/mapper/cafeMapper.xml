@@ -30,4 +30,10 @@
                    #{cafeRepImg, jdbcType=BLOB}, #{cafeRepImgMine, jdbcType=VARCHAR}, #{studyImg, jdbcType=BLOB}, #{studyImgMine, jdbcType=VARCHAR}, sysdate, sysdate)
     </insert>
 
+    <select id="findCafeBasicByUserId" parameterType="int" resultType="cafe">
+        SELECT cafeid, cafeName, cafeType, cafeTel, ADDRESS, userid
+        FROM cafe
+        WHERE userId = #{userId}
+    </select>
+
 </mapper>

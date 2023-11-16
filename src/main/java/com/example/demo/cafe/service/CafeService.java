@@ -12,5 +12,7 @@ public interface CafeService {
     void registerCafe(CafeDto.CafeRegisterRequestDto requestDto, String userName, MultipartFile cafeRepImgFile, MultipartFile studyImgFile);
 
     CafeDto.CafeSearchDetailResponseDto searchCafeDetail(int  cafeId);
+
+    CafeDto.CafeReadBasicResponseDto findCafeBasicByUserId(String userName);
 }
 

@@ -73,6 +73,15 @@ public class CafeController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
     }
 
+    @GetMapping("/manager/cafe/basic")
+    public ResponseEntity<ApiResponse<CafeDto.CafeReadBasicResponseDto>> readCafeBasic(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+        log.info(userName);
+        CafeDto.CafeReadBasicResponseDto result = cafeService.findCafeBasicByUserId(userName);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
+    }
+
     @GetMapping("/user/cafe/{cafeId}")
     public ResponseEntity<ApiResponse<CafeDto.CafeSearchDetailResponseDto>> readCafeDetail(
             @PathVariable int cafeId,
@@ -81,6 +90,9 @@ public class CafeController {
         CafeDto.CafeSearchDetailResponseDto detail = cafeService.searchCafeDetail(cafeId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(detail,CustomResponseCode.SUCCESS));
     }
+
+
+
 
 
 

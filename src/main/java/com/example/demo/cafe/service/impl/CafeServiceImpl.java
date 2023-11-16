@@ -110,4 +110,15 @@ public class CafeServiceImpl implements CafeService {
         return new CafeDto.CafeSearchDetailResponseDto(cafe,featureDto);
     }
 
+    @Override
+    public CafeDto.CafeReadBasicResponseDto findCafeBasicByUserId(String userName) {
+        Users user = usersMapper.getOneUsers(userName);
+        log.info(String.valueOf(user));
+        log.info(String.valueOf(user.getUserId()));
+        Cafe cafe = cafeMapper.findCafeBasicByUserId(user.getUserId());
+
+
+        return new CafeDto.CafeReadBasicResponseDto(cafe);
+    }
+
 }
