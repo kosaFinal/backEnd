@@ -2,8 +2,13 @@ package com.example.demo.cafe.dto;
 
 import com.example.demo.cafe.entity.Cafe;
 
+import com.example.demo.cafeFeature.dto.CafeFeatureDto;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -67,18 +72,6 @@ public class CafeDto {
     }
 
     @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CafeFeatureRequestDto{
-        private Boolean comfortableSeats;
-        private Boolean hasDesserts;
-        private Boolean quiet;
-        private Boolean noMusic;
-        private Boolean sentimental;
-        private Boolean hasPowerOutlets;
-    }
-
-    @Data
     public static class CafeLocationResponseDto{
         private Double longtitude;
         private Double latitude;
@@ -131,6 +124,26 @@ public class CafeDto {
         public CafeTimeResponseDto(String startTime, String endTime) {
             this.startTime = startTime;
             this.endTime = endTime;
+        }
+    }
+
+    @Getter
+    public static class CafeSearchDetailResponseDto{
+        private String cafeName;
+        private String address;
+        private String startTime;
+        private String endTime;
+        private String cafeTel;
+        private List<CafeFeatureDto.MapSelectFeatureRequestDto> features = new ArrayList<>();
+        private String study;
+
+        public CafeSearchDetailResponseDto(Cafe cafe){
+            this.cafeName = cafe.getCafeName();
+            this.address = cafe.getAddress();
+            this.startTime = cafe.getStartTime();
+            this.endTime = cafe.getEndTime();
+            this.cafeTel = cafe.getCafeTel();
+            this.study = cafe.getStudy();
         }
     }
 

@@ -2,23 +2,18 @@ package com.example.demo.cafe.controller;
 
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.dto.CafeImgDto;
-import com.example.demo.cafe.entity.CafeFeature;
-import com.example.demo.cafe.service.CafeFeatureService;
+import com.example.demo.cafeFeature.dto.CafeFeatureDto;
+import com.example.demo.cafeFeature.service.CafeFeatureService;
 import com.example.demo.cafe.service.CafeImgService;
 import com.example.demo.cafe.service.CafeService;
 import com.example.demo.constant.dto.ApiResponse;
 import com.example.demo.constant.enums.CustomResponseCode;
-import com.example.demo.security.service.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -42,7 +37,7 @@ public class CafeController {
             @RequestPart(value = "cafeRepImg", required = false) MultipartFile cafeRepImgFile,
             @RequestPart(value = "cafeStudyImg", required = false) MultipartFile studyImgFile, Authentication authentication,
             @RequestPart(value = "cafeImgs", required = false) MultipartFile[] cafeDetailImgFiles,
-            @RequestPart(value = "cafeFeature")CafeDto.CafeFeatureRequestDto cafeFeatureRequestDto) throws IOException {
+            @RequestPart(value = "cafeFeature") CafeFeatureDto.CafeFeatureRequestDto cafeFeatureRequestDto) throws IOException {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
@@ -79,7 +74,13 @@ public class CafeController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
     }
 
-
+    @GetMapping("/user/cafe/{cafeId}")
+    public ResponseEntity<ApiResponse<String>> readCafeDetail(
+            @PathVariable int cafeId,
+            Authentication authentication){
+//CafeDto.CafeSearchDetailResponseDto
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+    }
 
 
 

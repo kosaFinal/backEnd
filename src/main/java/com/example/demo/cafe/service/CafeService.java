@@ -9,5 +9,7 @@ public interface CafeService {
     String findCafeNameByCafeId(int cafeId);
 
     void registerCafe(CafeDto.CafeRegisterRequestDto requestDto, String userName);
+
+    CafeDto.CafeSearchDetailResponseDto searchCafeDetail(int  cafeId);
 }
 
