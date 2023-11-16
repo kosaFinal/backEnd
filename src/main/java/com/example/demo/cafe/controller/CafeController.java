@@ -72,7 +72,7 @@ public class CafeController {
             }
         }
 
-        cafeService.registerCafe(requestDto, userName);
+        cafeService.registerCafe(requestDto, userName, cafeRepImgFile, studyImgFile);
         cafeImgService.insertCafeImg(imgDtos, userName);
         cafeFeatureService.insertCafeFeatures(cafeFeatureRequestDto, userName);
 

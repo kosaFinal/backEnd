@@ -18,8 +18,8 @@ public class CafeDto {
         private String startTime;
         private String endTime;
         private String address;
-        private String longtitude;
-        private String latitude;
+        private Double longtitude;
+        private Double latitude;
         private String cafeTel;
         private String study;
         private int userId;
@@ -27,7 +27,8 @@ public class CafeDto {
         private byte[] studyImg;
         private Date createDate;
         private Date modifyDate;
-
+        private String cafeRepImgMine;
+        private String studyImgMine;
 
     }
 
@@ -36,10 +37,10 @@ public class CafeDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CafeRegisterResponseDto{
-        int cafeId;
-        String cafeName;
-        int userId;
-        byte[] studyImg;
+        private int cafeId;
+        private String cafeName;
+        private int userId;
+        private byte[] studyImg;
         public CafeRegisterResponseDto(int userId, byte[] studyImg){
             this.userId = userId;
             this.studyImg = studyImg;
@@ -76,8 +77,8 @@ public class CafeDto {
 
     @Data
     public static class CafeLocationResponseDto{
-        private String longtitude;
-        private String latitude;
+        private Double longtitude;
+        private Double latitude;
         private String cafeName;
         private byte[] cafeReqImg;
         private String cafeTel;
@@ -115,6 +116,7 @@ public class CafeDto {
         private String study;
         private int userId;
         private byte[] studyImg;
+        private String studyImgMine;
 
     }
 

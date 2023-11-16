@@ -16,5 +16,6 @@ public class CafeImgDto {
         private byte[] cafeDetailImg;
         private Date createDate;
         private Date modifyDate;
+        private String cafeDetailImgMine;
     }
 }
