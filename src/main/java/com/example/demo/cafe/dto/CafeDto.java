@@ -27,8 +27,8 @@ public class CafeDto {
         private String startTime;
         private String endTime;
         private String address;
-        private String longtitude;
-        private String latitude;
+        private Double longtitude;
+        private Double latitude;
         private String cafeTel;
         private String study;
         private int userId;
@@ -36,7 +36,8 @@ public class CafeDto {
         private byte[] studyImg;
         private Date createDate;
         private Date modifyDate;
-
+        private String cafeRepImgMine;
+        private String studyImgMine;
 
     }
 
@@ -113,6 +114,7 @@ public class CafeDto {
         private String study;
         private int userId;
         private byte[] studyImg;
+        private String studyImgMine;
 
     }
 

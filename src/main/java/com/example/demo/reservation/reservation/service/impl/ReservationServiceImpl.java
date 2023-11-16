@@ -64,7 +64,7 @@ public class ReservationServiceImpl implements ReservationService {
         log.info(requestDto.getReserveDate()); // 지금 date
 
         // 예약 중복인지 확인
-        List<Reservation> reservationTime = reservationMapper.getReservationByTableId(requestDto.getReserveDate(), requestDto.getTableId());
+        List<Reservation> reservationTime = reservationMapper.getOneTableRev(requestDto.getReserveDate(), requestDto.getTableId());
         log.info(reservationTime.toString());
 
         for (Reservation.TimeSlot timeSlot : requestDto.getReserveTime()) {
@@ -157,7 +157,7 @@ public class ReservationServiceImpl implements ReservationService {
         log.info("formatDate"+formatDate);
 
         // 예약날짜와 tableId로 예약 내역 가져오기
-        List<Reservation> reservations = reservationMapper.getReservationByTableId(formatDate, tableId);
+        List<Reservation> reservations = reservationMapper.getOneTableRev(formatDate, tableId);
         log.info(String.valueOf(reservations));
 
         if(reservations == null){
@@ -232,44 +232,27 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         // 가져온 userId로 cafeId 가져오기
-//        int cafeId = cafeImgService.findCafeIdByUserName(userName);
+        // int cafeId = cafeImgService.findCafeIdByUserName(userName);
         int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         // 카페의 해당 날짜의 전체 예약 불러오기
-
         String formatDate = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6);
-        List<Reservation> allReservation = reservationMapper.getReservaionByCafeId(formatDate, cafeId);
-        log.info(allReservation.toString());
+        List<Reservation> allReservation = reservationMapper.getOneCafeOneDayRev(formatDate, cafeId);
+        //log.info(allReservation.toString());
 
-        List<ReservationDto.DateReservationResponseDto> responseList = new ArrayList<>();
+        List<ReservationDto.DateReservationResponseDto> responseList = combinedTimeReservations(allReservation);
 
-        if(!allReservation.isEmpty()){
-            Reservation current = allReservation.get(0);
-
-            for(int i=1; i<allReservation.size(); i++){
-                Reservation next = allReservation.get(i);
-
-                if((current.getUserId() == next.getUserId())
-                        && (current.getTableId() == next.getTableId())
-                        && (current.getReserveEnd().equals(next.getReserveStart()))) {
-                    log.info("연속된 예약");
-                    current.setReserveEnd(next.getReserveEnd());
-                } else {
-                    log.info("연속아닌 예약");
-                    responseList.add(convertReservationToDto(current));
-                    current = next;
-                }
-            }
-            responseList.add(convertReservationToDto(current)); // 마지막 예약 저장
-        }
-
-        log.info(responseList.toString());
+        //log.info(responseList.toString());
 
         return responseList;
     }
 
-    // 날짜별 예약 조회 시 사용 (reservation -> DateReservationResponseDto 변경)
-    private ReservationDto.DateReservationResponseDto convertReservationToDto(Reservation reservation) {
+    // reservation -> DateReservationResponseDto 변경
+    private ReservationDto.DateReservationResponseDto convertReservationToDto(Reservation reservation, List<Integer> reservationIds) {
+
+//        log.info(String.valueOf(reservation));
+//        log.info(String.valueOf(reservation.getReservationId()));
+
         Users users = usersMapper.getUserByUserId(reservation.getUserId());
         String userRealName = users.getUserRealName();
 
@@ -278,6 +261,7 @@ public class ReservationServiceImpl implements ReservationService {
         String tableType = cafeTable.getTableType();
 
         return ReservationDto.DateReservationResponseDto.builder()
+                .reservationIds(reservationIds)
                 .userRealName(userRealName)
                 .tableNumber(tableNumber)
                 .tableType(tableType)
@@ -286,5 +270,38 @@ public class ReservationServiceImpl implements ReservationService {
                 .reserveEnd(reservation.getReserveEnd())
                 .build();
     }
+
+    // 주어진 List<reservation> 시간 연결하기
+    private List<ReservationDto.DateReservationResponseDto> combinedTimeReservations(List<Reservation> reservations) {
+        List<ReservationDto.DateReservationResponseDto> responseList = new ArrayList<>();
+
+        if (!reservations.isEmpty()) {
+            Reservation current = reservations.get(0);
+            List<Integer> reservationIds = new ArrayList<>();
+            reservationIds.add(current.getReservationId());
+
+
+            for (int i = 1; i < reservations.size(); i++) {
+                Reservation next = reservations.get(i);
+
+                if ((current.getUserId() == next.getUserId())
+                        && (current.getTableId() == next.getTableId())
+                        && (current.getReserveEnd().equals(next.getReserveStart()))) {
+                    current.setReserveEnd(next.getReserveEnd());
+                    reservationIds.add(next.getReservationId());
+                } else {
+                    responseList.add(convertReservationToDto(current, reservationIds));
+                    current = next;
+                    reservationIds = new ArrayList<>();
+                    reservationIds.add(current.getReservationId());
+                }
+            }
+            responseList.add(convertReservationToDto(current, reservationIds));
+        }
+
+        return responseList;
+    }
+
+
 
 }

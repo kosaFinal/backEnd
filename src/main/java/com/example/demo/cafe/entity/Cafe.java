@@ -21,6 +21,9 @@ public class Cafe {
     private Users user;
     private byte[] cafeRepImg;
     private byte[] studyImg;
+    private String cafeRepImgMine;
+    private String studyImgMine;
+
 
 
 }
