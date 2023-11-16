@@ -34,7 +34,7 @@
 
     <update id="cofirmReservation" parameterType="int">
         UPDATE reservation
-        SET status = 'P'
+        SET status = 'P', modifyDate = sysdate
         WHERE reservationId = #{reservationId}
     </update>
 
@@ -46,7 +46,7 @@
 
     <update id="cancleReservation">
         UPDATE reservation
-        SET status = 'N', cancleReasonId = #{cancleReasonId}
+        SET status = 'N', cancleReasonId = #{cancleReasonId}, modifyDate = sysdate
         WHERE reservationId = #{reservationId}
     </update>
     
