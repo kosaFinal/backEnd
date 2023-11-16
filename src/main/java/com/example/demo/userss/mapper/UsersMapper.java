@@ -14,5 +14,7 @@ public interface UsersMapper {
     Users getUserByUserId(int userId);
     void signupUsers(Users user);
 
+    int usersPwUpdate(String userName,String password);
+
 
 }

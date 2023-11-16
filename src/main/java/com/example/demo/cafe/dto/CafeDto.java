@@ -51,12 +51,14 @@ public class CafeDto {
 
     @Data
     public static class CafeSearchResponseDto{
+        private  int cafeId;
         private String cafeName;
         private String startTime;
         private String endTime;
         private String address;
 
         public CafeSearchResponseDto(Cafe cafe){
+            this.cafeId = cafe.getCafeId();
             this.cafeName = cafe.getCafeName();
             this.startTime = cafe.getStartTime();
             this.endTime = cafe.getEndTime();
@@ -74,7 +76,6 @@ public class CafeDto {
         private Boolean noMusic;
         private Boolean sentimental;
         private Boolean hasPowerOutlets;
-
     }
 
     @Data
