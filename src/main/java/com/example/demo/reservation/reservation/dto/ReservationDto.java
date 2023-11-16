@@ -56,6 +56,7 @@ public class ReservationDto {
     @NoArgsConstructor
     @Builder
     public static class DateReservationResponseDto{
+        private List<Integer> reservationIds;
         private String userRealName;
         private String tableNumber;
         private String tableType;
@@ -63,7 +64,9 @@ public class ReservationDto {
         private String reserveStart;
         private String reserveEnd;
 
-        public DateReservationResponseDto(String userRealName, String tableNumber, String tableType, int personCnt, String reserveStart, String reserveEnd) {
+        public DateReservationResponseDto(List<Integer> reservationIds, String userRealName, String tableNumber,
+                                          String tableType, int personCnt, String reserveStart, String reserveEnd) {
+            this.reservationIds = reservationIds;
             this.userRealName = userRealName;
             this.tableNumber = tableNumber;
             this.tableType = tableType;
