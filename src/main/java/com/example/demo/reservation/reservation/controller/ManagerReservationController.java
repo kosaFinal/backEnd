@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/reservation")
+@RequestMapping("/manager/reservation")
 @Slf4j
 public class ManagerReservationController {
 
@@ -58,10 +58,25 @@ public class ManagerReservationController {
     }
 
     @PatchMapping("/confirm")
-    public ResponseEntity<ApiResponse<Boolean>> createReservation(@RequestBody ReservationDto.CofirmReservationRequestDto cofirmReservationRequestDto) {
+    public ResponseEntity<ApiResponse<Boolean>> confirmReservation(@RequestBody ReservationDto.CofirmReservationRequestDto cofirmReservationRequestDto, Authentication authentication) {
         log.info("예약 확정 시작");
 
-        Boolean check = reservationService.confirmReservation(cofirmReservationRequestDto);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        Boolean check = reservationService.confirmReservation(cofirmReservationRequestDto, userName);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
+
+    }
+
+    @PatchMapping("/cancle")
+    public ResponseEntity<ApiResponse<Boolean>> cancleReservation(@RequestBody ReservationDto.CancleReservationRequestDto cancleReservationRequestDto, Authentication authentication) {
+        log.info("예약 확정 시작");
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        Boolean check = reservationService.cancleReservation(cancleReservationRequestDto, userName);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
 
     }

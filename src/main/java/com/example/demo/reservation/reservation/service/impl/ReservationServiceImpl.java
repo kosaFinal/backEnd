@@ -10,6 +10,8 @@ import com.example.demo.cafeTable.mapper.CafeTableMapper;
 import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
+import com.example.demo.reservation.cancleReason.entity.CancleReason;
+import com.example.demo.reservation.cancleReason.mapper.CancleReasonMapper;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
 import com.example.demo.reservation.reservation.entity.Reservation;
 import com.example.demo.reservation.reservation.mapper.ReservationMapper;
@@ -41,6 +43,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final UsersMapper usersMapper;
     private final CafeTableService cafeTableService;
     private final CafeImgService cafeImgService;
+    private final CancleReasonMapper cancleReasonMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -268,7 +271,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto) {
+    public Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto, String userName) {
+
+        // int cafeId = getCafIdByUsername(userName);
+        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         List<Integer> reservationIds = requestDto.getReservationIds();
 
@@ -277,25 +283,56 @@ public class ReservationServiceImpl implements ReservationService {
             if(temp == null){
                 throw new GeneralException(CustomResponseCode.NO_RESERVATION);
             }
+            if(temp.getCafeId() != cafeId){
+                throw new GeneralException(CustomResponseCode.NO_CAFE_MANAGER);
+            }
 
             try{
                 reservationMapper.cofirmReservation(reservationId);
                 log.info(reservationId+"가 변경됨");
             } catch (Exception e) {
                 log.info(e.getMessage());
-                throw new GeneralException(CustomResponseCode.UPDATE_RESERVATION_FAILED);
+                throw new GeneralException(CustomResponseCode.COFIRM_RESERVATION_FAILED);
             }
         }
         return true;
     }
 
     @Override
-    public List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName) {
-        Users user = usersMapper.getOneUsers(userName);
-        Cafe cafe = cafeMapper.getOneCafeByUserName(user.getUserId());
-        List<Reservation> reservations = reservationMapper.getFinReservations(user.getUserId(),cafe.getCafeId());
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto, String userName) {
 
-        return null;
+        // int cafeId = getCafIdByUsername(userName);
+        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+
+        List<Integer> reservationIds = requestDto.getReservationIds();
+
+        String cancleReasonId = requestDto.getCancleReasonId();
+        CancleReason cancleReason = cancleReasonMapper.getOneCancleReason(cancleReasonId);
+
+        if(cancleReason == null){
+            throw new GeneralException(CustomResponseCode.NO_CANCLEREASON);
+        }
+
+        for (Integer reservationId : reservationIds) {
+            Reservation temp = reservationMapper.getRevByRevId(reservationId);
+            if(temp == null){
+                throw new GeneralException(CustomResponseCode.NO_RESERVATION);
+            }
+
+            if(temp.getCafeId() != cafeId){
+                throw new GeneralException(CustomResponseCode.NO_CAFE_MANAGER);
+            }
+
+            try{
+                reservationMapper.cancleReservation(reservationId, cancleReasonId);
+                log.info(reservationId+"가 변경됨");
+            } catch (Exception e) {
+                log.info(e.getMessage());
+                throw new GeneralException(CustomResponseCode.CANCLE_RESERVATION_FAILED);
+            }
+        }
+        return true;
     }
 
     // 토큰 값으로 cafeId 가져오기
