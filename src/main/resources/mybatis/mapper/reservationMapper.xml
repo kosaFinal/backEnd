@@ -17,7 +17,7 @@
         SELECT *
         FROM reservation
         WHERE reserveDate = #{date} AND cafeId = #{cafeId} AND status IN ('A','P','F')
-        ORDER BY userId, tableId, reserveStrat
+        ORDER BY userId, tableId, reserveStart
     </select>
 
     <select id="getOneCafeBeforeRev" resultType="reservation">
