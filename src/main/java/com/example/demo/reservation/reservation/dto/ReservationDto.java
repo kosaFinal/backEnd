@@ -3,6 +3,7 @@ package com.example.demo.reservation.reservation.dto;
 import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.cafeTable.entity.CafeTable;
 import com.example.demo.reservation.reservation.entity.Reservation;
+import com.example.demo.userss.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -88,6 +89,25 @@ public class ReservationDto {
             this.reservationIds = reservationIds;
         }
     }
+    @Data
+    public static class UserReadFinishReservResponseDto {
+        private List<Integer> reservationIds;
+        private String tableNumber;
+        private String reserveStart;
+        private String reserveEnd;
+        private String reserveDate;
+        private String state;
+
+        public UserReadFinishReservResponseDto(Reservation reservation, List<Integer> reservationIds, String tableNumber) {
+            this.reservationIds = reservationIds;
+            this.tableNumber = tableNumber;
+            this.reserveStart = reservation.getReserveStart();
+            this.reserveEnd = reservation.getReserveEnd();
+            this.reserveDate = reservation.getReserveDate();
+            this.state = reservation.getStatus();
+        }
+    }
+
     @Data
     public static class CancleReservationRequestDto {
         private List<Integer> reservationIds;

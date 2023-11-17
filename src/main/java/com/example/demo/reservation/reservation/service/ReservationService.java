@@ -22,5 +22,7 @@ public interface ReservationService {
     Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto, String userName);
     Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto, String userName);
 
+    List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName);
+    List<ReservationDto.UserReadFinishReservResponseDto> proceedReservations(String userName);
 
 }

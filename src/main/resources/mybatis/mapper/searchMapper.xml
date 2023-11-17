@@ -22,7 +22,9 @@
                 LEFT JOIN
                     feature f ON cf.featureId = f.featureId
             WHERE
-                c.cafeType = #{cafeType}
+                <if test="cafeType != null">
+                    c.cafeType = #{cafeType}
+                </if>
                 AND c.study = #{studyEnable}
                 AND EXISTS (
                     SELECT
@@ -30,19 +32,25 @@
                     FROM cafeTable ct
                     WHERE
                         ct.cafeId = c.cafeId
-                        AND ct.tableType = #{preferSeat}
+                        <if test="preferSeat != null" >
+                            AND ct.tableType = #{preferSeat}
+                        </if>
                 )
+            <if test="startTime != null && endTime != null">
                 AND TO_DATE(c.startTime, 'HH24:MI') >= TO_DATE(#{startTime}, 'HH24:MI')
                 AND TO_DATE(c.endTime, 'HH24:MI') <= TO_DATE(#{endTime}, 'HH24:MI')
-                <if test="features != null and features.size() > 0">
-                    AND f.featureName IN
-                        <foreach item="feature" collection="features" open="(" separator="," close=")">
-                            #{feature}
-                        </foreach>
-                </if>
-                <if>
-                    AND f.featureName IS NULL
-                </if>
+            </if>
+                <choose>
+                    <when test="features != null and features.size() > 0">
+                        AND f.featureName IN
+                            <foreach item="feature" collection="features" open="(" separator="," close=")">
+                                #{feature}
+                            </foreach>
+                    </when>
+                    <otherwise>
+                        AND f.featureName IS NULL
+                    </otherwise>
+                </choose>
         ]]>
     </select>
 

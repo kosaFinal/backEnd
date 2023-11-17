@@ -1,18 +1,17 @@
 package com.example.demo.reservation.reservation.entity;
 
 import com.example.demo.constant.entity.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.lang.Nullable;
 
 import java.util.Date;
 
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Reservation extends BaseEntity {
+
 
     private int reservationId;
     private int tableId;
@@ -24,6 +23,8 @@ public class Reservation extends BaseEntity {
     private String status;
     private String reserveDate;
     private String cancleReasonId;
+
+
 
     @Data
     public static class TimeSlot {
