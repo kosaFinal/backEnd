@@ -58,4 +58,9 @@ public class UserReservationController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
     }
+    @GetMapping("/now/{userId}")
+    public ResponseEntity<ApiResponse<String>> readUserReservationStatus(@PathVariable int userId,Authentication authentication){
+        log.info("예약 현황 상태 조회 시작");
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+    }
 }

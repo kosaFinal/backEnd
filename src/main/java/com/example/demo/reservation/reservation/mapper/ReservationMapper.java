@@ -22,4 +22,5 @@ public interface ReservationMapper {
 
     List<Reservation> getFinReservations(int userId, int cafeId);
 
+    List<Reservation> getReservationStatus(int userId, int reservationId, String Status);
 }
