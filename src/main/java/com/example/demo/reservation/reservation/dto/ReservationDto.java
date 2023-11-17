@@ -15,8 +15,6 @@ import java.util.Map;
 public class ReservationDto {
 
     @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
     public static class UserReservationRequestDto{
         private int tableId;
         private List<Reservation.TimeSlot> reserveTime;
@@ -79,14 +77,9 @@ public class ReservationDto {
     }
 
     @Data
-    @NoArgsConstructor
-    @Builder
     public static class CofirmReservationRequestDto{
         private List<Integer> reservationIds;
 
-        public CofirmReservationRequestDto(List<Integer> reservationIds) {
-            this.reservationIds = reservationIds;
-        }
     }
 
     @Data
