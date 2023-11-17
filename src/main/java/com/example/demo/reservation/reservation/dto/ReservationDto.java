@@ -89,6 +89,11 @@ public class ReservationDto {
         }
     }
     @Data
+    public static class CancleReservationRequestDto {
+        private List<Integer> reservationIds;
+        private String cancleReasonId;
+    }
+    @Data
     @NoArgsConstructor
     @Builder
     public static class  UserReservationStatusResponseDto{

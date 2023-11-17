@@ -335,6 +335,11 @@ public class ReservationServiceImpl implements ReservationService {
         return true;
     }
 
+    @Override
+    public List<ReservationDto.UserReservationStatusResponseDto> reservationStatus(String Status, int UserId) {
+        return null;
+    }
+
     // 토큰 값으로 cafeId 가져오기
     private int getCafIdByUsername (String userName){
 
