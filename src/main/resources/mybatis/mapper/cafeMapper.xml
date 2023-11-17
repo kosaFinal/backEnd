@@ -40,7 +40,8 @@
         SELECT cafeId, study, userId, studyImg, studyImgMine
         FROM cafe
         WHERE userId = #{userId}
-
+    </select>
+    
     <select id="getOneCafeByUserName" resultType="cafe">
         select *
         from cafe
