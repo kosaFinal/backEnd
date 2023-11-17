@@ -16,6 +16,7 @@ public enum CustomResponseCode {
     NO_RESERVATION_TIME(false, 2004, "카페 예약이 불가능한 시간입니다."),
     NO_CHECK_DATE(false, 2005, "조회가 불가능한 날짜입니다."),
     NO_RESERVATION(false, 2006, "해당 예약은 존재하지 않습니다."),
+    NO_CANCLEREASON(false, 2007, "잘못된 카페 취소 사유입니다."),
 
     //unauthorized(권한 없을 때)(3000)
     EXPIRED_JWT(false, 3000, "만료된 토큰입니다."),

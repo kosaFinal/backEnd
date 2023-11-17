@@ -10,6 +10,8 @@ import com.example.demo.cafeTable.mapper.CafeTableMapper;
 import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
+import com.example.demo.reservation.cancleReason.entity.CancleReason;
+import com.example.demo.reservation.cancleReason.mapper.CancleReasonMapper;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
 import com.example.demo.reservation.reservation.entity.Reservation;
 import com.example.demo.reservation.reservation.mapper.ReservationMapper;
@@ -40,6 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final UsersMapper usersMapper;
     private final CafeTableService cafeTableService;
     private final CafeImgService cafeImgService;
+    private final CancleReasonMapper cancleReasonMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -292,7 +295,13 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto) {
         List<Integer> reservationIds = requestDto.getReservationIds();
+
         String cancleReasonId = requestDto.getCancleReasonId();
+        CancleReason cancleReason = cancleReasonMapper.getOneCancleReason(cancleReasonId);
+
+        if(cancleReason == null){
+            throw new GeneralException(CustomResponseCode.NO_CANCLEREASON);
+        }
 
         for (Integer reservationId : reservationIds) {
             Reservation temp = reservationMapper.getRevByRevId(reservationId);
