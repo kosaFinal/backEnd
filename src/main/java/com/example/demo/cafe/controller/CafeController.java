@@ -82,6 +82,26 @@ public class CafeController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
     }
 
+    @GetMapping("/manager/cafe/details")
+    public ResponseEntity<ApiResponse<CafeDto.CafeDetailsResponseWrapper>> readCafeDetails(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        CafeDto.CafeReadDetailResponseDto detailResult = cafeService.findCafeDetailByUserId(userName);
+        CafeFeatureDto.CafeFeatureResponseDto featureResult = cafeFeatureService.selectCafeFeature(userName);
+        CafeDto.CafeDetailsResponseWrapper wrapper = new CafeDto.CafeDetailsResponseWrapper(detailResult, featureResult);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(wrapper,CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/manager/cafe/setting")
+    public ResponseEntity<ApiResponse<CafeDto.CafeReadSettingResponseDto>> readCafeSetting(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        CafeDto.CafeReadSettingResponseDto result =  cafeService.findCafeSettingByUserId(userName);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
+    }
+
     @GetMapping("/user/cafe/{cafeId}")
     public ResponseEntity<ApiResponse<CafeDto.CafeSearchDetailResponseDto>> readCafeDetail(
             @PathVariable int cafeId,
@@ -90,10 +110,6 @@ public class CafeController {
         CafeDto.CafeSearchDetailResponseDto detail = cafeService.searchCafeDetail(cafeId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(detail,CustomResponseCode.SUCCESS));
     }
-
-
-
-
 
 
 }

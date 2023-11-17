@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class CafeFeatureDto {
     @Data
     public static class MapSelectFeatureRequestDto{
@@ -23,5 +25,12 @@ public class CafeFeatureDto {
         private Boolean noMusic;
         private Boolean sentimental;
         private Boolean hasPowerOutlets;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeFeatureResponseDto{
+        private List<Integer> featureIds;
     }
 }

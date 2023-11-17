@@ -14,5 +14,9 @@ public interface CafeService {
     CafeDto.CafeSearchDetailResponseDto searchCafeDetail(int  cafeId);
 
     CafeDto.CafeReadBasicResponseDto findCafeBasicByUserId(String userName);
+
+    CafeDto.CafeReadDetailResponseDto findCafeDetailByUserId(String userName);
+
+    CafeDto.CafeReadSettingResponseDto findCafeSettingByUserId(String userName);
 }
 
