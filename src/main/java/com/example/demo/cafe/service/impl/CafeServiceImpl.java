@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import javax.imageio.ImageReader;
@@ -113,12 +114,24 @@ public class CafeServiceImpl implements CafeService {
     @Override
     public CafeDto.CafeReadBasicResponseDto findCafeBasicByUserId(String userName) {
         Users user = usersMapper.getOneUsers(userName);
-        log.info(String.valueOf(user));
-        log.info(String.valueOf(user.getUserId()));
         Cafe cafe = cafeMapper.findCafeBasicByUserId(user.getUserId());
 
-
         return new CafeDto.CafeReadBasicResponseDto(cafe);
+    }
+
+    @Override
+    public CafeDto.CafeReadDetailResponseDto findCafeDetailByUserId(String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        Cafe cafe =  cafeMapper.getOneCafe(cafeId);
+        return new CafeDto.CafeReadDetailResponseDto(cafe);
+    }
+
+    @Override
+    public CafeDto.CafeReadSettingResponseDto findCafeSettingByUserId(String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        Cafe cafe =  cafeMapper.getOneCafe(cafeId);
+
+        return new CafeDto.CafeReadSettingResponseDto(cafe);
     }
 
 }
