@@ -47,9 +47,15 @@
     <select id="getFinReservations" resultType="reservation">
         select *
         from reservation
-        where status in ('N','F')
-        group by #{cafeId},#{userId}
-        order by createDate
+        where userId =  #{userId} and status in ('N','F')
+        order by createDate DESC
+    </select>
+
+    <select id="getProceedReservations" resultType="reservation">
+        select *
+        from reservation
+        where userId =  #{userId} and status in ('A','P')
+        order by createDate DESC
     </select>
     
 </mapper>

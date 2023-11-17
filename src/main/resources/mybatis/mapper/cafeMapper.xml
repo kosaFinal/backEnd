@@ -36,7 +36,7 @@
         WHERE userId = #{userId}
     </select>
 
-    <select id="getOneCafeByUserName" resultType="cafe">
+    <select id="getOneCafeByUserId" resultType="cafe">
         select *
         from cafe
         where userId = #{userId}

@@ -292,10 +292,25 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName) {
         Users user = usersMapper.getOneUsers(userName);
-        Cafe cafe = cafeMapper.getOneCafeByUserName(user.getUserId());
-        List<Reservation> reservations = reservationMapper.getFinReservations(user.getUserId(),cafe.getCafeId());
+        if(user == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
+        Cafe cafe = cafeMapper.getOneCafeByUserId(user.getUserId());
+        List<Reservation> reservations = reservationMapper.getFinReservations(user.getUserId());
 
-        return null;
+        return combinedTimeFinishReservations(reservations);
+    }
+
+    @Override
+    public List<ReservationDto.UserReadFinishReservResponseDto> proceedReservations(String userName) {
+        Users user = usersMapper.getOneUsers(userName);
+        if(user == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
+        Cafe cafe = cafeMapper.getOneCafeByUserId(user.getUserId());
+        List<Reservation> reservations = reservationMapper.getProceedReservations(user.getUserId());
+
+        return combinedTimeFinishReservations(reservations);
     }
 
     // 토큰 값으로 cafeId 가져오기
@@ -363,6 +378,48 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         return responseList;
+    }
+
+    private List<ReservationDto.UserReadFinishReservResponseDto> combinedTimeFinishReservations(List<Reservation> reservations) {
+        List<ReservationDto.UserReadFinishReservResponseDto> responseList = new ArrayList<>();
+
+        if (!reservations.isEmpty()) {
+            Reservation current = reservations.get(0);
+            List<Integer> reservationIds = new ArrayList<>();
+            reservationIds.add(current.getReservationId());
+
+
+            for (int i = 1; i < reservations.size(); i++) {
+                Reservation next = reservations.get(i);
+
+                if ((current.getUserId() == next.getUserId())
+                        && (current.getTableId() == next.getTableId())
+                        && (current.getReserveEnd().equals(next.getReserveStart()))
+                        && current.getReserveDate().equals(next.getReserveDate())) {
+                    current.setReserveEnd(next.getReserveEnd());
+                    reservationIds.add(next.getReservationId());
+                } else {
+                    responseList.add(convertFinishReservationToDto(current, reservationIds));
+                    current = next;
+                    reservationIds = new ArrayList<>();
+                    reservationIds.add(current.getReservationId());
+                }
+            }
+            responseList.add(convertFinishReservationToDto(current, reservationIds));
+        }
+
+        return responseList;
+    }
+
+    /**
+     * 만료된 유저 예약 리스트 조회
+     */
+    private ReservationDto.UserReadFinishReservResponseDto convertFinishReservationToDto(Reservation reservation, List<Integer> reservationIds) {
+
+        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(reservation.getTableId());
+        String tableNumber = cafeTable.getTableNumber();
+
+        return new ReservationDto.UserReadFinishReservResponseDto(reservation,reservationIds,tableNumber);
     }
 
 }

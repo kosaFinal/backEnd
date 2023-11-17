@@ -54,8 +54,16 @@ public class UserReservationController {
     }
 
     @GetMapping("/list/finish")
-    public ResponseEntity<ApiResponse<String>> readUserFinishReservation(Authentication authentication){
+    public ResponseEntity<ApiResponse<List<ReservationDto.UserReadFinishReservResponseDto>>> readUserFinishReservation(Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+        List<ReservationDto.UserReadFinishReservResponseDto> finishs = reservationService.finishReservations(userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(finishs,CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/list/state")
+    public ResponseEntity<ApiResponse<List<ReservationDto.UserReadFinishReservResponseDto>>> readUserReservationIng(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<ReservationDto.UserReadFinishReservResponseDto> proceeds = reservationService.proceedReservations(userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(proceeds,CustomResponseCode.SUCCESS));
     }
 }

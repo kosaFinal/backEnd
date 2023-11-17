@@ -3,9 +3,7 @@ package com.example.demo.search.dto;
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.cafeFeature.dto.CafeFeatureDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +12,21 @@ import java.util.stream.Collectors;
 public class SearchDto {
 
     @Getter
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SearchRequestDto{
         private String cafeType;
         private String studyEnable;
         private String people;
         private String ing;
-        private ArrayList<String> features;
+        @Getter
+        private List<String> features;
         private String startTime;
         private String endTime;
         private String userStudy;
         private String preferSeat;
+
     }
 
     @Builder
