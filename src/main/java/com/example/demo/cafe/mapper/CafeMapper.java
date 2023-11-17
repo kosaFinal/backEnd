@@ -22,5 +22,7 @@ public interface CafeMapper {
 
     Cafe getOneCafeByUserName(int userId);
 
+    void cafeDelete(int userId);
+
 
 }

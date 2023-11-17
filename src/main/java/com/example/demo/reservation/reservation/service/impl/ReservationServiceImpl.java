@@ -336,7 +336,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     // 토큰 값으로 cafeId 가져오기
-    private int getCafIdByUsername (String userName){
+    public int getCafIdByUsername (String userName){
 
         Users manager = usersMapper.getOneUsers(userName);
         if(manager == null){
