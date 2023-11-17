@@ -7,17 +7,55 @@
         VALUES (#{tableId}, #{cafeId}, #{userId}, #{reserveStart}, #{reserveEnd}, #{personCnt}, #{status}, #{reserveDate}, sysdate)
     </insert>
 
-    <select id="getOneTableRev" parameterType="reservation">
+    <select id="getOneTableRev" resultType="reservation">
         SELECT *
         FROM reservation
-        WHERE reserveDate = #{reserveDate} AND tableId = #{tableId} AND STATUS IN ('A','p','F')
+        WHERE reserveDate = #{reserveDate} AND tableId = #{tableId} AND status IN ('A','p','F')
     </select>
 
-    <select id="getOneCafeOneDayRev" parameterType="reservation">
+    <select id="getOneCafeOneDayRev" resultType="reservation">
         SELECT *
         FROM reservation
-        WHERE reserveDate = #{date} AND cafeId = #{cafeId} AND STATUS IN ('A','P','F')
-        ORDER BY USERID, TABLEID, RESERVESTART
+        WHERE reserveDate = #{date} AND cafeId = #{cafeId} AND status IN ('A','P','F')
+        ORDER BY userId, tableId, reserveStart
     </select>
-    
+
+    <select id="getOneCafeBeforeRev" resultType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE cafeId = #{cafeId} AND status = 'A'
+    </select>
+
+    <select id="getOneCafeIngRev" resultType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE cafeId = #{cafeId} AND status = 'P'
+    </select>
+
+    <update id="cofirmReservation" parameterType="int">
+        UPDATE reservation
+        SET status = 'P', modifyDate = sysdate
+        WHERE reservationId = #{reservationId}
+    </update>
+
+    <select id="getRevByRevId" resultType="reservation">
+        SELECT *
+        FROM reservation
+        WHERE reservationId = #{reservationId}
+    </select>
+
+    <update id="cancleReservation">
+        UPDATE reservation
+        SET status = 'N', cancleReasonId = #{cancleReasonId}, modifyDate = sysdate
+        WHERE reservationId = #{reservationId}
+    </update>
+
+    <select id="getFinReservations" resultType="reservation">
+        select *
+        from reservation
+        where status in ('N','F')
+        group by #{cafeId},#{userId}
+        order by createDate
+    </select>
+
 </mapper>

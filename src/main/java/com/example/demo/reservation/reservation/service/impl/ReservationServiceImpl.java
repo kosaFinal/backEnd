@@ -10,6 +10,8 @@ import com.example.demo.cafeTable.mapper.CafeTableMapper;
 import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.enums.CustomResponseCode;
 import com.example.demo.constant.exception.GeneralException;
+import com.example.demo.reservation.cancleReason.entity.CancleReason;
+import com.example.demo.reservation.cancleReason.mapper.CancleReasonMapper;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
 import com.example.demo.reservation.reservation.entity.Reservation;
 import com.example.demo.reservation.reservation.mapper.ReservationMapper;
@@ -19,15 +21,13 @@ import com.example.demo.userss.mapper.UsersMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +43,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final UsersMapper usersMapper;
     private final CafeTableService cafeTableService;
     private final CafeImgService cafeImgService;
+    private final CancleReasonMapper cancleReasonMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -210,7 +211,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationDto.DateReservationResponseDto> getDateReservation(String date, String userName) {
+    public List<ReservationDto.ManagerReservationResponseDto> getDateReservation(String date, String userName) {
 
         // 날짜 계산
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -225,14 +226,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
 
-        // 토큰 값으로 cafeId 가져오기
-        Users manager = usersMapper.getOneUsers(userName);
-        if(manager == null){
-            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
-        }
-
-        // 가져온 userId로 cafeId 가져오기
-        // int cafeId = cafeImgService.findCafeIdByUserName(userName);
+        // int cafeId = getCafIdByUsername(userName);
         int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         // 카페의 해당 날짜의 전체 예약 불러오기
@@ -240,15 +234,120 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> allReservation = reservationMapper.getOneCafeOneDayRev(formatDate, cafeId);
         //log.info(allReservation.toString());
 
-        List<ReservationDto.DateReservationResponseDto> responseList = combinedTimeReservations(allReservation);
+        List<ReservationDto.ManagerReservationResponseDto> responseList = combinedTimeReservations(allReservation);
 
         //log.info(responseList.toString());
 
         return responseList;
     }
 
+    @Override
+    public List<ReservationDto.ManagerReservationResponseDto> getBeforeReservation(String userName) {
+
+        // int cafeId = getCafIdByUsername(userName);
+        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+
+        // 상태가 A(신청)인 예약 가져오기
+        List<Reservation> afterReservation = reservationMapper.getOneCafeBeforeRev(cafeId);
+
+        List<ReservationDto.ManagerReservationResponseDto> responseList = combinedTimeReservations(afterReservation);
+
+        return responseList;
+    }
+
+    @Override
+    public List<ReservationDto.ManagerReservationResponseDto> getIngReservation(String userName) {
+
+        // int cafeId = getCafIdByUsername(userName);
+        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+
+        // 상태가 P(진행중)인 예약 가져오기
+        List<Reservation> afterReservation = reservationMapper.getOneCafeIngRev(cafeId);
+
+        List<ReservationDto.ManagerReservationResponseDto> responseList = combinedTimeReservations(afterReservation);
+
+        return responseList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto, String userName) {
+
+        // int cafeId = getCafIdByUsername(userName);
+        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+
+        List<Integer> reservationIds = requestDto.getReservationIds();
+
+        for (Integer reservationId : reservationIds) {
+            Reservation temp = reservationMapper.getRevByRevId(reservationId);
+            if(temp == null){
+                throw new GeneralException(CustomResponseCode.NO_RESERVATION);
+            }
+            if(temp.getCafeId() != cafeId){
+                throw new GeneralException(CustomResponseCode.NO_CAFE_MANAGER);
+            }
+
+            try{
+                reservationMapper.cofirmReservation(reservationId);
+                log.info(reservationId+"가 변경됨");
+            } catch (Exception e) {
+                log.info(e.getMessage());
+                throw new GeneralException(CustomResponseCode.COFIRM_RESERVATION_FAILED);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto, String userName) {
+
+        // int cafeId = getCafIdByUsername(userName);
+        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+
+        List<Integer> reservationIds = requestDto.getReservationIds();
+
+        String cancleReasonId = requestDto.getCancleReasonId();
+        CancleReason cancleReason = cancleReasonMapper.getOneCancleReason(cancleReasonId);
+
+        if(cancleReason == null){
+            throw new GeneralException(CustomResponseCode.NO_CANCLEREASON);
+        }
+
+        for (Integer reservationId : reservationIds) {
+            Reservation temp = reservationMapper.getRevByRevId(reservationId);
+            if(temp == null){
+                throw new GeneralException(CustomResponseCode.NO_RESERVATION);
+            }
+
+            if(temp.getCafeId() != cafeId){
+                throw new GeneralException(CustomResponseCode.NO_CAFE_MANAGER);
+            }
+
+            try{
+                reservationMapper.cancleReservation(reservationId, cancleReasonId);
+                log.info(reservationId+"가 변경됨");
+            } catch (Exception e) {
+                log.info(e.getMessage());
+                throw new GeneralException(CustomResponseCode.CANCLE_RESERVATION_FAILED);
+            }
+        }
+        return true;
+    }
+
+    // 토큰 값으로 cafeId 가져오기
+    private int getCafIdByUsername (String userName){
+
+        Users manager = usersMapper.getOneUsers(userName);
+        if(manager == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
+
+        return cafeImgService.findCafeIdByUserName(userName);
+    }
+
     // reservation -> DateReservationResponseDto 변경
-    private ReservationDto.DateReservationResponseDto convertReservationToDto(Reservation reservation, List<Integer> reservationIds) {
+    private ReservationDto.ManagerReservationResponseDto convertReservationToDto(Reservation reservation, List<Integer> reservationIds) {
 
 //        log.info(String.valueOf(reservation));
 //        log.info(String.valueOf(reservation.getReservationId()));
@@ -260,7 +359,7 @@ public class ReservationServiceImpl implements ReservationService {
         String tableNumber = cafeTable.getTableNumber();
         String tableType = cafeTable.getTableType();
 
-        return ReservationDto.DateReservationResponseDto.builder()
+        return ReservationDto.ManagerReservationResponseDto.builder()
                 .reservationIds(reservationIds)
                 .userRealName(userRealName)
                 .tableNumber(tableNumber)
@@ -268,12 +367,13 @@ public class ReservationServiceImpl implements ReservationService {
                 .personCnt(reservation.getPersonCnt())
                 .reserveStart(reservation.getReserveStart())
                 .reserveEnd(reservation.getReserveEnd())
+                .reserveDate(reservation.getReserveDate())
                 .build();
     }
 
     // 주어진 List<reservation> 시간 연결하기
-    private List<ReservationDto.DateReservationResponseDto> combinedTimeReservations(List<Reservation> reservations) {
-        List<ReservationDto.DateReservationResponseDto> responseList = new ArrayList<>();
+    private List<ReservationDto.ManagerReservationResponseDto> combinedTimeReservations(List<Reservation> reservations) {
+        List<ReservationDto.ManagerReservationResponseDto> responseList = new ArrayList<>();
 
         if (!reservations.isEmpty()) {
             Reservation current = reservations.get(0);
@@ -301,7 +401,5 @@ public class ReservationServiceImpl implements ReservationService {
 
         return responseList;
     }
-
-
 
 }

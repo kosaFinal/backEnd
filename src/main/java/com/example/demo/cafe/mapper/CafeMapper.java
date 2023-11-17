@@ -20,4 +20,7 @@ public interface CafeMapper {
 
     Cafe findCafeSettingByUserId(int userId);
 
+    Cafe getOneCafeByUserName(int userId);
+
+
 }

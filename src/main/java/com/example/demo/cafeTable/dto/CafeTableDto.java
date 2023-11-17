@@ -14,5 +14,6 @@ public class CafeTableDto {
     public static class CafeTableInfoResponseDto {
         private int tableId;
         private String tableNumber;
+        private String tableType;
     }
 }
