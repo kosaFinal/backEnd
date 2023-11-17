@@ -16,6 +16,8 @@ import java.util.Map;
 public class ReservationDto {
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UserReservationRequestDto{
         private int tableId;
         private List<Reservation.TimeSlot> reserveTime;
@@ -78,11 +80,15 @@ public class ReservationDto {
     }
 
     @Data
+    @NoArgsConstructor
+    @Builder
     public static class CofirmReservationRequestDto{
         private List<Integer> reservationIds;
 
+        public CofirmReservationRequestDto(List<Integer> reservationIds) {
+            this.reservationIds = reservationIds;
+        }
     }
-
     @Data
     public static class UserReadFinishReservResponseDto {
         private List<Integer> reservationIds;
@@ -107,4 +113,16 @@ public class ReservationDto {
         private List<Integer> reservationIds;
         private String cancleReasonId;
     }
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class  UserReservationStatusResponseDto{
+        private String status;
+
+        public UserReservationStatusResponseDto(String reservationStatus) {
+            this.status = status;
+        }
+    }
+
+
 }

@@ -12,7 +12,7 @@ public interface ReservationService {
     Boolean createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName);
     List<ReservationDto.TimeSlotResponseDto> getAvailableTimeSlots(String reserveDate, int tableId);
     ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId);
-
+    List<ReservationDto.UserReservationStatusResponseDto> reservationStatus(String Status, int UserId);
 
     // manager
     List<ReservationDto.ManagerReservationResponseDto> getDateReservation(String date, String userName);

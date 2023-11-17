@@ -66,4 +66,10 @@ public class UserReservationController {
         List<ReservationDto.UserReadFinishReservResponseDto> proceeds = reservationService.proceedReservations(userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(proceeds,CustomResponseCode.SUCCESS));
     }
+    @GetMapping("/now/{userId}")
+    public ResponseEntity<ApiResponse<String>> readUserReservationStatus(@PathVariable int userId,Authentication authentication){
+        log.info("예약 현황 상태 조회 시작");
+//        ReservationDto.UserReservationStatusResponseDto userReservationStatusResponseDto = reservationService.reservationStatus(status , userId);
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+    }
 }
