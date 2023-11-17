@@ -19,4 +19,6 @@ public interface ReservationMapper {
     Reservation getRevByRevId(int reservationId);
     void cofirmReservation(int reservationId);
 
+    List<Reservation> getFinReservations(int userId, int cafeId);
+
 }

@@ -89,6 +89,9 @@ public class ReservationDto {
         }
     }
 
+    @Data
+    public static class UserReadFinishReservResponseDto{
 
+    }
 
 }

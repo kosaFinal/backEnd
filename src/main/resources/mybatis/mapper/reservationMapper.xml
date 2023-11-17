@@ -43,5 +43,13 @@
         FROM reservation
         WHERE reservationId = #{reservationId}
     </select>
+
+    <select id="getFinReservations" resultType="reservation">
+        select *
+        from reservation
+        where status in ('N','F')
+        group by #{cafeId},#{userId}
+        order by createDate
+    </select>
     
 </mapper>

@@ -19,6 +19,7 @@ import com.example.demo.userss.mapper.UsersMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -286,6 +287,15 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName) {
+        Users user = usersMapper.getOneUsers(userName);
+        Cafe cafe = cafeMapper.getOneCafeByUserName(user.getUserId());
+        List<Reservation> reservations = reservationMapper.getFinReservations(user.getUserId(),cafe.getCafeId());
+
+        return null;
     }
 
     // 토큰 값으로 cafeId 가져오기

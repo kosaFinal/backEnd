@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user/reservation/*")
+@RequestMapping("/user/reservation")
 @Slf4j
 public class UserReservationController {
 
@@ -51,5 +51,11 @@ public class UserReservationController {
         log.info(revCafeInfoResponseDto.toString());
         log.info("apiresponse: "+ApiResponse.createSuccess(revCafeInfoResponseDto, CustomResponseCode.SUCCESS));
         return ResponseEntity.ok().body(ApiResponse.createSuccess(revCafeInfoResponseDto, CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/list/finish")
+    public ResponseEntity<ApiResponse<String>> readUserFinishReservation(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
     }
 }

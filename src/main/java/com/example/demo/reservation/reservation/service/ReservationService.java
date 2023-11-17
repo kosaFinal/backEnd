@@ -21,4 +21,6 @@ public interface ReservationService {
 
     Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto);
 
+    List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName);
+
 }
