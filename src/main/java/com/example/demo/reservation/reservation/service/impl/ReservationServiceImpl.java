@@ -27,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -197,13 +195,15 @@ public class ReservationServiceImpl implements ReservationService {
             throw new GeneralException(CustomResponseCode.NO_RESERVATION_CAFE);
         }
 
-        String cafeName = cafe.getCafeName();
+        String img = Base64.getEncoder().encodeToString(cafe.getStudyImg());
 
         Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo = cafeTableService.getTableInfo(cafeId);
 
         ReservationDto.RevCafeInfoResponseDto revCafeInfoResDto = ReservationDto.RevCafeInfoResponseDto.builder()
-                .cafeName(cafeName)
+                .cafeName(cafe.getCafeName())
                 .tableInfo(tableInfo)
+                .studyImg(img)
+                .studyImgMine(cafe.getStudyImgMine())
                 .build();
 
         log.info(String.valueOf(revCafeInfoResDto));
@@ -244,8 +244,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDto.ManagerReservationResponseDto> getBeforeReservation(String userName) {
 
-        // int cafeId = getCafIdByUsername(userName);
-        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+        int cafeId = getCafIdByUsername(userName);
+        //int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         // 상태가 A(신청)인 예약 가져오기
         List<Reservation> afterReservation = reservationMapper.getOneCafeBeforeRev(cafeId);
@@ -273,16 +273,18 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto, String userName) {
 
-        // int cafeId = getCafIdByUsername(userName);
-        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+        int cafeId = getCafIdByUsername(userName);
+        //int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         List<Integer> reservationIds = requestDto.getReservationIds();
 
         for (Integer reservationId : reservationIds) {
             Reservation temp = reservationMapper.getRevByRevId(reservationId);
+
             if(temp == null){
                 throw new GeneralException(CustomResponseCode.NO_RESERVATION);
             }
+
             if(temp.getCafeId() != cafeId){
                 throw new GeneralException(CustomResponseCode.NO_CAFE_MANAGER);
             }
@@ -302,8 +304,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto, String userName) {
 
-        // int cafeId = getCafIdByUsername(userName);
-        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+        int cafeId = getCafIdByUsername(userName);
+        //int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         List<Integer> reservationIds = requestDto.getReservationIds();
 
