@@ -46,6 +46,7 @@ public class WebSecurityConfig {
                                 .antMatchers(("/manager/**")).hasRole("MANAGER")
                                 .antMatchers("/login").permitAll()
                                 .antMatchers("/signup").permitAll()
+                                .antMatchers("/check/userName/dup/*").permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .exceptionHandling((exceptionHandler) -> exceptionHandler
