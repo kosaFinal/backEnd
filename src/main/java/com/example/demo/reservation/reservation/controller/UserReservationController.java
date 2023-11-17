@@ -34,7 +34,7 @@ public class UserReservationController {
     }
 
     @GetMapping("/time/{date}/{tableId}")
-    public ResponseEntity<ApiResponse<List<ReservationDto.TimeSlotResponseDto>>> getRevTimeInfo(@PathVariable String date, @PathVariable int tableId){
+    public ResponseEntity<ApiResponse<List<ReservationDto.TimeSlotResponseDto>>> getRevTimeInfo(@PathVariable String date, @PathVariable int tableId, Authentication authentication){
         log.info("시간 가져오기 시작");
         List<ReservationDto.TimeSlotResponseDto> timeSlotResponseDto = reservationService.getAvailableTimeSlots(date, tableId);
         log.info(timeSlotResponseDto.toString());
@@ -45,7 +45,7 @@ public class UserReservationController {
     // 예약할 카페 이름&테이블 조회
 //    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/cafe/{cafeId}")
-    public ResponseEntity<ApiResponse<ReservationDto.RevCafeInfoResponseDto>> getRevCafeInfo(@PathVariable int cafeId){
+    public ResponseEntity<ApiResponse<ReservationDto.RevCafeInfoResponseDto>> getRevCafeInfo(@PathVariable int cafeId, Authentication authentication){
         log.info("예약할 카페 정보 조회 시작");
         ReservationDto.RevCafeInfoResponseDto revCafeInfoResponseDto = reservationService.getRevCafeInfo(cafeId);
         log.info(revCafeInfoResponseDto.toString());
