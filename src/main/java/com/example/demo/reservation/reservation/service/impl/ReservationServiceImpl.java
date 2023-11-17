@@ -310,10 +310,9 @@ public class ReservationServiceImpl implements ReservationService {
         String cancleReasonId = requestDto.getCancleReasonId();
         CancleReason cancleReason = cancleReasonMapper.getOneCancleReason(cancleReasonId);
 
-        if(cancleReason == null){
+        if (cancleReason == null) {
             throw new GeneralException(CustomResponseCode.NO_CANCLEREASON);
         }
-
         for (Integer reservationId : reservationIds) {
             Reservation temp = reservationMapper.getRevByRevId(reservationId);
             if(temp == null){
@@ -334,9 +333,32 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return true;
     }
+    public List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName) {
+        Users user = usersMapper.getOneUsers(userName);
+        if(user == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
+        Cafe cafe = cafeMapper.getOneCafeByUserId(user.getUserId());
+        List<Reservation> reservations = reservationMapper.getFinReservations(user.getUserId());
+
+        return combinedTimeFinishReservations(reservations);
+    }
+
+    @Override
+    public List<ReservationDto.UserReadFinishReservResponseDto> proceedReservations(String userName) {
+        Users user = usersMapper.getOneUsers(userName);
+        if(user == null){
+            throw new GeneralException(CustomResponseCode.USER_NOT_FOUND);
+        }
+        Cafe cafe = cafeMapper.getOneCafeByUserId(user.getUserId());
+        List<Reservation> reservations = reservationMapper.getProceedReservations(user.getUserId());
+
+        return combinedTimeFinishReservations(reservations);
+
+    }
 
     // 토큰 값으로 cafeId 가져오기
-    private int getCafIdByUsername (String userName){
+    public int getCafIdByUsername (String userName){
 
         Users manager = usersMapper.getOneUsers(userName);
         if(manager == null){
@@ -347,7 +369,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     // reservation -> DateReservationResponseDto 변경
-    private ReservationDto.ManagerReservationResponseDto convertReservationToDto(Reservation reservation, List<Integer> reservationIds) {
+    public ReservationDto.ManagerReservationResponseDto convertReservationToDto(Reservation reservation, List<Integer> reservationIds) {
 
 //        log.info(String.valueOf(reservation));
 //        log.info(String.valueOf(reservation.getReservationId()));
@@ -372,7 +394,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     // 주어진 List<reservation> 시간 연결하기
-    private List<ReservationDto.ManagerReservationResponseDto> combinedTimeReservations(List<Reservation> reservations) {
+    public List<ReservationDto.ManagerReservationResponseDto> combinedTimeReservations(List<Reservation> reservations) {
         List<ReservationDto.ManagerReservationResponseDto> responseList = new ArrayList<>();
 
         if (!reservations.isEmpty()) {
@@ -400,6 +422,48 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         return responseList;
+    }
+
+    public List<ReservationDto.UserReadFinishReservResponseDto> combinedTimeFinishReservations(List<Reservation> reservations) {
+        List<ReservationDto.UserReadFinishReservResponseDto> responseList = new ArrayList<>();
+
+        if (!reservations.isEmpty()) {
+            Reservation current = reservations.get(0);
+            List<Integer> reservationIds = new ArrayList<>();
+            reservationIds.add(current.getReservationId());
+
+
+            for (int i = 1; i < reservations.size(); i++) {
+                Reservation next = reservations.get(i);
+
+                if ((current.getUserId() == next.getUserId())
+                        && (current.getTableId() == next.getTableId())
+                        && (current.getReserveEnd().equals(next.getReserveStart()))
+                        && current.getReserveDate().equals(next.getReserveDate())) {
+                    current.setReserveEnd(next.getReserveEnd());
+                    reservationIds.add(next.getReservationId());
+                } else {
+                    responseList.add(convertFinishReservationToDto(current, reservationIds));
+                    current = next;
+                    reservationIds = new ArrayList<>();
+                    reservationIds.add(current.getReservationId());
+                }
+            }
+            responseList.add(convertFinishReservationToDto(current, reservationIds));
+        }
+
+        return responseList;
+    }
+
+    /**
+     * 만료된 유저 예약 리스트 조회
+     */
+    public ReservationDto.UserReadFinishReservResponseDto convertFinishReservationToDto(Reservation reservation, List<Integer> reservationIds) {
+
+        CafeTable cafeTable = cafeTableMapper.getOneCafeTable(reservation.getTableId());
+        String tableNumber = cafeTable.getTableNumber();
+
+        return new ReservationDto.UserReadFinishReservResponseDto(reservation,reservationIds,tableNumber);
     }
 
 }
