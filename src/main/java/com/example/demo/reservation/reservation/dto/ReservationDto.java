@@ -84,14 +84,15 @@ public class ReservationDto {
     }
 
     @Data
-    public static class UserReadFinishReservResponseDto{
+    public static class UserReadFinishReservResponseDto {
         private List<Integer> reservationIds;
         private String tableNumber;
         private String reserveStart;
         private String reserveEnd;
         private String reserveDate;
         private String state;
-        public UserReadFinishReservResponseDto(Reservation reservation, List<Integer> reservationIds,String tableNumber) {
+
+        public UserReadFinishReservResponseDto(Reservation reservation, List<Integer> reservationIds, String tableNumber) {
             this.reservationIds = reservationIds;
             this.tableNumber = tableNumber;
             this.reserveStart = reservation.getReserveStart();
@@ -99,7 +100,9 @@ public class ReservationDto {
             this.reserveDate = reservation.getReserveDate();
             this.state = reservation.getStatus();
         }
+    }
 
+    @Data
     public static class CancleReservationRequestDto {
         private List<Integer> reservationIds;
         private String cancleReasonId;
