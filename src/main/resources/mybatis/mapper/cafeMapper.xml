@@ -36,4 +36,10 @@
         WHERE userId = #{userId}
     </select>
 
+    <select id="findCafeSettingByUserId" parameterType="int" resultType="Cafe">
+        SELECT cafeId, study, userId, studyImg, studyImgMine
+        FROM cafe
+        WHERE userId = #{userId}
+    </select>
+
 </mapper>

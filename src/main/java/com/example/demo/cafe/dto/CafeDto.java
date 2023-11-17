@@ -6,9 +6,7 @@ import com.example.demo.cafeFeature.dto.CafeFeatureDto;
 import com.example.demo.feature.dto.FeatureDto;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import lombok.Builder;
 import lombok.Data;
@@ -119,6 +117,21 @@ public class CafeDto {
         private String startTime;
         private String endTime;
         private int userId;
+
+        public CafeReadDetailResponseDto(Cafe cafe){
+            this.cafeId = cafe.getCafeId();
+            this.startTime = cafe.getStartTime();
+            this.endTime = cafe.getEndTime();
+            this.userId = cafe.getUserId();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeDetailsResponseWrapper {
+        private CafeDto.CafeReadDetailResponseDto detailResponse;
+        private CafeFeatureDto.CafeFeatureResponseDto featureResponse;
     }
 
     @Data
@@ -128,8 +141,16 @@ public class CafeDto {
         private int cafeId;
         private String study;
         private int userId;
-        private byte[] studyImg;
+        private String studyImg;
         private String studyImgMine;
+
+        public CafeReadSettingResponseDto(Cafe cafe){
+            this.cafeId = cafe.getCafeId();
+            this.study = cafe.getStudy();
+            this.userId = cafe.getUserId();
+            this.studyImg = Base64.getEncoder().encodeToString(cafe.getStudyImg());
+            this.studyImgMine = cafe.getStudyImgMine();
+        }
 
     }
 

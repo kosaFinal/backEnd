@@ -2,12 +2,18 @@ package com.example.demo.cafeFeature.service.Impl;
 
 import com.example.demo.cafe.dto.CafeDto;
 import com.example.demo.cafeFeature.dto.CafeFeatureDto;
+import com.example.demo.cafeFeature.entity.CafeFeature;
 import com.example.demo.cafeFeature.mapper.CafeFeatureMapper;
 import com.example.demo.cafe.mapper.CafeImgMapper;
 import com.example.demo.cafeFeature.service.CafeFeatureService;
+import com.example.demo.feature.entity.Feature;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,4 +46,19 @@ public class CafeFeatureServiceImpl implements CafeFeatureService {
 
         }
     }
+
+    @Override
+    public CafeFeatureDto.CafeFeatureResponseDto selectCafeFeature(String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        List<Integer> featureIds = cafeFeatureMapper.findFeatureIdByCafeId(cafeId);
+        return new CafeFeatureDto.CafeFeatureResponseDto(featureIds);
+    }
+
+    @Override
+    public void deleteFeatures(String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        cafeFeatureMapper.deleteFeatures(cafeId);
+    }
+
+
 }

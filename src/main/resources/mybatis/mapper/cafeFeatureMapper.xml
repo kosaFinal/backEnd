@@ -7,6 +7,15 @@
         VALUES (#{cafeId}, #{featureId}, sysdate, sysdate)
     </insert>
 
+    <select id="findFeatureIdByCafeId" parameterType="int">
+        select featureId
+        from cafeFeature
+        where cafeId = #{cafeId}
+    </select>
 
+    <delete id="deleteFeatures">
+        DELETE FROM cafeFeature
+        WHERE cafeId = #{cafeId}
+    </delete>
 
 </mapper>
