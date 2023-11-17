@@ -2,10 +2,12 @@ package com.example.demo.cafe.entity;
 
 import com.example.demo.userss.entity.Users;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Getter
+@ToString
 public class Cafe {
 
     private int cafeId;

@@ -42,9 +42,11 @@ public class WebSecurityConfig {
                 )
                 .authorizeHttpRequests(
                         request -> request
-                                .antMatchers("/user/*").hasRole("USER")
-                                .antMatchers(("/manager/*")).hasRole("MANAGER")
-                                .anyRequest().permitAll()
+                                .antMatchers("/user/**").hasRole("USER")
+                                .antMatchers(("/manager/**")).hasRole("MANAGER")
+                                .antMatchers("/login").permitAll()
+                                .antMatchers("/signup").permitAll()
+                                .antMatchers("/check/userName/dup/*").permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .exceptionHandling((exceptionHandler) -> exceptionHandler

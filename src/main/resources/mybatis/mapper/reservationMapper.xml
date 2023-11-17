@@ -49,5 +49,13 @@
         SET status = 'N', cancleReasonId = #{cancleReasonId}, modifyDate = sysdate
         WHERE reservationId = #{reservationId}
     </update>
-    
+
+    <select id="getFinReservations" resultType="reservation">
+        select *
+        from reservation
+        where status in ('N','F')
+        group by #{cafeId},#{userId}
+        order by createDate
+    </select>
+
 </mapper>

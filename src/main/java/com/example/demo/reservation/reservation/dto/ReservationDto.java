@@ -15,6 +15,7 @@ import java.util.Map;
 public class ReservationDto {
 
     @Data
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class UserReservationRequestDto{
         private int tableId;
@@ -24,23 +25,35 @@ public class ReservationDto {
     }
 
     @Data
+    @NoArgsConstructor
     @Builder
     public static class RevCafeInfoResponseDto{
         private String cafeName;
         private Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo;
 
+        public RevCafeInfoResponseDto(String cafeName, Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo) {
+            this.cafeName = cafeName;
+            this.tableInfo = tableInfo;
+        }
     }
 
     @Data
+    @NoArgsConstructor
     @Builder
     public static class TimeSlotResponseDto{
         private String reserveStart;
         private String reserveEnd;
         private String available;
 
+        public TimeSlotResponseDto(String reserveStart, String reserveEnd, String available) {
+            this.reserveStart = reserveStart;
+            this.reserveEnd = reserveEnd;
+            this.available = available;
+        }
     }
 
     @Data
+    @NoArgsConstructor
     @Builder
     public static class ManagerReservationResponseDto{
         private List<Integer> reservationIds;
@@ -52,19 +65,33 @@ public class ReservationDto {
         private String reserveEnd;
         private String reserveDate;
 
+        public ManagerReservationResponseDto(List<Integer> reservationIds, String userRealName, String tableNumber,
+                                          String tableType, int personCnt, String reserveStart, String reserveEnd, String reserveDate) {
+            this.reservationIds = reservationIds;
+            this.userRealName = userRealName;
+            this.tableNumber = tableNumber;
+            this.tableType = tableType;
+            this.personCnt = personCnt;
+            this.reserveStart = reserveStart;
+            this.reserveEnd = reserveEnd;
+            this.reserveDate = reserveDate;
+        }
     }
 
     @Data
+    @NoArgsConstructor
+    @Builder
     public static class CofirmReservationRequestDto{
         private List<Integer> reservationIds;
 
+        public CofirmReservationRequestDto(List<Integer> reservationIds) {
+            this.reservationIds = reservationIds;
+        }
     }
 
     @Data
-    public static class CancleReservationRequestDto{
+    public static class CancleReservationRequestDto {
         private List<Integer> reservationIds;
         private String cancleReasonId;
-
     }
-
 }

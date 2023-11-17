@@ -36,4 +36,10 @@
         WHERE userId = #{userId}
     </select>
 
+    <select id="getOneCafeByUserName" resultType="cafe">
+        select *
+        from cafe
+        where userId = #{userId}
+    </select>
+
 </mapper>

@@ -18,4 +18,6 @@ public interface CafeMapper {
 
     Cafe findCafeBasicByUserId(int userId);
 
+    Cafe getOneCafeByUserName(int userId);
+
 }

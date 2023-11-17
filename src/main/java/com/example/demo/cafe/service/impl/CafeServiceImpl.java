@@ -102,6 +102,7 @@ public class CafeServiceImpl implements CafeService {
     @Override
     public CafeDto.CafeSearchDetailResponseDto searchCafeDetail(int cafeId) {
         Cafe cafe = cafeMapper.getOneCafe(cafeId);
+
         List<Feature> features = featureMapper.readFeatures(cafeId);
         List<FeatureDto.FeatureResponseDto> featureDto = features.stream().map(FeatureDto.FeatureResponseDto::new)
                 .collect(Collectors.toList());

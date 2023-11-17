@@ -147,6 +147,7 @@ public class CafeDto {
 
     @Getter
     public static class CafeSearchDetailResponseDto{
+        private int cafeId;
         private String cafeName;
         private String address;
         private String startTime;
