@@ -24,12 +24,21 @@ public class CafeUpdateController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
 
-        CafeUpdateDto.CafeTelResponseDto result = cafeUpdateService.cafeUpdate(cafeTel, userName);
-
+        CafeUpdateDto.CafeTelResponseDto result = cafeUpdateService.cafeTelUpdate(cafeTel, userName);
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
     }
 
+    @PatchMapping("/manager/cafe/edit/location")
+    public ResponseEntity<ApiResponse<CafeUpdateDto.CafeLocationResponseDto>> updateCafeAddress(
+            @RequestBody CafeUpdateDto.CafeLocationRequestDto cafeAddress,
+            Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
 
+        CafeUpdateDto.CafeLocationResponseDto result = cafeUpdateService.cafeAddressUpdate(cafeAddress, userName);
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
+    }
 
 }
