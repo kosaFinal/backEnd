@@ -415,6 +415,7 @@ public class ReservationServiceImpl implements ReservationService {
 
                 if ((current.getUserId() == next.getUserId())
                         && (current.getTableId() == next.getTableId())
+                        && (current.getReserveDate() == next.getReserveDate())
                         && (current.getReserveEnd().equals(next.getReserveStart()))) {
                     current.setReserveEnd(next.getReserveEnd());
                     reservationIds.add(next.getReservationId());
