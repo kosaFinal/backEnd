@@ -7,4 +7,10 @@ import java.util.Map;
 
 public interface CafeTableService {
     Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> getTableInfo(int cafeId);
+
+    void insertCafeTable(CafeTableDto.CafeTableInsertRequestDto requestDto, String userName);
+
+    CafeTableDto.CafeTableResponseDto getTableInfoOne(String userName);
+
+    void deleteCafeTableOne(int tableId);
 }

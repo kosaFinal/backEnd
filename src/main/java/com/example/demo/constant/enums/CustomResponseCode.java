@@ -18,6 +18,8 @@ public enum CustomResponseCode {
     NO_RESERVATION(false, 2006, "해당 예약은 존재하지 않습니다."),
     NO_CANCLEREASON(false, 2007, "잘못된 카페 취소 사유입니다."),
     NO_CAFE_MANAGER(false, 2008, "해당 점주의 카페가 아닙니다."),
+    IMG_EXTRACT_ERROR(false, 2009, "이미지 MIME 타입 추출 중 오류 발생."),
+    NO_CAFEIMG_DATA_READ(false,2010,"이미지 데이터를 읽을 수 없습니다."),
 
     //unauthorized(권한 없을 때)(3000)
     EXPIRED_JWT(false, 3000, "만료된 토큰입니다."),
@@ -29,6 +31,8 @@ public enum CustomResponseCode {
     CAFE_NOT_FOUND(false,4001,"해당 카페를 찾을 수 없습니다."),
     RESERVATION_NOT_FOUND(false,4002,"해당 예약을 찾을 수 없습니다."),
     CAFETABLE_NOT_FOUND(false,4003,"해당 카페테이블을 찾을 수 없습니다."),
+    CAFEIMG_READER_NOT_FOUND(false,4004,"주어진 데이터에 대한 이미지 리더를 찾을 수 없습니다."),
+
 
     //internal server error(기타 에러)(5000)
     IMG_OVER_SELECT(false,5000,"최대 5장의 이미지만 업로드 가능합니다"),

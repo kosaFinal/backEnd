@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Base64;
+
 @Slf4j
 public class CafeUpdateDto {
 
@@ -111,6 +113,27 @@ public class CafeUpdateDto {
         private String study;
         public CafeStudyResponseDto(Cafe cafe){
             this.study = cafe.getStudy();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeStudyImgRequestDto {
+        private byte[] studyImg;
+        private String studyImgMine;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeStudyImgResponseDto {
+        private String studyImg;
+        private String studyImgMine;
+
+        public CafeStudyImgResponseDto(Cafe cafe) {
+            this.studyImg = Base64.getEncoder().encodeToString(cafe.getStudyImg());
+            this.studyImgMine = cafe.getStudyImgMine();
         }
     }
 

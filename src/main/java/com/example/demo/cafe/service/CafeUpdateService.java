@@ -1,6 +1,7 @@
 package com.example.demo.cafe.service;
 
 import com.example.demo.cafe.dto.CafeUpdateDto;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface CafeUpdateService {
     CafeUpdateDto.CafeTelResponseDto cafeTelUpdate(CafeUpdateDto.CafeTelRequestDto cafeTel, String userName);
@@ -9,5 +10,7 @@ public interface CafeUpdateService {
     CafeUpdateDto.CafeTimeResponseDto cafeTimeUpdate(CafeUpdateDto.CafeTimeRequestDto cafeTime, String userName);
 
     CafeUpdateDto.CafeStudyResponseDto cafeStudyUpdate(CafeUpdateDto.CafeStudyRequestDto cafeStudy, String userName);
+
+    CafeUpdateDto.CafeStudyImgResponseDto cafeStudyImgUpdate(MultipartFile cafeStudyImg, String userName);
 
 }
