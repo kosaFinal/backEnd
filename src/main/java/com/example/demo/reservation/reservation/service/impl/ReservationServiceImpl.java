@@ -135,7 +135,7 @@ public class ReservationServiceImpl implements ReservationService {
         log.info("변환마감시간 "+String.valueOf(endHour));
 
         // 오픈시간부터 마감시간까지의 timeslot 만들기(default avilable이 Y)
-        List<ReservationDto.TimeSlotResponseDto> newTimeslot = new ArrayList<>();
+        List<ReservationDto.TimeSlotResponseDto> newTimeslot = new LinkedList<>();
         for(int i=startHour; i<endHour; i++){
             String start = String.format("%02d:00", i); // 두 자리 정수로 포맷팅
             String end = String.format("%02d:00", i + 1);
@@ -184,6 +184,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId) {
+        log.info("시작했음");
 
         Cafe cafe = cafeMapper.getOneCafe(cafeId);
 
@@ -360,8 +361,26 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationDto.UserReservationStatusResponseDto> reservationStatus(String Status, int UserId) {
-        return null;
+    public ReservationDto.UserReservationStatusResponseDto reservationStatus(String userName) {
+        Users user = usersMapper.getOneUsers(userName);
+        int userId = user.getUserId();
+        log.info("userID"+userId);
+
+        Reservation rev = reservationMapper.getReservationRecent(userId);
+        log.info("rev"+rev);
+        int reservationId = rev.getReservationId();
+        log.info("reservationId"+reservationId);
+        Reservation reservation = reservationMapper.getRevByRevId(reservationId);
+        log.info(reservation.getStatus());
+        return new ReservationDto.UserReservationStatusResponseDto(reservation.getStatus(), reservationId);
+    }
+
+    @Override
+    public ReservationDto.CancleReasonResponDto cancleReason(int reservationId) {
+        CancleReason cancleReason = cancleReasonMapper.getReservationCancleReason(reservationId);
+//        String cancleReasonContent = cancleReason.getCancleContent();
+
+        return new ReservationDto.CancleReasonResponDto(reservationId, cancleReason.getCancleContent());
     }
 
     // 토큰 값으로 cafeId 가져오기

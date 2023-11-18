@@ -20,9 +20,10 @@ public interface ReservationMapper {
     void cofirmReservation(int reservationId);
     void cancleReservation(int reservationId, String cancleReasonId);
 
+
     List<Reservation> getFinReservations(int userId);
 
     List<Reservation> getProceedReservations(int userId);
 
-    List<Reservation> getReservationStatus(int userId, int reservationId, String Status);
+    Reservation getReservationRecent(int userId);
 }
