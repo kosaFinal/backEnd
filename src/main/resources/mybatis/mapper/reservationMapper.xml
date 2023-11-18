@@ -65,5 +65,15 @@
         where userId =  #{userId} and status in ('A','P')
         order by createDate DESC
     </select>
+    <select id="getReservationRecent" resultType="reservation">
+        select *
+        from (
+                 select *
+                 from reservation
+                 where userid = #{userId}
+                 order by createDate DESC, TO_DATE(reserveStart, 'HH24:MI') ASC
+             )
+        where ROWNUM = 1
+    </select>
 
 </mapper>
