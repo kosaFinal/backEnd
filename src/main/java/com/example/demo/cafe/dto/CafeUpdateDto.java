@@ -33,5 +33,37 @@ public class CafeUpdateDto {
         }
     }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeLocationRequestDto{
+        private String address;
+        private Double longtitude;
+        private Double latitude;
+
+        public CafeLocationRequestDto(Cafe cafe){
+            this.address = cafe.getAddress();
+            this.longtitude = cafe.getLongtitude();
+            this.latitude = cafe.getLatitude();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeLocationResponseDto{
+        private int cafeId;
+        private String address;
+        private Double longtitude;
+        private Double latitude;
+
+        public CafeLocationResponseDto(Cafe cafe){
+            this.cafeId = cafe.getCafeId();
+            this.address = cafe.getAddress();
+            this.longtitude = cafe.getLongtitude();
+            this.latitude = cafe.getLatitude();
+        }
+    }
+
 
 }

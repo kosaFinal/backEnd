@@ -8,4 +8,10 @@
         WHERE cafeId = #{cafeId}
     </update>
 
+    <update id="updateCafeAddress">
+        UPDATE cafe
+        SET address = #{address},longtitude = #{longtitude} ,latitude = #{latitude}
+        WHERE cafeId = #{cafeId}
+    </update>
+
 </mapper>

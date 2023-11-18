@@ -21,11 +21,20 @@ public class CafeUpdateServiceImpl implements CafeUpdateService {
 
 
     @Override
-    public CafeUpdateDto.CafeTelResponseDto cafeUpdate(CafeUpdateDto.CafeTelRequestDto cafeTel, String userName) {
+    public CafeUpdateDto.CafeTelResponseDto cafeTelUpdate(CafeUpdateDto.CafeTelRequestDto cafeTel, String userName) {
         int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
         cafeUpdateMapper.updateCafeTel(cafeTel.getCafeTel(), cafeId);
 
         Cafe cafe = cafeMapper.getOneCafe(cafeId);
         return new CafeUpdateDto.CafeTelResponseDto(cafe);
+    }
+
+    @Override
+    public CafeUpdateDto.CafeLocationResponseDto cafeAddressUpdate(CafeUpdateDto.CafeLocationRequestDto cafeAddress, String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        cafeUpdateMapper.updateCafeAddress(cafeAddress.getAddress(), cafeAddress.getLongtitude(), cafeAddress.getLatitude(), cafeId);
+
+        Cafe cafe = cafeMapper.getOneCafe(cafeId);
+        return new CafeUpdateDto.CafeLocationResponseDto(cafe);
     }
 }
