@@ -10,7 +10,7 @@
     <select id="getOneTableRev" resultType="reservation">
         SELECT *
         FROM reservation
-        WHERE reserveDate = #{reserveDate} AND tableId = #{tableId} AND status IN ('A','p','F')
+        WHERE reserveDate = #{reserveDate} AND tableId = #{tableId} AND status IN ('A','P','F')
     </select>
 
     <select id="getOneCafeOneDayRev" resultType="reservation">
@@ -24,12 +24,14 @@
         SELECT *
         FROM reservation
         WHERE cafeId = #{cafeId} AND status = 'A'
+        ORDER BY userId, tableId, reserveStart
     </select>
 
     <select id="getOneCafeIngRev" resultType="reservation">
         SELECT *
         FROM reservation
         WHERE cafeId = #{cafeId} AND status = 'P'
+        ORDER BY userId, tableId, reserveStart
     </select>
 
     <update id="cofirmReservation" parameterType="int">
@@ -53,9 +55,25 @@
     <select id="getFinReservations" resultType="reservation">
         select *
         from reservation
-        where status in ('N','F')
-        group by #{cafeId},#{userId}
-        order by createDate
+        where userId =  #{userId} and status in ('N','F')
+        order by createDate DESC
+    </select>
+
+    <select id="getProceedReservations" resultType="reservation">
+        select *
+        from reservation
+        where userId =  #{userId} and status in ('A','P')
+        order by createDate DESC
+    </select>
+    <select id="getReservationRecent" resultType="reservation">
+        select *
+        from (
+                 select *
+                 from reservation
+                 where userid = #{userId}
+                 order by createDate DESC, TO_DATE(reserveStart, 'HH24:MI') ASC
+             )
+        where ROWNUM = 1
     </select>
 
 </mapper>

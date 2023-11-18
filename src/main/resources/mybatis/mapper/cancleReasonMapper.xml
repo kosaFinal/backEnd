@@ -6,5 +6,9 @@
         FROM cancleReason
         WHERE cancleReasonId = #{cancleReasonId}
     </select>
-
+    <select id="getReservationCancleReason" resultType="cancleReason">
+    SELECT c.canclecontent, c.cancleReasonId
+    FROM canclereason c, reservation r
+    WHERE c.canclereasonId = r.canclereasonId AND reservationId = #{reservationId}
+    </select>
 </mapper>

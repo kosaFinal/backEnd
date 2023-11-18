@@ -32,6 +32,7 @@ public class UserReservationController {
         Boolean check = reservationService.createReservation(userReservationRequestDto,username);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
     }
+//    @CrossOrigin(origins = "http://localhost:3000")
 
     @GetMapping("/time/{date}/{tableId}")
     public ResponseEntity<ApiResponse<List<ReservationDto.TimeSlotResponseDto>>> getRevTimeInfo(@PathVariable String date, @PathVariable int tableId, Authentication authentication){
@@ -54,8 +55,29 @@ public class UserReservationController {
     }
 
     @GetMapping("/list/finish")
-    public ResponseEntity<ApiResponse<String>> readUserFinishReservation(Authentication authentication){
+    public ResponseEntity<ApiResponse<List<ReservationDto.UserReadFinishReservResponseDto>>> readUserFinishReservation(Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
+        List<ReservationDto.UserReadFinishReservResponseDto> finishs = reservationService.finishReservations(userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(finishs,CustomResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/list/state")
+    public ResponseEntity<ApiResponse<List<ReservationDto.UserReadFinishReservResponseDto>>> readUserReservationIng(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<ReservationDto.UserReadFinishReservResponseDto> proceeds = reservationService.proceedReservations(userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(proceeds,CustomResponseCode.SUCCESS));
+    }
+    @GetMapping("/now")
+    public ResponseEntity<ApiResponse<ReservationDto.UserReservationStatusResponseDto>> readUserReservationStatus(Authentication authentication){
+        log.info("예약 현황 상태 조회 시작");
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ReservationDto.UserReservationStatusResponseDto userReservationStatusResponseDto = reservationService.reservationStatus(userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(userReservationStatusResponseDto, CustomResponseCode.SUCCESS));
+    }
+    @GetMapping("/now/cancle/{reservationId}")
+    public ResponseEntity<ApiResponse<ReservationDto.CancleReasonResponDto>> readCancleReason(@PathVariable int reservationId, Authentication authentication){
+        log.info("취소 페이지 시작");
+      ReservationDto.CancleReasonResponDto cancleReasonResponseDto = reservationService.cancleReason(reservationId);
+        return  ResponseEntity.ok().body(ApiResponse.createSuccess(cancleReasonResponseDto, CustomResponseCode.SUCCESS));
     }
 }

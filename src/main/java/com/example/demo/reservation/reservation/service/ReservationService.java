@@ -12,7 +12,8 @@ public interface ReservationService {
     Boolean createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName);
     List<ReservationDto.TimeSlotResponseDto> getAvailableTimeSlots(String reserveDate, int tableId);
     ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId);
-
+    ReservationDto.UserReservationStatusResponseDto reservationStatus(String userName);
+    ReservationDto.CancleReasonResponDto cancleReason(int reservationId);
 
     // manager
     List<ReservationDto.ManagerReservationResponseDto> getDateReservation(String date, String userName);
@@ -22,5 +23,7 @@ public interface ReservationService {
     Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto, String userName);
     Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto, String userName);
 
+    List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName);
+    List<ReservationDto.UserReadFinishReservResponseDto> proceedReservations(String userName);
 
 }
