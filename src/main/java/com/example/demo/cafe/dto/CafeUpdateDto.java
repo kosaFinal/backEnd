@@ -65,5 +65,55 @@ public class CafeUpdateDto {
         }
     }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeTimeRequestDto{
+        private String startTime;
+        private String endTime;
+
+        public CafeTimeRequestDto(Cafe cafe){
+            this.startTime = cafe.getStartTime();
+            this.endTime = cafe.getEndTime();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeTimeResponseDto{
+        private String startTime;
+        private String endTime;
+        private int cafeId;
+
+        public CafeTimeResponseDto(Cafe cafe){
+            this.startTime = cafe.getStartTime();
+            this.endTime = cafe.getEndTime();
+            this.cafeId = cafe.getCafeId();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeStudyRequestDto{
+        private String study;
+
+        public CafeStudyRequestDto(Cafe cafe){
+            this.study = cafe.getStudy();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeStudyResponseDto{
+        private String study;
+        public CafeStudyResponseDto(Cafe cafe){
+            this.study = cafe.getStudy();
+        }
+    }
+
+
 
 }

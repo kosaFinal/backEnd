@@ -14,4 +14,16 @@
         WHERE cafeId = #{cafeId}
     </update>
 
+    <update id="updateCafeTime">
+        UPDATE cafe
+        SET startTime = #{startTime},endTime = #{endTime}
+        WHERE cafeId = #{cafeId}
+    </update>
+
+    <update id="updateCafeStudy">
+        UPDATE cafe
+        SET study = #{study}
+        WHERE cafeId = #{cafeId}
+    </update>
+
 </mapper>
