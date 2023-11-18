@@ -134,4 +134,10 @@ public class CafeServiceImpl implements CafeService {
         return new CafeDto.CafeReadSettingResponseDto(cafe);
     }
 
+    @Override
+    public void deleteCafe(String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        cafeMapper.cafeDelete(cafeId);
+    }
+
 }
