@@ -11,4 +11,6 @@ public interface CafeUpdateMapper {
 
     int updateCafeStudy(String study, int cafeId);
 
+    void updateCafeStudyImg(byte[] studyImg, String studyImgMine, int cafeId);
+
 }

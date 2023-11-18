@@ -121,7 +121,7 @@ public class CafeController {
     }
 
     @DeleteMapping("/manager/cafe/delete")
-    public ResponseEntity<ApiResponse>deleteCafe(Authentication authentication){
+    public ResponseEntity<ApiResponse<String>>deleteCafe(Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
         log.info("카페 삭제!");
