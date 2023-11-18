@@ -10,26 +10,28 @@
     <select id="getOneTableRev" resultType="reservation">
         SELECT *
         FROM reservation
-        WHERE reserveDate = #{reserveDate} AND tableId = #{tableId} AND status IN ('A','p','F')
+        WHERE reserveDate = #{reserveDate} AND tableId = #{tableId} AND status IN ('A','P','F')
     </select>
 
     <select id="getOneCafeOneDayRev" resultType="reservation">
         SELECT *
         FROM reservation
         WHERE reserveDate = #{date} AND cafeId = #{cafeId} AND status IN ('A','P','F')
-        ORDER BY userId, tableId, reserveStart, reserveDate
+        ORDER BY userId, tableId, reserveStart
     </select>
 
     <select id="getOneCafeBeforeRev" resultType="reservation">
         SELECT *
         FROM reservation
         WHERE cafeId = #{cafeId} AND status = 'A'
+        ORDER BY userId, tableId, reserveStart
     </select>
 
     <select id="getOneCafeIngRev" resultType="reservation">
         SELECT *
         FROM reservation
         WHERE cafeId = #{cafeId} AND status = 'P'
+        ORDER BY userId, tableId, reserveStart
     </select>
 
     <update id="cofirmReservation" parameterType="int">
