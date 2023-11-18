@@ -25,7 +25,7 @@ public class CafeFeatureServiceImpl implements CafeFeatureService {
 
 
     @Override
-    public void insertCafeFeatures(CafeFeatureDto.CafeFeatureRequestDto cafeFeatureRequestDto, String userName) {
+    public CafeFeatureDto.CafeFeatureResponseDto insertCafeFeatures(CafeFeatureDto.CafeFeatureRequestDto cafeFeatureRequestDto, String userName) {
         int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
 
         int[] featureIds = new int[]{22, 23, 24, 25, 26, 27}; // 특성 ID 배열
@@ -45,6 +45,8 @@ public class CafeFeatureServiceImpl implements CafeFeatureService {
             }
 
         }
+        List<Integer> featureIdss = cafeFeatureMapper.findFeatureIdByCafeId(cafeId);
+        return new CafeFeatureDto.CafeFeatureResponseDto(featureIdss);
     }
 
     @Override

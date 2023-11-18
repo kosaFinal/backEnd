@@ -34,7 +34,10 @@ public enum CustomResponseCode {
     IMG_OVER_SELECT(false,5000,"최대 5장의 이미지만 업로드 가능합니다"),
     CREATE_RESERVATION_FAILED(false, 5001, "카페 예약 생성을 실패하였습니다."),
     COFIRM_RESERVATION_FAILED(false, 5002, "카페 예약 확정을 실패하였습니다."),
-    CANCLE_RESERVATION_FAILED(false, 5003, "카페 예약 취소를 실패하였습니다.");
+    CANCLE_RESERVATION_FAILED(false, 5003, "카페 예약 취소를 실패하였습니다."),
+    CAFE_OPERATOR_TIME_OVER(false,5004,"카페 종료 시간은 시작 시간 이후여야 합니다"),
+    CAFE_OPERATOR_TIME_MISMATCH(false,5005,"카페 운영시간 형식이 맞지 않습니다"),
+    CAFE_OPERATOR_TIME_EQUALS(false,5006,"카페 시작시간과 종료시간이 같습니다.");
 
     private final boolean isSuccess;
     private final int code;
