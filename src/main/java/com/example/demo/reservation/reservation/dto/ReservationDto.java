@@ -101,10 +101,12 @@ public class ReservationDto {
     @NoArgsConstructor
     @Builder
     public static class  UserReservationStatusResponseDto{
+        private  String userName;
         private String status;
         private int reservationId;
 
-        public UserReservationStatusResponseDto(String status, int reservationId) {
+        public UserReservationStatusResponseDto(String userName, String status, int reservationId) {
+            this.userName = userName;
             this.status = status;
             this.reservationId = reservationId;
         }

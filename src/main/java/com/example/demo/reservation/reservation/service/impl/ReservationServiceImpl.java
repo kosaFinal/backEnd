@@ -372,7 +372,7 @@ public class ReservationServiceImpl implements ReservationService {
         log.info("reservationId"+reservationId);
         Reservation reservation = reservationMapper.getRevByRevId(reservationId);
         log.info(reservation.getStatus());
-        return new ReservationDto.UserReservationStatusResponseDto(reservation.getStatus(), reservationId);
+        return new ReservationDto.UserReservationStatusResponseDto(userName, reservation.getStatus(), reservationId);
     }
 
     @Override
