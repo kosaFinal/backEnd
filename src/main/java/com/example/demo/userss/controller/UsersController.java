@@ -30,6 +30,7 @@ public class UsersController {
     public ResponseEntity<ApiResponse<UsersDto.UserLoginResponseDto>> login(@RequestBody UsersDto.UserLoginRequestDto userLoginRequestDto){
         log.info("들어옴!");
         UsersDto.UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
+        log.info(userLoginResponseDto.toString());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(userLoginResponseDto, CustomResponseCode.SUCCESS));
     }
 

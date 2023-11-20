@@ -36,15 +36,18 @@ public class UserServiceImpl implements UsersService {
 
         log.info("login서비스 usermapper가 찾은 user: "+user);
 
+
         if(!passwordEncoder.matches(userLoginRequestDto.getPassword(),user.getPassword())){
+            log.info("userLoginRequestDto.getPassword(): "+ userLoginRequestDto.getPassword());
             throw new GeneralException(CustomResponseCode.NOT_EQUALS_PASSWORD);
         }
 
         String accessToken = jwtUtils.createToken(userLoginRequestDto.getUserName());
-
+        log.info("accesstoken: "+ accessToken);
         log.info("accessToken: "+accessToken);
         return UsersDto.UserLoginResponseDto.builder()
                 .userName(userLoginRequestDto.getUserName())
+                .role(user.getRole())
                 .accessToken(accessToken)
                 .build();
     }
@@ -95,7 +98,6 @@ public class UserServiceImpl implements UsersService {
 
     @Override
     public void logout(String userName) {
-
 
     }
 
