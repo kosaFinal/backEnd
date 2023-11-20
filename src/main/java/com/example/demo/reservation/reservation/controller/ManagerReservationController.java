@@ -58,25 +58,37 @@ public class ManagerReservationController {
     }
 
     @PatchMapping("/confirm")
-    public ResponseEntity<ApiResponse<Boolean>> confirmReservation(@RequestBody ReservationDto.CofirmReservationRequestDto cofirmReservationRequestDto, Authentication authentication) {
+    public ResponseEntity<ApiResponse<Boolean>> confirmReservation(@RequestBody ReservationDto.ConfAndFinReservationRequestDto requestDto, Authentication authentication) {
         log.info("예약 확정 시작");
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
 
-        Boolean check = reservationService.confirmReservation(cofirmReservationRequestDto, userName);
+        Boolean check = reservationService.changeConfirmReservation(requestDto, userName);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
 
     }
 
     @PatchMapping("/cancle")
     public ResponseEntity<ApiResponse<Boolean>> cancleReservation(@RequestBody ReservationDto.CancleReservationRequestDto cancleReservationRequestDto, Authentication authentication) {
-        log.info("예약 확정 시작");
+        log.info("예약 취소 시작");
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
 
-        Boolean check = reservationService.cancleReservation(cancleReservationRequestDto, userName);
+        Boolean check = reservationService.changeCancleReservation(cancleReservationRequestDto, userName);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
+
+    }
+
+    @PatchMapping("/finish")
+    public ResponseEntity<ApiResponse<Boolean>> finishReservation(@RequestBody ReservationDto.ConfAndFinReservationRequestDto requestDto, Authentication authentication) {
+        log.info("이용 종료 시작");
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        Boolean check = reservationService.changeFinishReservation(requestDto, userName);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
 
     }
