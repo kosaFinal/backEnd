@@ -19,6 +19,7 @@ public interface ReservationMapper {
     Reservation getRevByRevId(int reservationId);
     void cofirmReservation(int reservationId);
     void cancleReservation(int reservationId, String cancleReasonId);
+    void finishReservation(int reservationId);
 
 
     List<Reservation> getFinReservations(int userId);

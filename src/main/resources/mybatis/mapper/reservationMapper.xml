@@ -52,6 +52,12 @@
         WHERE reservationId = #{reservationId}
     </update>
 
+    <update id="finishReservation">
+        UPDATE reservation
+        SET status = 'F', modifyDate = sysdate
+        WHERE reservationId = #{reservationId}
+    </update>
+
     <select id="getFinReservations" resultType="reservation">
         select *
         from reservation

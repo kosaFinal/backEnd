@@ -272,7 +272,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean confirmReservation(ReservationDto.CofirmReservationRequestDto requestDto, String userName) {
+    public Boolean changeConfirmReservation(ReservationDto.ConfAndFinReservationRequestDto requestDto, String userName) {
 
         int cafeId = getCafIdByUsername(userName);
         //int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
@@ -303,7 +303,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean cancleReservation(ReservationDto.CancleReservationRequestDto requestDto, String userName) {
+    public Boolean changeCancleReservation(ReservationDto.CancleReservationRequestDto requestDto, String userName) {
 
         int cafeId = getCafIdByUsername(userName);
         //int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
@@ -336,6 +336,38 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return true;
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean changeFinishReservation(ReservationDto.ConfAndFinReservationRequestDto requestDto, String userName) {
+
+        int cafeId = getCafIdByUsername(userName);
+        //int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+
+        List<Integer> reservationIds = requestDto.getReservationIds();
+
+        for (Integer reservationId : reservationIds) {
+            Reservation temp = reservationMapper.getRevByRevId(reservationId);
+
+            if(temp == null){
+                throw new GeneralException(CustomResponseCode.NO_RESERVATION);
+            }
+
+            if(temp.getCafeId() != cafeId){
+                throw new GeneralException(CustomResponseCode.NO_CAFE_MANAGER);
+            }
+
+            try{
+                reservationMapper.finishReservation(reservationId);
+                log.info(reservationId+"가 변경됨");
+            } catch (Exception e) {
+                log.info(e.getMessage());
+                throw new GeneralException(CustomResponseCode.COFIRM_RESERVATION_FAILED);
+            }
+        }
+        return true;
+    }
+
     public List<ReservationDto.UserReadFinishReservResponseDto> finishReservations(String userName) {
         Users user = usersMapper.getOneUsers(userName);
         if(user == null){
