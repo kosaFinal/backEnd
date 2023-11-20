@@ -6,7 +6,7 @@ import com.example.demo.cafeFeature.dto.CafeFeatureDto;
 import java.util.List;
 
 public interface CafeFeatureService {
-    void insertCafeFeatures(CafeFeatureDto.CafeFeatureRequestDto cafeFeatureRequestDto, String userName);
+    CafeFeatureDto.CafeFeatureResponseDto insertCafeFeatures(CafeFeatureDto.CafeFeatureRequestDto cafeFeatureRequestDto, String userName);
     CafeFeatureDto.CafeFeatureResponseDto selectCafeFeature (String userName);
     void deleteFeatures(String userName);
 }

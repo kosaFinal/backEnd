@@ -3,7 +3,9 @@ package com.example.demo.cafe.dto;
 import com.example.demo.cafe.entity.Cafe;
 
 import com.example.demo.cafeFeature.dto.CafeFeatureDto;
+import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.feature.dto.FeatureDto;
+import com.example.demo.reservation.reservation.dto.ReservationDto;
 import lombok.*;
 
 import java.util.*;
@@ -152,6 +154,13 @@ public class CafeDto {
             this.studyImgMine = cafe.getStudyImgMine();
         }
 
+    }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeSettingResponseWrapper {
+        private CafeDto.CafeReadSettingResponseDto SettingResponse;
+        private ReservationDto.RevCafeInfoResponseDto CafeTableResponse;
     }
 
     @Builder

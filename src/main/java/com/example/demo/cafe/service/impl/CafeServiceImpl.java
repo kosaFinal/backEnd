@@ -8,6 +8,8 @@ import com.example.demo.cafe.mapper.CafeImgMapper;
 import com.example.demo.cafe.mapper.CafeMapper;
 import com.example.demo.cafe.service.CafeService;
 import com.example.demo.cafeFeature.entity.CafeFeature;
+import com.example.demo.constant.enums.CustomResponseCode;
+import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.feature.dto.FeatureDto;
 import com.example.demo.feature.entity.Feature;
 import com.example.demo.feature.mapper.FeatureMapper;
@@ -45,14 +47,12 @@ public class CafeServiceImpl implements CafeService {
             ImageInputStream iis = ImageIO.createImageInputStream(bais);
             Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
             if (!iter.hasNext()) {
-                log.error("No image reader found for given data.");
-                return null;
+                throw new GeneralException(CustomResponseCode.CAFEIMG_READER_NOT_FOUND);
             }
             ImageReader reader = iter.next();
             return "image/" + reader.getFormatName().toLowerCase();
         } catch (IOException e) {
-            log.error("Error occurred while extracting image MIME type", e);
-            return null;
+            throw new GeneralException(CustomResponseCode.IMG_EXTRACT_ERROR);
         }
     }
 
@@ -95,8 +95,7 @@ public class CafeServiceImpl implements CafeService {
 
             cafeMapper.insertCafe(requestDto);
         } catch (IOException e) {
-            log.error("Error occurred while processing images", e);
-            // Handle the exception according to your business logic
+            throw new GeneralException(CustomResponseCode.NO_CAFEIMG_DATA_READ);
         }
     }
 
@@ -132,6 +131,12 @@ public class CafeServiceImpl implements CafeService {
         Cafe cafe =  cafeMapper.getOneCafe(cafeId);
 
         return new CafeDto.CafeReadSettingResponseDto(cafe);
+    }
+
+    @Override
+    public void deleteCafe(String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        cafeMapper.cafeDelete(cafeId);
     }
 
 }

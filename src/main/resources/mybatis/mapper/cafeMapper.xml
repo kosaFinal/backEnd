@@ -46,7 +46,11 @@
         select *
         from cafe
         where userId = #{userId}
-
     </select>
 
+    <delete id="cafeDelete">
+        delete from cafe where cafeId = #{cafeId}
+    </delete>
+
+    <select id=""></select>
 </mapper>

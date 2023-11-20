@@ -1,7 +1,6 @@
 package com.example.demo.reservation.reservation.dto;
 
 import com.example.demo.cafeTable.dto.CafeTableDto;
-import com.example.demo.cafeTable.entity.CafeTable;
 import com.example.demo.reservation.reservation.entity.Reservation;
 import com.example.demo.userss.entity.Users;
 import lombok.AllArgsConstructor;
@@ -27,34 +26,30 @@ public class ReservationDto {
 
     @Data
     @NoArgsConstructor
+    @AllArgsConstructor
     @Builder
     public static class RevCafeInfoResponseDto{
         private String cafeName;
         private Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo;
+        private String studyImg;
+        private String studyImgMine;
 
-        public RevCafeInfoResponseDto(String cafeName, Map<String, List<CafeTableDto.CafeTableInfoResponseDto>> tableInfo) {
-            this.cafeName = cafeName;
-            this.tableInfo = tableInfo;
-        }
     }
 
     @Data
     @NoArgsConstructor
+    @AllArgsConstructor
     @Builder
     public static class TimeSlotResponseDto{
         private String reserveStart;
         private String reserveEnd;
         private String available;
 
-        public TimeSlotResponseDto(String reserveStart, String reserveEnd, String available) {
-            this.reserveStart = reserveStart;
-            this.reserveEnd = reserveEnd;
-            this.available = available;
-        }
     }
 
     @Data
     @NoArgsConstructor
+    @AllArgsConstructor
     @Builder
     public static class ManagerReservationResponseDto{
         private List<Integer> reservationIds;
@@ -66,29 +61,13 @@ public class ReservationDto {
         private String reserveEnd;
         private String reserveDate;
 
-        public ManagerReservationResponseDto(List<Integer> reservationIds, String userRealName, String tableNumber,
-                                          String tableType, int personCnt, String reserveStart, String reserveEnd, String reserveDate) {
-            this.reservationIds = reservationIds;
-            this.userRealName = userRealName;
-            this.tableNumber = tableNumber;
-            this.tableType = tableType;
-            this.personCnt = personCnt;
-            this.reserveStart = reserveStart;
-            this.reserveEnd = reserveEnd;
-            this.reserveDate = reserveDate;
-        }
     }
 
     @Data
-    @NoArgsConstructor
-    @Builder
-    public static class CofirmReservationRequestDto{
+    public static class ConfAndFinReservationRequestDto{
         private List<Integer> reservationIds;
-
-        public CofirmReservationRequestDto(List<Integer> reservationIds) {
-            this.reservationIds = reservationIds;
-        }
     }
+
     @Data
     public static class UserReadFinishReservResponseDto {
         private List<Integer> reservationIds;
@@ -113,16 +92,32 @@ public class ReservationDto {
         private List<Integer> reservationIds;
         private String cancleReasonId;
     }
+
     @Data
     @NoArgsConstructor
     @Builder
     public static class  UserReservationStatusResponseDto{
+        private  String userName;
         private String status;
+        private int reservationId;
 
-        public UserReservationStatusResponseDto(String reservationStatus) {
+        public UserReservationStatusResponseDto(String userName, String status, int reservationId) {
+            this.userName = userName;
             this.status = status;
+            this.reservationId = reservationId;
+        }
+
+    }
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class CancleReasonResponDto {
+        private int reservationId;
+        private String cancleContent;
+        public CancleReasonResponDto(int reservationId, String cancleContent) {
+            this.reservationId = reservationId;
+            this.cancleContent = cancleContent;
         }
     }
-
 
 }
