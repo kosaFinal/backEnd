@@ -2,6 +2,7 @@ package com.example.demo.search.service.Impl;
 
 import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.search.dto.SearchDto;
+import com.example.demo.search.dto.SearchRequestDto;
 import com.example.demo.search.mapper.SearchMapper;
 import com.example.demo.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Override
     public SearchDto.SearchResponseDto search(SearchDto.SearchRequestDto searchRequestDto) {
+        log.info("searchRequestDto: "+ searchRequestDto);
         List<Cafe> cafeList = searchMapper.search(searchRequestDto);
 
         return new SearchDto.SearchResponseDto(cafeList);

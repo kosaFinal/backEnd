@@ -11,17 +11,16 @@ import java.util.stream.Collectors;
 
 public class SearchDto {
 
-    @Getter
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SearchRequestDto{
         private String cafeType;
         private String studyEnable;
-        private String people;
-        private String ing;
-        @Getter
-        private List<String> features;
+        private String people; //다인석
+        private String proceed;  //운영중
+        private List<String> features;  //특성
         private String startTime;
         private String endTime;
         private String userStudy;
@@ -30,6 +29,7 @@ public class SearchDto {
     }
 
     @Builder
+    @Data
     @AllArgsConstructor
     public static class SearchResponseDto{
         private List<CafeDto.CafeSearchResponseDto> searchCafes;

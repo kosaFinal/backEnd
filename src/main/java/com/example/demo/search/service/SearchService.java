@@ -1,6 +1,7 @@
 package com.example.demo.search.service;
 
 import com.example.demo.search.dto.SearchDto;
+import com.example.demo.search.dto.SearchRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 

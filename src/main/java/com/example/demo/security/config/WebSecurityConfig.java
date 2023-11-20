@@ -42,7 +42,7 @@ public class WebSecurityConfig {
                 )
                 .authorizeHttpRequests(
                         request -> request
-                                .antMatchers("/user/**").hasRole("USER")
+                                .antMatchers("/user/**").hasAnyRole("USER","MANAGER")
                                 .antMatchers(("/manager/**")).hasRole("MANAGER")
                                 .antMatchers("/login").permitAll()
                                 .antMatchers("/signup").permitAll()

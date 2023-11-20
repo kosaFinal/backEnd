@@ -2,6 +2,7 @@ package com.example.demo.feature.dto;
 
 import com.example.demo.feature.entity.Feature;
 import lombok.Data;
+import lombok.Getter;
 
 public class FeatureDto {
 
@@ -12,4 +13,6 @@ public class FeatureDto {
             this.featureName = feature.getFeatureName();
         }
     }
+
+
 }

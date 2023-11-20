@@ -3,55 +3,66 @@
 <mapper namespace="com.example.demo.search.mapper.SearchMapper">
 
     <select id="search" resultType="cafe">
-        <![CDATA[
-            SELECT
+            SELECT distinct
                 c.cafeId,
                 c.cafeName,
                 c.cafeType,
                 c.startTime,
                 c.endTime,
                 c.address,
-                c.longitude,
+                c.longtitude,
                 c.latitude,
                 c.cafeTel,
-                c.study,
-                cf.featureId
+                c.study
             FROM cafe c
-                LEFT JOIN
-                    cafeFeature cf ON c.cafeId = cf.cafeId
-                LEFT JOIN
-                    feature f ON cf.featureId = f.featureId
+                LEFT JOIN (
+                    SELECT CAFEID, FEATUREID
+                    from CAFEFEATURE
+                    group by CAFEID, FEATUREID
+                ) cf
+                ON c.cafeId = cf.cafeId
+                LEFT JOIN (
+                    SELECT FEATUREID, FEATURENAME
+                    from FEATURE
+                    group by featureName,featureId
+                ) f
+                ON cf.FEATUREID = f.FEATUREID
             WHERE
-                <if test="cafeType != null">
-                    c.cafeType = #{cafeType}
-                </if>
-                AND c.study = #{studyEnable}
-                AND EXISTS (
-                    SELECT
-                    1
-                    FROM cafeTable ct
-                    WHERE
-                        ct.cafeId = c.cafeId
-                        <if test="preferSeat != null" >
-                            AND ct.tableType = #{preferSeat}
-                        </if>
-                )
-            <if test="startTime != null && endTime != null">
-                AND TO_DATE(c.startTime, 'HH24:MI') >= TO_DATE(#{startTime}, 'HH24:MI')
-                AND TO_DATE(c.endTime, 'HH24:MI') <= TO_DATE(#{endTime}, 'HH24:MI')
-            </if>
+                c.study = #{studyEnable}
                 <choose>
-                    <when test="features != null and features.size() > 0">
-                        AND f.featureName IN
-                            <foreach item="feature" collection="features" open="(" separator="," close=")">
-                                #{feature}
-                            </foreach>
+                    <when test="cafeType != ''">
+                        AND c.cafeType = #{cafeType}
+
                     </when>
                     <otherwise>
-                        AND f.featureName IS NULL
+                        AND c.cafeType IN ('G','P')
                     </otherwise>
                 </choose>
-        ]]>
+                <if test="preferSeat != ''" >
+                    AND EXISTS (
+                            SELECT
+                            1
+                            FROM cafeTable ct
+                            WHERE
+                                ct.cafeId = c.cafeId
+                                AND ct.tableType = #{preferSeat}
+                        )
+                </if>
+                <if test="startTime != '' &amp;&amp; endTime != ''">
+                    AND TO_DATE(c.startTime, 'HH24:MI') &lt;= TO_DATE(#{startTime}, 'HH24:MI')
+                    AND TO_DATE(c.endTime, 'HH24:MI') &gt;= TO_DATE(#{endTime}, 'HH24:MI')
+                </if>
+                <if test= "proceed.equals('Y')">
+--                   AND SYSDATE &gt;= TO_DATE(c.startTime, 'HH24:MI')
+--                   AND SYSDATE &lt;= TO_DATE(c.endTime, 'HH24:MI')
+                </if>
+                    <if test=" features != null and features.size > 0 ">
+                        AND f.featureName IN
+                            <foreach collection="features" item="feature" open="(" separator="," close=")">
+                                #{feature}
+                            </foreach>
+                    </if>
+
     </select>
 
     <select id="searchWord" parameterType="String" resultType="java.lang.String">
@@ -67,7 +78,7 @@
                 SELECT cafe.*,
                 (6371 * ACOS(COS(#{latitude}/57.29577951)
                 * COS(LATITUDE/57.29577951)
-                * COS(LONGITUDE/57.29577951 - #{longitude}/57.29577951)
+                * COS(LONGITITUDE/57.29577951 - #{longititude}/57.29577951)
                 + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
                 FROM cafe
             )
