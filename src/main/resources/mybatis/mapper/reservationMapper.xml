@@ -24,14 +24,14 @@
         SELECT *
         FROM reservation
         WHERE cafeId = #{cafeId} AND status = 'A'
-        ORDER BY userId, tableId, reserveStart
+        ORDER BY reserveDate, userId, tableId, reserveStart
     </select>
 
     <select id="getOneCafeIngRev" resultType="reservation">
         SELECT *
         FROM reservation
         WHERE cafeId = #{cafeId} AND status = 'P'
-        ORDER BY userId, tableId, reserveStart
+        ORDER BY reserveDate, userId, tableId, reserveStart
     </select>
 
     <update id="cofirmReservation" parameterType="int">
