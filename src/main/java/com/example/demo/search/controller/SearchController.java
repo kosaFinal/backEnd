@@ -28,16 +28,16 @@ public class SearchController {
     }
 
     @GetMapping("/user/search/relative/{word}")
-    public ResponseEntity<ApiResponse<List<String>>> searchWord(@PathVariable String word){
+    public ResponseEntity<ApiResponse<SearchDto.SearchResponseDto>> searchWord(@PathVariable String word){
         log.info(word);
-        List<String> words = searchService.searchWord(word);
+        SearchDto.SearchResponseDto words = searchService.searchWord(word);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(words,CustomResponseCode.SUCCESS));
     }
 
     @GetMapping("/user/search/near/mylocation")
     public ResponseEntity<ApiResponse<SearchDto.SearchResponseDto>> searchByMyLocation(
-            @RequestParam("x") Double longtitude,
-            @RequestParam("y") Double latitude,
+            @RequestParam(value = "x") Double longtitude,
+            @RequestParam(value = "y") Double latitude,
             Authentication authentication
     ){
         SearchDto.SearchResponseDto nearCafesMyLocation = searchService.searchByMyLocation(longtitude,latitude);

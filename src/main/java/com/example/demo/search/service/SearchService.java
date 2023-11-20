@@ -11,6 +11,6 @@ import java.util.List;
 public interface SearchService {
     SearchDto.SearchResponseDto search(SearchDto.SearchRequestDto searchRequestDto);
 
-    List<String> searchWord(String word);
+    SearchDto.SearchResponseDto searchWord(String word);
     SearchDto.SearchResponseDto searchByMyLocation(Double longtitude, Double latitude);
 }

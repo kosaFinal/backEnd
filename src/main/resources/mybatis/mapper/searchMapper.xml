@@ -65,8 +65,8 @@
 
     </select>
 
-    <select id="searchWord" parameterType="String" resultType="java.lang.String">
-        select CAFENAME
+    <select id="searchWord" parameterType="String" resultType="cafe">
+        select *
         from CAFE
         where CAFENAME LIKE '%'||#{word}||'%'
     </select>
@@ -78,11 +78,11 @@
                 SELECT cafe.*,
                 (6371 * ACOS(COS(#{latitude}/57.29577951)
                 * COS(LATITUDE/57.29577951)
-                * COS(LONGITITUDE/57.29577951 - #{longititude}/57.29577951)
+                * COS(LONGTITUDE/57.29577951 - #{longtitude}/57.29577951)
                 + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
                 FROM cafe
             )
-            WHERE ROWNUM <= 15
+            WHERE ROWNUM <= 5
             ORDER BY distance
         ]]>
     </select>
