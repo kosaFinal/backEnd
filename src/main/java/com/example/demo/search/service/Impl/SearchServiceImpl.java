@@ -39,9 +39,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<String> searchWord(String word) {
+    public SearchDto.SearchResponseDto searchWord(String word) {
 
-        return searchMapper.searchWord(word);
+        List<Cafe> wordsCafe = searchMapper.searchWord(word);
+        return new SearchDto.SearchResponseDto(wordsCafe);
     }
 
     @Override
