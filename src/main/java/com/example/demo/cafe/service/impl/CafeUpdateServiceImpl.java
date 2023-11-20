@@ -13,9 +13,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.activation.MimeType;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.List;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +36,20 @@ public class CafeUpdateServiceImpl implements CafeUpdateService {
     private final CafeUpdateMapper cafeUpdateMapper;
     private final CafeImgMapper cafeImgMapper;
     private final CafeMapper cafeMapper;
+
+    private String extractMimeType(byte[] imageData) throws GeneralException{
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(imageData)) {
+            ImageInputStream iis = ImageIO.createImageInputStream(bais);
+            Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
+            if (!iter.hasNext()) {
+                throw new GeneralException(CustomResponseCode.CAFEIMG_READER_NOT_FOUND);
+            }
+            ImageReader reader = iter.next();
+            return "image/" + reader.getFormatName().toLowerCase();
+        } catch (IOException e) {
+            throw new GeneralException(CustomResponseCode.IMG_EXTRACT_ERROR);
+        }
+    }
 
     private void validateCafeTime(CafeUpdateDto.CafeTimeRequestDto cafeTime) throws GeneralException {
         try {
@@ -76,5 +101,25 @@ public class CafeUpdateServiceImpl implements CafeUpdateService {
         cafeUpdateMapper.updateCafeStudy(cafeStudy.getStudy(), cafeId);
         Cafe cafe = cafeMapper.getOneCafe(cafeId);
         return new CafeUpdateDto.CafeStudyResponseDto(cafe);
+    }
+
+    @Override
+    public CafeUpdateDto.CafeStudyImgResponseDto cafeStudyImgUpdate(MultipartFile cafeStudyImg, String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        if (cafeStudyImg != null && !cafeStudyImg.isEmpty()) {
+            try {
+                byte[] studyImgBytes = cafeStudyImg.getBytes();
+                String mimeType = extractMimeType(studyImgBytes); // MIME 타입 추출
+                if (mimeType != null) {
+                    cafeUpdateMapper.updateCafeStudyImg(studyImgBytes, mimeType, cafeId);
+                }
+            } catch (IOException e) {
+                throw new GeneralException(CustomResponseCode.NO_CAFEIMG_DATA_READ);
+            }
+        }
+
+
+        Cafe cafe = cafeMapper.getOneCafe(cafeId);
+        return new CafeUpdateDto.CafeStudyImgResponseDto(cafe);
     }
 }

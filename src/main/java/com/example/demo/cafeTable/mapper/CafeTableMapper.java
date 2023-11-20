@@ -10,4 +10,10 @@ import java.util.List;
 public interface CafeTableMapper {
     CafeTable getOneCafeTable(int tableId);
     List<CafeTableDto.CafeTableInfoResponseDto> getTableInfo(int cafeId, String tableType);
+
+    void deleteCafeTableOne(int tableId);
+
+    CafeTable getTableInfoOne(int cafeId);
+
+    void insertCafeTable(CafeTableDto.CafeTableInsertRequestDto requestDto);
 }

@@ -101,12 +101,27 @@ public class ReservationDto {
     @NoArgsConstructor
     @Builder
     public static class  UserReservationStatusResponseDto{
+        private  String userName;
         private String status;
+        private int reservationId;
 
-        public UserReservationStatusResponseDto(String reservationStatus) {
+        public UserReservationStatusResponseDto(String userName, String status, int reservationId) {
+            this.userName = userName;
             this.status = status;
+            this.reservationId = reservationId;
+        }
+
+    }
+    @Data
+    @NoArgsConstructor
+    @Builder
+    public static class CancleReasonResponDto {
+        private int reservationId;
+        private String cancleContent;
+        public CancleReasonResponDto(int reservationId, String cancleContent) {
+            this.reservationId = reservationId;
+            this.cancleContent = cancleContent;
         }
     }
-
 
 }
