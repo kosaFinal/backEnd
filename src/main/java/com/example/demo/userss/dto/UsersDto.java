@@ -36,6 +36,7 @@ public class UsersDto {
     @NoArgsConstructor
     public static class UserLoginResponseDto{
         private String userName;
+        private String role;
         private String accessToken;
     }
 
