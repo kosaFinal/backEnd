@@ -23,9 +23,7 @@ public class SearchDto {
         private List<String> features;  //특성
         private String startTime;
         private String endTime;
-        private String userStudy;
         private String preferSeat;
-
     }
 
     @Builder

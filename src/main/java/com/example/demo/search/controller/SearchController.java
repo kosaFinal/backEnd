@@ -19,12 +19,25 @@ import java.util.List;
 public class SearchController {
 
     private final SearchService searchService;
-    @PostMapping("/user/search")
-    public ResponseEntity<ApiResponse<SearchDto.SearchResponseDto>> search(@RequestBody SearchDto.SearchRequestDto searchRequestDto){
+    @GetMapping("/user/search")
+    public ResponseEntity<ApiResponse<SearchDto.SearchResponseDto>> search(
+            @RequestParam(value = "cafeType", required = false) String cafeType,
+            @RequestParam(value = "studyEnable",required = false) String studyEnable,
+            @RequestParam(value = "people",required = false) String people,
+            @RequestParam(value = "proceed",required = false) String proceed,
+            @RequestParam(value = "features",required = false) List<String> features,
+            @RequestParam(value = "startTime",required = false) String startTime,
+            @RequestParam(value = "endTime",required = false) String endTime,
+            @RequestParam(value = "preferSeat",required = false) String preferSeat,
+            @RequestParam(value = "pageNo") int pageNo
+    ){
+        SearchDto.SearchRequestDto searchRequestDto = new SearchDto.SearchRequestDto(
+                cafeType,studyEnable,people,proceed,features,startTime,endTime,preferSeat
+        );
         log.info(searchRequestDto.toString());
+        log.info(String.valueOf(pageNo));
         SearchDto.SearchResponseDto searchResponseDto = searchService.search(searchRequestDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(searchResponseDto, CustomResponseCode.SUCCESS));
-//        return null;
     }
 
     @GetMapping("/user/search/relative/{word}")
