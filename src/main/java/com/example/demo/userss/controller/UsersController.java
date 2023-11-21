@@ -54,6 +54,7 @@ public class UsersController {
     /**
      * 비밀번호 변경
      */
+    @CrossOrigin(origins = "http://localhost:3000")
     @PatchMapping("/user/update/password")
     public ResponseEntity<ApiResponse<String>> updatePw(
             @RequestBody UsersDto.UserCheckPwRequestDto updatePwRequestDto,
