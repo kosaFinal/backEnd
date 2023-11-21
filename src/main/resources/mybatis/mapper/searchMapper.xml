@@ -56,12 +56,15 @@
                   AND SYSDATE &gt;= TO_DATE(c.startTime, 'HH24:MI')
                   AND SYSDATE &lt;= TO_DATE(c.endTime, 'HH24:MI')
                 </if>
-                    <if test=" features != null and features.size > 0 ">
-                        AND f.featureName IN
-                            <foreach collection="features" item="feature" open="(" separator="," close=")">
-                                #{feature}
-                            </foreach>
-                    </if>
+                <if test=" features != null and features.size > 0 ">
+                    AND f.featureName IN
+                    <foreach collection="features" item="feature" open="(" separator="," close=")">
+                        #{feature}
+                    </foreach>
+                </if>
+                <if test="word != ''">
+                    AND c.CAFENAME LIKE '%'||#{word}||'%'
+                </if>
 
     </select>
 

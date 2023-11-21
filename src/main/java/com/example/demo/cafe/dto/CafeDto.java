@@ -176,6 +176,8 @@ public class CafeDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CafeSearchDetailResponseDto{
         private int cafeId;
         private String cafeName;

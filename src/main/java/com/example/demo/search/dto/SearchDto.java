@@ -24,6 +24,7 @@ public class SearchDto {
         private String startTime;
         private String endTime;
         private String preferSeat;
+        private String word;
     }
 
     @Builder
