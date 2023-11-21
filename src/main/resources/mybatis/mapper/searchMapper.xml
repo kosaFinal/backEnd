@@ -53,8 +53,8 @@
                     AND TO_DATE(c.endTime, 'HH24:MI') &gt;= TO_DATE(#{endTime}, 'HH24:MI')
                 </if>
                 <if test= "proceed.equals('Y')">
---                   AND SYSDATE &gt;= TO_DATE(c.startTime, 'HH24:MI')
---                   AND SYSDATE &lt;= TO_DATE(c.endTime, 'HH24:MI')
+                  AND SYSDATE &gt;= TO_DATE(c.startTime, 'HH24:MI')
+                  AND SYSDATE &lt;= TO_DATE(c.endTime, 'HH24:MI')
                 </if>
                     <if test=" features != null and features.size > 0 ">
                         AND f.featureName IN
