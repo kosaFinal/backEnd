@@ -76,8 +76,9 @@ public class UserReservationController {
     }
     @GetMapping("/now/cancle/{reservationId}")
     public ResponseEntity<ApiResponse<ReservationDto.CancleReasonResponDto>> readCancleReason(@PathVariable int reservationId, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         log.info("취소 페이지 시작");
-      ReservationDto.CancleReasonResponDto cancleReasonResponseDto = reservationService.cancleReason(reservationId);
+      ReservationDto.CancleReasonResponDto cancleReasonResponseDto = reservationService.cancleReason(reservationId,userDetails.getUsername());
         return  ResponseEntity.ok().body(ApiResponse.createSuccess(cancleReasonResponseDto, CustomResponseCode.SUCCESS));
     }
 }

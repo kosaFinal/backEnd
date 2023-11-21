@@ -97,12 +97,12 @@ public class ReservationDto {
     @NoArgsConstructor
     @Builder
     public static class  UserReservationStatusResponseDto{
-        private  String userName;
+        private  String userRealName;
         private String status;
         private int reservationId;
 
-        public UserReservationStatusResponseDto(String userName, String status, int reservationId) {
-            this.userName = userName;
+        public UserReservationStatusResponseDto(String userRealName, String status, int reservationId) {
+            this.userRealName = userRealName;
             this.status = status;
             this.reservationId = reservationId;
         }
@@ -114,9 +114,13 @@ public class ReservationDto {
     public static class CancleReasonResponDto {
         private int reservationId;
         private String cancleContent;
-        public CancleReasonResponDto(int reservationId, String cancleContent) {
+        private String cafeTel;
+        private String userRealName;
+        public CancleReasonResponDto(int reservationId, String cancleContent, String cafeTel, String userRealName) {
             this.reservationId = reservationId;
             this.cancleContent = cancleContent;
+            this.cafeTel = cafeTel;
+            this.userRealName = userRealName;
         }
     }
 

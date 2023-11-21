@@ -13,7 +13,7 @@ public interface ReservationService {
     List<ReservationDto.TimeSlotResponseDto> getAvailableTimeSlots(String reserveDate, int tableId);
     ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId);
     ReservationDto.UserReservationStatusResponseDto reservationStatus(String userName);
-    ReservationDto.CancleReasonResponDto cancleReason(int reservationId);
+    ReservationDto.CancleReasonResponDto cancleReason(int reservationId, String userName);
 
     // manager
     List<ReservationDto.ManagerReservationResponseDto> getDateReservation(String date, String userName);
