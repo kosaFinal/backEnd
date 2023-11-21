@@ -3,6 +3,7 @@
 <mapper namespace="com.example.demo.reservation.reservation.mapper.ReservationMapper">
 
     <insert id="createReservation" parameterType="reservation">
+
         INSERT INTO reservation (tableId, cafeId, userId, reserveStart, reserveEnd, personCnt, status, reserveDate, createDate)
         VALUES (#{tableId}, #{cafeId}, #{userId}, #{reserveStart}, #{reserveEnd}, #{personCnt}, #{status}, #{reserveDate}, sysdate)
     </insert>

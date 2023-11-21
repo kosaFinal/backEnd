@@ -1,5 +1,6 @@
 package com.example.demo.search.service.Impl;
 
+import com.example.demo.cafe.dto.PageDto;
 import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.search.dto.SearchDto;
 import com.example.demo.search.dto.SearchRequestDto;
@@ -31,23 +32,31 @@ public class SearchServiceImpl implements SearchService {
      *         private String preferSeat;
      */
     @Override
-    public SearchDto.SearchResponseDto search(SearchDto.SearchRequestDto searchRequestDto) {
+    public SearchDto.SearchResponseDto search(SearchDto.SearchRequestDto searchRequestDto,int pageNo) {
         log.info("searchRequestDto: "+ searchRequestDto);
-        List<Cafe> cafeList = searchMapper.search(searchRequestDto);
 
-        return new SearchDto.SearchResponseDto(cafeList);
+        int cafeListSize = searchMapper.search(searchRequestDto);
+
+        PageDto pager = new PageDto(5,5,cafeListSize,pageNo);
+        List<Cafe> cafeList = searchMapper.searchByPage(searchRequestDto, pager);
+
+        return new SearchDto.SearchResponseDto(cafeList,pager);
     }
 
     @Override
-    public SearchDto.SearchResponseDto searchWord(String word) {
+    public SearchDto.SearchResponseDto searchWord(String word,int pageNo) {
 
-        List<Cafe> wordsCafe = searchMapper.searchWord(word);
-        return new SearchDto.SearchResponseDto(wordsCafe);
+        int count = searchMapper.searchWordCount(word);
+        PageDto pager = new PageDto(5,5,count,pageNo);
+        List<Cafe> wordsCafe = searchMapper.searchWord(word,pager);
+        return new SearchDto.SearchResponseDto(wordsCafe,pager);
     }
 
     @Override
-    public SearchDto.SearchResponseDto searchByMyLocation(Double longtitude, Double latitude) {
-        List<Cafe> cafes = searchMapper.searchByMyLocation(longtitude,latitude);
-        return new SearchDto.SearchResponseDto(cafes);
+    public SearchDto.SearchResponseDto searchByMyLocation(Double longtitude, Double latitude,int pageNo) {
+        int count = searchMapper.searchByMyLocationCount(longtitude,latitude);
+        PageDto pager = new PageDto(5,5,count,pageNo);
+        List<Cafe> cafes = searchMapper.searchByMyLocation(longtitude,latitude,pager);
+        return new SearchDto.SearchResponseDto(cafes,pager);
     }
 }

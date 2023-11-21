@@ -2,8 +2,76 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.search.mapper.SearchMapper">
 
-    <select id="search" resultType="cafe">
-            SELECT distinct
+    <select id="search" resultType="int">
+        SELECT count(distinct c.cafeId)
+        FROM cafe c
+        LEFT JOIN (
+            SELECT CAFEID, FEATUREID
+            from CAFEFEATURE
+            group by CAFEID, FEATUREID
+            ) cf
+            ON c.cafeId = cf.cafeId
+            LEFT JOIN (
+            SELECT FEATUREID, FEATURENAME
+            from FEATURE
+            group by featureName,featureId
+            ) f
+            ON cf.FEATUREID = f.FEATUREID
+        WHERE
+        c.study = #{studyEnable}
+        <choose>
+            <when test="cafeType != ''">
+          AND c.cafeType = #{cafeType}
+
+            </when>
+            <otherwise>
+                AND c.cafeType IN ('G','P')
+            </otherwise>
+        </choose>
+        <if test="preferSeat != ''" >
+            AND EXISTS (
+            SELECT
+            1
+            FROM cafeTable ct
+            WHERE
+            ct.cafeId = c.cafeId
+            AND ct.tableType = #{preferSeat}
+            )
+        </if>
+        <if test="startTime != '' &amp;&amp; endTime != ''">
+            AND TO_DATE(c.startTime, 'HH24:MI') &lt;= TO_DATE(#{startTime}, 'HH24:MI')
+            AND TO_DATE(c.endTime, 'HH24:MI') &gt;= TO_DATE(#{endTime}, 'HH24:MI')
+        </if>
+        <if test= "proceed.equals('Y')">
+            AND SYSDATE &gt;= TO_DATE(c.startTime, 'HH24:MI')
+            AND SYSDATE &lt;= TO_DATE(c.endTime, 'HH24:MI')
+        </if>
+        <if test=" features != null and features.size > 0 ">
+            AND f.featureName IN
+            <foreach collection="features" item="feature" open="(" separator="," close=")">
+                #{feature}
+            </foreach>
+        </if>
+        <if test="word != ''">
+            AND c.CAFENAME LIKE '%'||#{word}||'%'
+        </if>
+    </select>
+
+    <select id="searchByPage" resultType="cafe">
+        select resultFin.cafeId,
+        resultFin.cafeName,
+        resultFin.cafeType,
+        resultFin.startTime,
+        resultFin.endTime,
+        resultFin.address,
+        resultFin.longtitude,
+        resultFin.latitude,
+        resultFin.cafeTel,
+        resultFin.study
+        from (
+            select rownum as rnum, caferesult.*
+            from (
+                SELECT distinct
                 c.cafeId,
                 c.cafeName,
                 c.cafeType,
@@ -14,80 +82,136 @@
                 c.latitude,
                 c.cafeTel,
                 c.study
-            FROM cafe c
-                LEFT JOIN (
-                    SELECT CAFEID, FEATUREID
-                    from CAFEFEATURE
-                    group by CAFEID, FEATUREID
-                ) cf
-                ON c.cafeId = cf.cafeId
-                LEFT JOIN (
-                    SELECT FEATUREID, FEATURENAME
-                    from FEATURE
-                    group by featureName,featureId
-                ) f
-                ON cf.FEATUREID = f.FEATUREID
-            WHERE
-                c.study = #{studyEnable}
+                FROM cafe c
+                    LEFT JOIN (
+                        SELECT CAFEID, FEATUREID
+                        from CAFEFEATURE
+                        group by CAFEID, FEATUREID
+                    ) cf
+                    ON c.cafeId = cf.cafeId
+                    LEFT JOIN (
+                        SELECT FEATUREID, FEATURENAME
+                        from FEATURE
+                        group by featureName,featureId
+                    ) f
+                    ON cf.FEATUREID = f.FEATUREID
+                WHERE
+                c.study = #{searchRequestDto.studyEnable}
                 <choose>
-                    <when test="cafeType != ''">
-                        AND c.cafeType = #{cafeType}
-
+                    <when test="searchRequestDto.cafeType != ''">
+                        AND c.cafeType = #{searchRequestDto.cafeType}
                     </when>
-                    <otherwise>
-                        AND c.cafeType IN ('G','P')
-                    </otherwise>
+                        <otherwise>
+                            AND c.cafeType IN ('G','P')
+                        </otherwise>
                 </choose>
-                <if test="preferSeat != ''" >
+                <if test="searchRequestDto.preferSeat != ''" >
                     AND EXISTS (
-                            SELECT
-                            1
-                            FROM cafeTable ct
-                            WHERE
-                                ct.cafeId = c.cafeId
-                                AND ct.tableType = #{preferSeat}
-                        )
+                    SELECT
+                    1
+                    FROM cafeTable ct
+                    WHERE
+                    ct.cafeId = c.cafeId
+                    AND ct.tableType = #{searchRequestDto.preferSeat}
+                    )
                 </if>
-                <if test="startTime != '' &amp;&amp; endTime != ''">
-                    AND TO_DATE(c.startTime, 'HH24:MI') &lt;= TO_DATE(#{startTime}, 'HH24:MI')
-                    AND TO_DATE(c.endTime, 'HH24:MI') &gt;= TO_DATE(#{endTime}, 'HH24:MI')
+                <if test="searchRequestDto.startTime != '' &amp;&amp; searchRequestDto.endTime != ''">
+                    AND TO_DATE(c.startTime, 'HH24:MI') &lt;= TO_DATE(#{searchRequestDto.startTime}, 'HH24:MI')
+                    AND TO_DATE(c.endTime, 'HH24:MI') &gt;= TO_DATE(#{searchRequestDto.endTime}, 'HH24:MI')
                 </if>
-                <if test= "proceed.equals('Y')">
-                  AND SYSDATE &gt;= TO_DATE(c.startTime, 'HH24:MI')
-                  AND SYSDATE &lt;= TO_DATE(c.endTime, 'HH24:MI')
+                <if test= "searchRequestDto.proceed.equals('Y')">
+                    AND SYSDATE &gt;= TO_DATE(c.startTime, 'HH24:MI')
+                    AND SYSDATE &lt;= TO_DATE(c.endTime, 'HH24:MI')
                 </if>
-                <if test=" features != null and features.size > 0 ">
+                <if test=" searchRequestDto.features != null and searchRequestDto.features.size > 0 ">
                     AND f.featureName IN
-                    <foreach collection="features" item="feature" open="(" separator="," close=")">
+                    <foreach collection="searchRequestDto.features" item="feature" open="(" separator="," close=")">
                         #{feature}
                     </foreach>
                 </if>
-                <if test="word != ''">
-                    AND c.CAFENAME LIKE '%'||#{word}||'%'
+                <if test="searchRequestDto.word != ''">
+                    AND c.CAFENAME LIKE '%'||#{searchRequestDto.word}||'%'
                 </if>
+            ) caferesult
+            where rownum &lt;= #{pager.endRowNo}
+        ) resultFin
+        where resultFin.rnum &gt;= #{pager.startRowNo}
 
     </select>
 
-    <select id="searchWord" parameterType="String" resultType="cafe">
-        select *
+    <select id="searchWord" resultType="cafe">
+        select resultFin.cafeId,
+               resultFin.cafeName,
+               resultFin.cafeType,
+               resultFin.startTime,
+               resultFin.endTime,
+               resultFin.address,
+               resultFin.longtitude,
+               resultFin.latitude,
+               resultFin.cafeTel,
+               resultFin.study
+        from (select rownum as rnum, c.*
+              from (select *
+                    from CAFE
+                    where CAFENAME LIKE '%' || #{word} || '%') c
+              where rownum &lt;= #{pager.endRowNo}
+        ) resultFin
+        where rnum &gt;= #{pager.startRowNo}
+    </select>
+
+    <select id="searchWordCount" parameterType="String" resultType="int">
+        select count(*)
         from CAFE
         where CAFENAME LIKE '%'||#{word}||'%'
     </select>
-    
-    <select id="searchByMyLocation" parameterType="Double" resultType="cafe">
+
+    <select id="searchByMyLocationCount" parameterType="Double" resultType="int">
         <![CDATA[
+        SELECT count(*)
+        FROM (
+                 SELECT cafe.*,
+                        (6371 * ACOS(COS(#{latitude}/57.29577951)
+                                         * COS(LATITUDE/57.29577951)
+                                         * COS(LONGTITUDE/57.29577951 - #{longtitude}/57.29577951)
+                            + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
+                 FROM cafe
+             )
+        WHERE ROWNUM <= 5
+        ORDER BY distance
+        ]]>
+    </select>
+
+    <select id="searchByMyLocation" resultType="cafe">
+        select resultFin.cafeId,
+               resultFin.cafeName,
+               resultFin.cafeType,
+               resultFin.startTime,
+               resultFin.endTime,
+               resultFin.address,
+               resultFin.longtitude,
+               resultFin.latitude,
+               resultFin.cafeTel,
+               resultFin.study
+        from (
+            select rownum as rnum, cc.*
+            from (
+            <![CDATA[
             SELECT *
             FROM (
-                SELECT cafe.*,
-                (6371 * ACOS(COS(#{latitude}/57.29577951)
-                * COS(LATITUDE/57.29577951)
-                * COS(LONGTITUDE/57.29577951 - #{longtitude}/57.29577951)
-                + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
-                FROM cafe
-            )
+                     SELECT cafe.*,
+                            (6371 * ACOS(COS(#{latitude}/57.29577951)
+                                             * COS(LATITUDE/57.29577951)
+                                             * COS(LONGTITUDE/57.29577951 - #{longtitude}/57.29577951)
+                                + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
+                     FROM cafe
+                 )
             WHERE ROWNUM <= 5
             ORDER BY distance
-        ]]>
+            ]]>
+            ) cc
+            where rownum &lt;= #{pager.endRowNo}
+        ) resultFin
+        where rnum &gt;= #{pager.startRowNo}
     </select>
 
 </mapper>

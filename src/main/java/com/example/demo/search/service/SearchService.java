@@ -9,8 +9,8 @@ import java.util.List;
 
 
 public interface SearchService {
-    SearchDto.SearchResponseDto search(SearchDto.SearchRequestDto searchRequestDto);
+    SearchDto.SearchResponseDto search(SearchDto.SearchRequestDto searchRequestDto,int pageNo);
 
-    SearchDto.SearchResponseDto searchWord(String word);
-    SearchDto.SearchResponseDto searchByMyLocation(Double longtitude, Double latitude);
+    SearchDto.SearchResponseDto searchWord(String word,int pageNo);
+    SearchDto.SearchResponseDto searchByMyLocation(Double longtitude, Double latitude,int pageNo);
 }

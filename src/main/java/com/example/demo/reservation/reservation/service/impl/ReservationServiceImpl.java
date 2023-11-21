@@ -415,7 +415,6 @@ public class ReservationServiceImpl implements ReservationService {
         int cafeId = reservation.getCafeId();
         Cafe cafe = cafeMapper.getOneCafe(cafeId);
 
-
         return new ReservationDto.CancleReasonResponDto(reservationId, cancleReason.getCancleContent(),cafe.getCafeTel() ,user.getUserRealName());
     }
 
@@ -432,9 +431,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     // reservation -> DateReservationResponseDto 변경
     public ReservationDto.ManagerReservationResponseDto convertReservationToDto(Reservation reservation, List<Integer> reservationIds) {
-
-//        log.info(String.valueOf(reservation));
-//        log.info(String.valueOf(reservation.getReservationId()));
 
         Users users = usersMapper.getUserByUserId(reservation.getUserId());
         String userRealName = users.getUserRealName();

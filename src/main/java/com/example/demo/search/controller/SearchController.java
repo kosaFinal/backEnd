@@ -30,21 +30,23 @@ public class SearchController {
             @RequestParam(value = "endTime",required = false) String endTime,
             @RequestParam(value = "preferSeat",required = false) String preferSeat,
             @RequestParam(value = "word",required = false)String word,
-            @RequestParam(value = "pageNo") int pageNo
+            @RequestParam(value = "pageNo", defaultValue = "1") int pageNo
     ){
         SearchDto.SearchRequestDto searchRequestDto = new SearchDto.SearchRequestDto(
                 cafeType,studyEnable,people,proceed,features,startTime,endTime,preferSeat,word
         );
         log.info(searchRequestDto.toString());
         log.info(String.valueOf(pageNo));
-        SearchDto.SearchResponseDto searchResponseDto = searchService.search(searchRequestDto);
+        SearchDto.SearchResponseDto searchResponseDto = searchService.search(searchRequestDto,pageNo);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(searchResponseDto, CustomResponseCode.SUCCESS));
     }
 
     @GetMapping("/user/search/relative/{word}")
-    public ResponseEntity<ApiResponse<SearchDto.SearchResponseDto>> searchWord(@PathVariable String word){
+    public ResponseEntity<ApiResponse<SearchDto.SearchResponseDto>> searchWord(
+            @PathVariable String word,
+            @RequestParam(defaultValue = "1") int pageNo){
         log.info(word);
-        SearchDto.SearchResponseDto words = searchService.searchWord(word);
+        SearchDto.SearchResponseDto words = searchService.searchWord(word,pageNo);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(words,CustomResponseCode.SUCCESS));
     }
 
@@ -52,9 +54,10 @@ public class SearchController {
     public ResponseEntity<ApiResponse<SearchDto.SearchResponseDto>> searchByMyLocation(
             @RequestParam(value = "x") Double longtitude,
             @RequestParam(value = "y") Double latitude,
+            @RequestParam(value ="pageNo",defaultValue = "1") int pageNo,
             Authentication authentication
     ){
-        SearchDto.SearchResponseDto nearCafesMyLocation = searchService.searchByMyLocation(longtitude,latitude);
+        SearchDto.SearchResponseDto nearCafesMyLocation = searchService.searchByMyLocation(longtitude,latitude,pageNo);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(nearCafesMyLocation, CustomResponseCode.SUCCESS));
     }
 }

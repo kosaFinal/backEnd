@@ -1,6 +1,7 @@
 package com.example.demo.search.dto;
 
 import com.example.demo.cafe.dto.CafeDto;
+import com.example.demo.cafe.dto.PageDto;
 import com.example.demo.cafe.entity.Cafe;
 import com.example.demo.cafeFeature.dto.CafeFeatureDto;
 import lombok.*;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SearchDto {
-
 
     @Data
     @NoArgsConstructor
@@ -33,13 +33,15 @@ public class SearchDto {
     public static class SearchResponseDto{
         private List<CafeDto.CafeSearchResponseDto> searchCafes;
         private List<CafeDto.CafeLocationResponseDto> locations;
+        private PageDto pager;
 
-        public SearchResponseDto(List<Cafe> cafes){
+        public SearchResponseDto(List<Cafe> cafes, PageDto pager ){
             this.searchCafes = cafes.stream().map(CafeDto.CafeSearchResponseDto::new)
                     .collect(Collectors.toList());
             this.locations = cafes.stream()
                     .map(CafeDto.CafeLocationResponseDto::new)
                     .collect(Collectors.toList());
+            this.pager = pager;
         }
 
     }
