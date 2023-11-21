@@ -404,15 +404,19 @@ public class ReservationServiceImpl implements ReservationService {
         log.info("reservationId"+reservationId);
         Reservation reservation = reservationMapper.getRevByRevId(reservationId);
         log.info(reservation.getStatus());
-        return new ReservationDto.UserReservationStatusResponseDto(userName, reservation.getStatus(), reservationId);
+        return new ReservationDto.UserReservationStatusResponseDto(user.getUserRealName(), reservation.getStatus(), reservationId);
     }
 
     @Override
-    public ReservationDto.CancleReasonResponDto cancleReason(int reservationId) {
+    public ReservationDto.CancleReasonResponDto cancleReason(int reservationId, String userName) {
         CancleReason cancleReason = cancleReasonMapper.getReservationCancleReason(reservationId);
-//        String cancleReasonContent = cancleReason.getCancleContent();
+        Users user = usersMapper.getOneUsers(userName);
+        Reservation reservation = reservationMapper.getRevByRevId(reservationId);
+        int cafeId = reservation.getCafeId();
+        Cafe cafe = cafeMapper.getOneCafe(cafeId);
 
-        return new ReservationDto.CancleReasonResponDto(reservationId, cancleReason.getCancleContent());
+
+        return new ReservationDto.CancleReasonResponDto(reservationId, cancleReason.getCancleContent(),cafe.getCafeTel() ,user.getUserRealName());
     }
 
     // 토큰 값으로 cafeId 가져오기
