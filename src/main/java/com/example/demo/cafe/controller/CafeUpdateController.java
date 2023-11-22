@@ -50,6 +50,18 @@ public class CafeUpdateController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
     }
 
+    @PatchMapping("/manager/cafe/edit/cafeRepImg")
+    public ResponseEntity<ApiResponse<CafeUpdateDto.CafeRepImgResponseDto>> updateCafeRepImg(
+            @RequestPart(value = "cafeRepImg", required = false) MultipartFile cafeRepImgFile,
+            Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userName = userDetails.getUsername();
+
+        CafeUpdateDto.CafeRepImgResponseDto result = cafeUpdateService.cafeRepImgUpdate(cafeRepImgFile, userName);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseCode.SUCCESS));
+    }
+
     @PatchMapping("/manager/cafe/edit/time")
     public ResponseEntity<ApiResponse<CafeUpdateDto.CafeTimeResponseDto>> updateCafeAddress(
             @RequestBody CafeUpdateDto.CafeTimeRequestDto cafeTime,

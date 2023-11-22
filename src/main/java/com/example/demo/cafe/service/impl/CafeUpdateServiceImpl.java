@@ -117,9 +117,25 @@ public class CafeUpdateServiceImpl implements CafeUpdateService {
                 throw new GeneralException(CustomResponseCode.NO_CAFEIMG_DATA_READ);
             }
         }
-
-
         Cafe cafe = cafeMapper.getOneCafe(cafeId);
         return new CafeUpdateDto.CafeStudyImgResponseDto(cafe);
+    }
+
+    @Override
+    public CafeUpdateDto.CafeRepImgResponseDto cafeRepImgUpdate(MultipartFile cafeRepImg, String userName) {
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        if (cafeRepImg != null && !cafeRepImg.isEmpty()) {
+            try {
+                byte[] cafeRepImgBytes = cafeRepImg.getBytes();
+                String mimeType = extractMimeType(cafeRepImgBytes); // MIME 타입 추출
+                if (mimeType != null) {
+                    cafeUpdateMapper.updateCafeRepImg(cafeRepImgBytes, mimeType, cafeId);
+                }
+            } catch (IOException e) {
+                throw new GeneralException(CustomResponseCode.NO_CAFEIMG_DATA_READ);
+            }
+        }
+        Cafe cafe = cafeMapper.getOneCafe(cafeId);
+        return new CafeUpdateDto.CafeRepImgResponseDto(cafe);
     }
 }

@@ -12,5 +12,6 @@ public interface CafeUpdateService {
     CafeUpdateDto.CafeStudyResponseDto cafeStudyUpdate(CafeUpdateDto.CafeStudyRequestDto cafeStudy, String userName);
 
     CafeUpdateDto.CafeStudyImgResponseDto cafeStudyImgUpdate(MultipartFile cafeStudyImg, String userName);
+    CafeUpdateDto.CafeRepImgResponseDto cafeRepImgUpdate(MultipartFile cafeRepImg, String userName);
 
 }
