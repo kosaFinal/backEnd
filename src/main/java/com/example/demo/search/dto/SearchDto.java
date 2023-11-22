@@ -30,19 +30,14 @@ public class SearchDto {
 
     @Builder
     @Data
-    @AllArgsConstructor
     public static class SearchResponseDto{
         private List<CafeDto.CafeSearchResponseDto> searchCafes;
         private List<CafeDto.CafeLocationResponseDto> locations;
         private PageDto pager;
 
-        public SearchResponseDto(List<Cafe> cafes, PageDto pager ){
-            this.searchCafes = cafes.stream().map(cafe ->
-                            new CafeDto.CafeSearchResponseDto(cafe, Base64.getEncoder().encodeToString(cafe.getCafeRepImg())))
-                    .collect(Collectors.toList());
-            this.locations = cafes.stream()
-                    .map(cafe -> new CafeDto.CafeLocationResponseDto(cafe, Base64.getEncoder().encodeToString(cafe.getCafeRepImg())))
-                    .collect(Collectors.toList());
+        public SearchResponseDto(List<CafeDto.CafeSearchResponseDto> searchCafes, List<CafeDto.CafeLocationResponseDto> locations, PageDto pager ){
+            this.searchCafes = searchCafes;
+            this.locations = locations;
             this.pager = pager;
         }
 
