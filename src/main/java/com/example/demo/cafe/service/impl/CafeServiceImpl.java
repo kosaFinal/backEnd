@@ -2,7 +2,9 @@ package com.example.demo.cafe.service.impl;
 
 
 import com.example.demo.cafe.dto.CafeDto;
+import com.example.demo.cafe.dto.CafeImgDto;
 import com.example.demo.cafe.entity.Cafe;
+import com.example.demo.cafe.entity.CafeImg;
 import com.example.demo.cafeFeature.mapper.CafeFeatureMapper;
 import com.example.demo.cafe.mapper.CafeImgMapper;
 import com.example.demo.cafe.mapper.CafeMapper;
@@ -107,7 +109,8 @@ public class CafeServiceImpl implements CafeService {
         List<FeatureDto.FeatureResponseDto> featureDto = features.stream().map(FeatureDto.FeatureResponseDto::new)
                 .collect(Collectors.toList());
         log.info(featureDto.toString());
-        return new CafeDto.CafeSearchDetailResponseDto(cafe,featureDto);
+        List<CafeImg> imgs = cafeImgMapper.findImgsByCafeId(cafeId);
+        return new CafeDto.CafeSearchDetailResponseDto(cafe,featureDto,imgs);
     }
 
     @Override
@@ -122,7 +125,9 @@ public class CafeServiceImpl implements CafeService {
     public CafeDto.CafeReadDetailResponseDto findCafeDetailByUserId(String userName) {
         int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
         Cafe cafe =  cafeMapper.getOneCafe(cafeId);
-        return new CafeDto.CafeReadDetailResponseDto(cafe);
+        List<CafeImg> imgs = cafeImgMapper.findImgsByCafeId(cafeId);
+        List<byte[]> imgList = imgs.stream().map(CafeImg::getCafeDetailImg).collect(Collectors.toList());
+        return new CafeDto.CafeReadDetailResponseDto(cafe,imgList);
     }
 
     @Override

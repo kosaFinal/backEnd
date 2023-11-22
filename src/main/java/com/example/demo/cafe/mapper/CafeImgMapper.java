@@ -13,4 +13,6 @@ public interface CafeImgMapper {
     int findCafeIdByUserName(String userName);
 
     void insertCafeImg(CafeImgDto.CafeRegisterImgRequestDto imgDto);
+
+    List<CafeImg> findImgsByCafeId(int cafeId);
 }

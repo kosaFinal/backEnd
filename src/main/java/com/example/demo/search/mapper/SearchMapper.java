@@ -2,6 +2,7 @@ package com.example.demo.search.mapper;
 
 import com.example.demo.cafe.dto.PageDto;
 import com.example.demo.cafe.entity.Cafe;
+import com.example.demo.cafe.entity.CafeImg;
 import com.example.demo.search.dto.SearchDto;
 import com.example.demo.search.dto.SearchRequestDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -19,5 +20,7 @@ public interface SearchMapper {
     List<Cafe> searchWord(String word,@Param("pager") PageDto pager);
 
     List<Cafe> searchByMyLocation(Double longtitude, Double latitude,@Param("pager") PageDto pager);
+
+    Cafe findRepImg(int cafeId);
 
 }

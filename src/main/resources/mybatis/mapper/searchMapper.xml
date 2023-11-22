@@ -214,4 +214,10 @@
         where rnum &gt;= #{pager.startRowNo}
     </select>
 
+    <select id="findRepImg" resultType="cafe">
+        select c.*
+        from cafe c
+        where cafeId = #{cafeId}
+    </select>
+
 </mapper>

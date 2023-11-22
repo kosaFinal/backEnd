@@ -2,6 +2,7 @@ package com.example.demo.cafe.dto;
 
 import com.example.demo.cafe.entity.Cafe;
 
+import com.example.demo.cafe.entity.CafeImg;
 import com.example.demo.cafeFeature.dto.CafeFeatureDto;
 import com.example.demo.cafeTable.dto.CafeTableDto;
 import com.example.demo.feature.dto.FeatureDto;
@@ -9,6 +10,7 @@ import com.example.demo.reservation.reservation.dto.ReservationDto;
 import lombok.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import lombok.Builder;
 import lombok.Data;
@@ -61,13 +63,15 @@ public class CafeDto {
     public static class CafeSearchResponseDto{
         private  int cafeId;
         private String cafeName;
+        private String cafeReqImg;
         private String startTime;
         private String endTime;
         private String address;
 
-        public CafeSearchResponseDto(Cafe cafe){
+        public CafeSearchResponseDto(Cafe cafe,String cafeReqImg){
             this.cafeId = cafe.getCafeId();
             this.cafeName = cafe.getCafeName();
+            this.cafeReqImg = cafeReqImg;
             this.startTime = cafe.getStartTime();
             this.endTime = cafe.getEndTime();
             this.address = cafe.getAddress();
@@ -79,14 +83,14 @@ public class CafeDto {
         private Double longtitude;
         private Double latitude;
         private String cafeName;
-        private byte[] cafeReqImg;
+        private String cafeReqImg;
         private String cafeTel;
 
-        public CafeLocationResponseDto(Cafe cafe){
+        public CafeLocationResponseDto(Cafe cafe, String cafeReqImg){
             this.longtitude = cafe.getLongtitude();
             this.latitude = cafe.getLatitude();
             this.cafeName = cafe.getCafeName();
-            this.cafeReqImg = cafe.getCafeRepImg();
+            this.cafeReqImg = cafeReqImg;
             this.cafeTel = cafe.getCafeTel();
         }
     }
@@ -119,12 +123,16 @@ public class CafeDto {
         private String startTime;
         private String endTime;
         private int userId;
+        private List<String> detailImgs;
 
-        public CafeReadDetailResponseDto(Cafe cafe){
+        public CafeReadDetailResponseDto(Cafe cafe, List<byte[]> imgs){
             this.cafeId = cafe.getCafeId();
             this.startTime = cafe.getStartTime();
             this.endTime = cafe.getEndTime();
             this.userId = cafe.getUserId();
+            this.detailImgs = imgs.stream().map(
+                    img -> Base64.getEncoder().encodeToString(img)
+            ).collect(Collectors.toList());
         }
     }
 
@@ -187,8 +195,9 @@ public class CafeDto {
         private String cafeTel;
         private List<FeatureDto.FeatureResponseDto> features;
         private String study;
+        private List<String> detailImgs;
 
-        public CafeSearchDetailResponseDto(Cafe cafe, List<FeatureDto.FeatureResponseDto> features){
+        public CafeSearchDetailResponseDto(Cafe cafe, List<FeatureDto.FeatureResponseDto> features, List<CafeImg> imgs){
             this.cafeName = cafe.getCafeName();
             this.address = cafe.getAddress();
             this.startTime = cafe.getStartTime();
@@ -196,6 +205,9 @@ public class CafeDto {
             this.cafeTel = cafe.getCafeTel();
             this.features = features;
             this.study = cafe.getStudy();
+            this.detailImgs = imgs.stream()
+                    .map(img -> Base64.getEncoder().encodeToString(img.getCafeDetailImg()))
+                    .collect(Collectors.toList());
         }
     }
 

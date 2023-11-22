@@ -7,6 +7,7 @@ import com.example.demo.cafeFeature.dto.CafeFeatureDto;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,10 +37,11 @@ public class SearchDto {
         private PageDto pager;
 
         public SearchResponseDto(List<Cafe> cafes, PageDto pager ){
-            this.searchCafes = cafes.stream().map(CafeDto.CafeSearchResponseDto::new)
+            this.searchCafes = cafes.stream().map(cafe ->
+                            new CafeDto.CafeSearchResponseDto(cafe, Base64.getEncoder().encodeToString(cafe.getCafeRepImg())))
                     .collect(Collectors.toList());
             this.locations = cafes.stream()
-                    .map(CafeDto.CafeLocationResponseDto::new)
+                    .map(cafe -> new CafeDto.CafeLocationResponseDto(cafe, Base64.getEncoder().encodeToString(cafe.getCafeRepImg())))
                     .collect(Collectors.toList());
             this.pager = pager;
         }

@@ -1,6 +1,7 @@
 package com.example.demo.cafe.entity;
 
 import com.example.demo.userss.entity.Users;
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Getter
 @ToString
+@Data
 public class Cafe {
 
     private int cafeId;

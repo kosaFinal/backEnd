@@ -40,7 +40,19 @@ public class SearchServiceImpl implements SearchService {
         PageDto pager = new PageDto(5,5,cafeListSize,pageNo);
         List<Cafe> cafeList = searchMapper.searchByPage(searchRequestDto, pager);
 
-        return new SearchDto.SearchResponseDto(cafeList,pager);
+        //임시//
+        List<Cafe> newList = new ArrayList<>();
+        for(Cafe c : cafeList){
+            if(searchMapper.findRepImg(c.getCafeId()) == null){
+                continue;
+            }
+            c.setCafeRepImg(searchMapper.findRepImg(c.getCafeId()).getCafeRepImg());
+            newList.add(c);
+        }
+        log.info(cafeList.toString());
+        log.info(newList.toString());
+
+        return new SearchDto.SearchResponseDto(newList,pager);
     }
 
     @Override
@@ -49,7 +61,16 @@ public class SearchServiceImpl implements SearchService {
         int count = searchMapper.searchWordCount(word);
         PageDto pager = new PageDto(5,5,count,pageNo);
         List<Cafe> wordsCafe = searchMapper.searchWord(word,pager);
-        return new SearchDto.SearchResponseDto(wordsCafe,pager);
+        //임시//
+        List<Cafe> newList = new ArrayList<>();
+        for(Cafe c : wordsCafe){
+            if(searchMapper.findRepImg(c.getCafeId()) == null){
+                continue;
+            }
+            c.setCafeRepImg(searchMapper.findRepImg(c.getCafeId()).getCafeRepImg());
+            newList.add(c);
+        }
+        return new SearchDto.SearchResponseDto(newList,pager);
     }
 
     @Override
@@ -57,6 +78,15 @@ public class SearchServiceImpl implements SearchService {
         int count = searchMapper.searchByMyLocationCount(longtitude,latitude);
         PageDto pager = new PageDto(5,5,count,pageNo);
         List<Cafe> cafes = searchMapper.searchByMyLocation(longtitude,latitude,pager);
-        return new SearchDto.SearchResponseDto(cafes,pager);
+        //임시//
+        List<Cafe> newList = new ArrayList<>();
+        for(Cafe c : cafes){
+            if(searchMapper.findRepImg(c.getCafeId()) == null){
+                continue;
+            }
+            c.setCafeRepImg(searchMapper.findRepImg(c.getCafeId()).getCafeRepImg());
+            newList.add(c);
+        }
+        return new SearchDto.SearchResponseDto(newList,pager);
     }
 }

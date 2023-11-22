@@ -13,4 +13,10 @@
         where userId = (select userId from users where userName = #{userName})
     </select>
 
+    <select id="findImgsByCafeId" resultType="cafeImg">
+        select *
+        from cafeImg
+        where cafeId = #{cafeId}
+    </select>
+
 </mapper>

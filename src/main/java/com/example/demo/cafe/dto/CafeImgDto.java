@@ -18,4 +18,5 @@ public class CafeImgDto {
         private Date modifyDate;
         private String cafeDetailImgMine;
     }
+
 }
