@@ -32,4 +32,10 @@
         WHERE cafeId = #{cafeId}
     </update>
 
+    <update id="updateCafeRepImg">
+        UPDATE cafe
+        SET CAFEREPIMG = #{cafeRepImg}, CAFEREPIMGMine = #{cafeRepImgMine}
+        WHERE cafeId = #{cafeId}
+    </update>
+
 </mapper>

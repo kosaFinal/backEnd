@@ -137,6 +137,16 @@ public class CafeUpdateDto {
         }
     }
 
-
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CafeRepImgResponseDto {
+        private String cafeRepImg;
+        private String cafeRepImgMine;
+        public CafeRepImgResponseDto(Cafe cafe){
+            this.cafeRepImg = Base64.getEncoder().encodeToString(cafe.getCafeRepImg());
+            this.cafeRepImgMine =  cafe.getCafeRepImgMine();
+        }
+    }
 
 }

@@ -94,6 +94,7 @@ public class CafeDto {
             this.cafeTel = cafe.getCafeTel();
         }
     }
+
 /* 매니저 - 카페 조회 */
     @Data
     @NoArgsConstructor
@@ -103,7 +104,12 @@ public class CafeDto {
         private String cafeName;
         private String cafeType;
         private String address;
+        private String detailAddress;
         private String cafeTel;
+        private Double longtitude;
+        private Double latitude;
+        private String cafeRepImg;
+        private String cafeRepImgMine;
         private int userId;
         public CafeReadBasicResponseDto(Cafe cafe) {
             this.cafeId = cafe.getCafeId();
@@ -112,6 +118,17 @@ public class CafeDto {
             this.address = cafe.getAddress();
             this.cafeTel = cafe.getCafeTel();
             this.userId = cafe.getUserId();
+            this.longtitude = cafe.getLongtitude();
+            this.latitude = cafe.getLatitude();
+            this.cafeRepImg = Base64.getEncoder().encodeToString(cafe.getCafeRepImg());
+            this.cafeRepImgMine =  cafe.getCafeRepImgMine();
+            if (cafe.getAddress() != null) {
+                String[] addressParts = cafe.getAddress().split(",", 2);
+                this.address = addressParts[0]; // 첫 번째 부분은 주소
+                if (addressParts.length > 1) {
+                    this.detailAddress = addressParts[1]; // 두 번째 부분은 상세 주소
+                }
+            }
         }
     }
 

@@ -49,7 +49,7 @@ public class CafeServiceImpl implements CafeService {
             ImageInputStream iis = ImageIO.createImageInputStream(bais);
             Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
             if (!iter.hasNext()) {
-                throw new GeneralException(CustomResponseCode.CAFEIMG_READER_NOT_FOUND);
+                    throw new GeneralException(CustomResponseCode.CAFEIMG_READER_NOT_FOUND);
             }
             ImageReader reader = iter.next();
             return "image/" + reader.getFormatName().toLowerCase();
@@ -115,9 +115,8 @@ public class CafeServiceImpl implements CafeService {
 
     @Override
     public CafeDto.CafeReadBasicResponseDto findCafeBasicByUserId(String userName) {
-        Users user = usersMapper.getOneUsers(userName);
-        Cafe cafe = cafeMapper.findCafeBasicByUserId(user.getUserId());
-
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        Cafe cafe =  cafeMapper.getOneCafe(cafeId);
         return new CafeDto.CafeReadBasicResponseDto(cafe);
     }
 
