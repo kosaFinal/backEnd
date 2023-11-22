@@ -71,14 +71,16 @@ public class ReservationDto {
     @Data
     public static class UserReadFinishReservResponseDto {
         private List<Integer> reservationIds;
+        private String cafeName;
         private String tableNumber;
         private String reserveStart;
         private String reserveEnd;
         private String reserveDate;
         private String state;
 
-        public UserReadFinishReservResponseDto(Reservation reservation, List<Integer> reservationIds, String tableNumber) {
+        public UserReadFinishReservResponseDto(Reservation reservation, List<Integer> reservationIds, String tableNumber,String cafeName) {
             this.reservationIds = reservationIds;
+            this.cafeName = cafeName;
             this.tableNumber = tableNumber;
             this.reserveStart = reservation.getReserveStart();
             this.reserveEnd = reservation.getReserveEnd();
