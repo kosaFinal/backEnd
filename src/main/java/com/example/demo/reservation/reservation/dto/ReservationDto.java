@@ -26,6 +26,16 @@ public class ReservationDto {
 
     @Data
     @NoArgsConstructor
+    public static class UserReservationResponseDto{
+        private List<Integer> reservationIds;
+
+        public UserReservationResponseDto(List<Integer> reservationIds){
+            this.reservationIds = reservationIds;
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class RevCafeInfoResponseDto{

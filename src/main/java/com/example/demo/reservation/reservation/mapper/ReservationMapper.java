@@ -27,4 +27,6 @@ public interface ReservationMapper {
     List<Reservation> getProceedReservations(int userId);
 
     Reservation getReservationRecent(int userId);
+
+    int getReservationId(int userId, String reserveDate, String reserveStart);
 }

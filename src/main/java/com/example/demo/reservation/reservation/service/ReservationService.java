@@ -9,10 +9,10 @@ import java.util.List;
 public interface ReservationService {
 
     // user
-    Boolean createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName);
+    ReservationDto.UserReservationResponseDto createReservation(ReservationDto.UserReservationRequestDto userReservationRequestDto, String userName);
     List<ReservationDto.TimeSlotResponseDto> getAvailableTimeSlots(String reserveDate, int tableId);
     ReservationDto.RevCafeInfoResponseDto getRevCafeInfo(int cafeId);
-    ReservationDto.UserReservationStatusResponseDto reservationStatus(String userName);
+    ReservationDto.UserReservationStatusResponseDto reservationStatus(String userName, int reservationId);
     ReservationDto.CancleReasonResponDto cancleReason(int reservationId, String userName);
 
     // manager

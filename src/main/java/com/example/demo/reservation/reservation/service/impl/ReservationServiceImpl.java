@@ -45,7 +45,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean createReservation(ReservationDto.UserReservationRequestDto requestDto, String userName) {
+    public ReservationDto.UserReservationResponseDto createReservation(ReservationDto.UserReservationRequestDto requestDto, String userName) {
         log.info("서비스 시작");
 
         // 존재하는 카페테이블인지 확인
@@ -65,7 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
         // 예약 중복인지 확인
         List<Reservation> reservationTime = reservationMapper.getOneTableRev(requestDto.getReserveDate(), requestDto.getTableId());
         log.info(reservationTime.toString());
-
+        List<Integer> ids = new ArrayList<>();
         for (Reservation.TimeSlot timeSlot : requestDto.getReserveTime()) {
             String requestStart = timeSlot.getReserveStart();
             boolean isChecked = false;
@@ -96,12 +96,15 @@ public class ReservationServiceImpl implements ReservationService {
 
             try {
                 reservationMapper.createReservation(saveReservation);
+                int id = reservationMapper.getReservationId(saveReservation.getUserId(),saveReservation.getReserveDate(), saveReservation.getReserveStart());
+                ids.add(id);
             } catch (Exception e) {
                 log.info(e.getMessage());
                 throw new GeneralException(CustomResponseCode.CREATE_RESERVATION_FAILED);
             }
         }
-        return true;
+        ReservationDto.UserReservationResponseDto response = new ReservationDto.UserReservationResponseDto(ids);
+        return response;
     }
 
     @Override
@@ -392,15 +395,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    /**
+     * 실시간 예약 현황 상태 확인
+     */
     @Override
-    public ReservationDto.UserReservationStatusResponseDto reservationStatus(String userName) {
+    public ReservationDto.UserReservationStatusResponseDto reservationStatus(String userName, int reservationId) {
         Users user = usersMapper.getOneUsers(userName);
-        int userId = user.getUserId();
-        log.info("userID"+userId);
 
-        Reservation rev = reservationMapper.getReservationRecent(userId);
-        log.info("rev"+rev);
-        int reservationId = rev.getReservationId();
         log.info("reservationId"+reservationId);
         Reservation reservation = reservationMapper.getRevByRevId(reservationId);
         log.info(reservation.getStatus());

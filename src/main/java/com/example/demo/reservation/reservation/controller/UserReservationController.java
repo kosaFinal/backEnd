@@ -23,14 +23,14 @@ public class UserReservationController {
 
     // 예약 생성
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Boolean>> createReservation(@RequestBody ReservationDto.UserReservationRequestDto userReservationRequestDto, Authentication authentication) {
+    public ResponseEntity<ApiResponse<ReservationDto.UserReservationResponseDto>> createReservation(@RequestBody ReservationDto.UserReservationRequestDto userReservationRequestDto, Authentication authentication) {
         log.info("예약 생성 요청 받음");
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
 
-        Boolean check = reservationService.createReservation(userReservationRequestDto,username);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(check, CustomResponseCode.SUCCESS));
+        ReservationDto.UserReservationResponseDto reservationIds = reservationService.createReservation(userReservationRequestDto,username);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(reservationIds, CustomResponseCode.SUCCESS));
     }
 //    @CrossOrigin(origins = "http://localhost:3000")
 
@@ -67,11 +67,13 @@ public class UserReservationController {
         List<ReservationDto.UserReadFinishReservResponseDto> proceeds = reservationService.proceedReservations(userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(proceeds,CustomResponseCode.SUCCESS));
     }
-    @GetMapping("/now")
-    public ResponseEntity<ApiResponse<ReservationDto.UserReservationStatusResponseDto>> readUserReservationStatus(Authentication authentication){
+    @GetMapping("/now/{reservationId}")
+    public ResponseEntity<ApiResponse<ReservationDto.UserReservationStatusResponseDto>> readUserReservationStatus(
+            @PathVariable int reservationId,
+            Authentication authentication){
         log.info("예약 현황 상태 조회 시작");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ReservationDto.UserReservationStatusResponseDto userReservationStatusResponseDto = reservationService.reservationStatus(userDetails.getUsername());
+        ReservationDto.UserReservationStatusResponseDto userReservationStatusResponseDto = reservationService.reservationStatus(userDetails.getUsername(),reservationId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(userReservationStatusResponseDto, CustomResponseCode.SUCCESS));
     }
     @GetMapping("/now/cancle/{reservationId}")
