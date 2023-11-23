@@ -115,9 +115,17 @@ public class CafeServiceImpl implements CafeService {
 
     @Override
     public CafeDto.CafeReadBasicResponseDto findCafeBasicByUserId(String userName) {
-        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
-        Cafe cafe =  cafeMapper.getOneCafe(cafeId);
-        return new CafeDto.CafeReadBasicResponseDto(cafe);
+        try {
+            int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+            Cafe cafe = cafeMapper.getOneCafe(cafeId);
+            CafeDto.CafeReadBasicResponseDto responseDto = new CafeDto.CafeReadBasicResponseDto(cafe);
+            responseDto.setCafeCheck(true);
+            return responseDto;
+        } catch (Exception e) {
+            CafeDto.CafeReadBasicResponseDto responseDto = new CafeDto.CafeReadBasicResponseDto();
+            responseDto.setCafeCheck(false);
+            return responseDto;
+        }
     }
 
     @Override

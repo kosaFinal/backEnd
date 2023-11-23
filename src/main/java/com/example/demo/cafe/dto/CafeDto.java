@@ -111,6 +111,7 @@ public class CafeDto {
         private String cafeRepImg;
         private String cafeRepImgMine;
         private int userId;
+        private Boolean CafeCheck;
         public CafeReadBasicResponseDto(Cafe cafe) {
             this.cafeId = cafe.getCafeId();
             this.cafeName = cafe.getCafeName();
