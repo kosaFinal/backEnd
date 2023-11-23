@@ -94,7 +94,6 @@ public class CafeServiceImpl implements CafeService {
                     requestDto.setStudyImgMine(mimeType);
                 }
             }
-
             cafeMapper.insertCafe(requestDto);
         } catch (IOException e) {
             throw new GeneralException(CustomResponseCode.NO_CAFEIMG_DATA_READ);

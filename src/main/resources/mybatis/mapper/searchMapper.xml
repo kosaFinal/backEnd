@@ -195,7 +195,7 @@
         from (
             select rownum as rnum, cc.*
             from (
-            <![CDATA[
+
             SELECT *
             FROM (
                      SELECT cafe.*,
@@ -205,9 +205,8 @@
                                 + SIN(#{latitude}/57.29577951) * SIN(LATITUDE/57.29577951))) AS distance
                      FROM cafe
                  )
-            WHERE ROWNUM <= 5
-            ORDER BY distance
-            ]]>
+            ORDER BY distance asc
+
             ) cc
             where rownum &lt;= #{pager.endRowNo}
         ) resultFin
