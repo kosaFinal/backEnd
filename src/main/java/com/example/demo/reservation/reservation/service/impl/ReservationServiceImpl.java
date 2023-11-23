@@ -230,8 +230,8 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
 
-        // int cafeId = getCafIdByUsername(userName);
-        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+        int cafeId = getCafIdByUsername(userName);
+        //int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         // 카페의 해당 날짜의 전체 예약 불러오기
         String formatDate = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6);
@@ -262,8 +262,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDto.ManagerReservationResponseDto> getIngReservation(String userName) {
 
-        // int cafeId = getCafIdByUsername(userName);
-        int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
+        int cafeId = getCafIdByUsername(userName);
+        // int cafeId = 22; // 점주 1명에 여러 카페 등록이라 임시
 
         // 상태가 P(진행중)인 예약 가져오기
         List<Reservation> afterReservation = reservationMapper.getOneCafeIngRev(cafeId);
