@@ -42,7 +42,11 @@ public class CafeImgServiceImpl implements CafeImgService{
     }
 
     public int findCafeIdByUserName(String userName){
-        return cafeImgMapper.findCafeIdByUserName(userName);
+        int cafeId = cafeImgMapper.findCafeIdByUserName(userName);
+        if((Integer)cafeId == null){
+            return 0;
+        }
+        return cafeId;
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.example.demo.cafe.service.CafeService;
 import com.example.demo.cafeTable.service.CafeTableService;
 import com.example.demo.constant.dto.ApiResponse;
 import com.example.demo.constant.enums.CustomResponseCode;
+import com.example.demo.constant.exception.GeneralException;
 import com.example.demo.reservation.reservation.dto.ReservationDto;
 import com.example.demo.reservation.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +75,7 @@ public class CafeController {
 
         cafeService.registerCafe(requestDto, userName, cafeRepImgFile, studyImgFile);
         cafeImgService.insertCafeImg(imgDtos, userName);
-        cafeFeatureService.insertCafeFeatures(cafeFeatureRequestDto, userName);
+        CafeFeatureDto.CafeFeatureResponseDto s = cafeFeatureService.insertCafeFeatures(cafeFeatureRequestDto, userName);
 
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseCode.SUCCESS));
     }
@@ -104,6 +105,9 @@ public class CafeController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
         log.info("카페 세팅 페이지!");
+        if(cafeImgService.findCafeIdByUserName(userName) == 0){
+            throw new GeneralException(CustomResponseCode.ALREADY_CAFE_EXIST);
+        }
         ReservationDto.RevCafeInfoResponseDto CafeTableResult = reservationService.getRevCafeInfo(cafeImgService.findCafeIdByUserName(userName));
         CafeDto.CafeReadSettingResponseDto CafeSettingResult = cafeService.findCafeSettingByUserId(userName);
         CafeDto.CafeSettingResponseWrapper wrapper = new CafeDto.CafeSettingResponseWrapper(CafeSettingResult, CafeTableResult);

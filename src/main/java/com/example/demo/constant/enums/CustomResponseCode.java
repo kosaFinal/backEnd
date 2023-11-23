@@ -20,6 +20,7 @@ public enum CustomResponseCode {
     NO_CAFE_MANAGER(false, 2008, "해당 점주의 카페가 아닙니다."),
     IMG_EXTRACT_ERROR(false, 2009, "이미지 MIME 타입 추출 중 오류 발생."),
     NO_CAFEIMG_DATA_READ(false,2010,"이미지 데이터를 읽을 수 없습니다."),
+    ALREADY_CAFE_EXIST(false,2011,"해당 점주는 이미 카페를 등록하였습니다."),
 
     //unauthorized(권한 없을 때)(3000)
     EXPIRED_JWT(false, 3000, "만료된 토큰입니다."),
