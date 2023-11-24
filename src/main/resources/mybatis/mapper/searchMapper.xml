@@ -115,6 +115,16 @@
                     AND ct.tableType = #{searchRequestDto.preferSeat}
                     )
                 </if>
+        <if test="searchRequestDto.people.equals('Y')" >
+            AND EXISTS (
+            SELECT
+            1
+            FROM cafeTable ct
+            WHERE
+            ct.cafeId = c.cafeId
+            AND ct.tableType = 'M'
+            )
+        </if>
                 <if test="searchRequestDto.startTime != '' &amp;&amp; searchRequestDto.endTime != ''">
                     AND TO_DATE(c.startTime, 'HH24:MI') &lt;= TO_DATE(#{searchRequestDto.startTime}, 'HH24:MI')
                     AND TO_DATE(c.endTime, 'HH24:MI') &gt;= TO_DATE(#{searchRequestDto.endTime}, 'HH24:MI')
