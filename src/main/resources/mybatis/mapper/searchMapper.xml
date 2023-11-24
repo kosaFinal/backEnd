@@ -206,7 +206,6 @@
                      FROM cafe
                  )
             ORDER BY distance asc
-
             ) cc
             where rownum &lt;= #{pager.endRowNo}
         ) resultFin
