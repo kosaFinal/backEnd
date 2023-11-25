@@ -522,8 +522,9 @@ public class ReservationServiceImpl implements ReservationService {
         CafeTable cafeTable = cafeTableMapper.getOneCafeTable(reservation.getTableId());
         String tableNumber = cafeTable.getTableNumber();
         Cafe cafe = cafeMapper.getOneCafe(reservation.getCafeId());
+        String cafeRepImg = Base64.getEncoder().encodeToString(cafe.getCafeRepImg());
 
-        return new ReservationDto.UserReadFinishReservResponseDto(reservation,reservationIds,tableNumber,cafe.getCafeName());
+        return new ReservationDto.UserReadFinishReservResponseDto(reservation,reservationIds,tableNumber,cafe.getCafeName(), cafeRepImg);
     }
 
 }
