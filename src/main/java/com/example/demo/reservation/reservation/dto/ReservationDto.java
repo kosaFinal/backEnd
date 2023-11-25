@@ -87,8 +87,9 @@ public class ReservationDto {
         private String reserveEnd;
         private String reserveDate;
         private String state;
+        private String cafeRepImg;
 
-        public UserReadFinishReservResponseDto(Reservation reservation, List<Integer> reservationIds, String tableNumber,String cafeName) {
+        public UserReadFinishReservResponseDto(Reservation reservation, List<Integer> reservationIds, String tableNumber,String cafeName, String cafeRepImg) {
             this.reservationIds = reservationIds;
             this.cafeName = cafeName;
             this.tableNumber = tableNumber;
@@ -96,6 +97,7 @@ public class ReservationDto {
             this.reserveEnd = reservation.getReserveEnd();
             this.reserveDate = reservation.getReserveDate();
             this.state = reservation.getStatus();
+            this.cafeRepImg = cafeRepImg;
         }
     }
 
