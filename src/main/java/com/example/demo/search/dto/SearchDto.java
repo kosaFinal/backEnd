@@ -19,25 +19,25 @@ public class SearchDto {
     public static class SearchRequestDto{
         private String cafeType;
         private String studyEnable;
-        private String people; //다인석
-        private String proceed;  //운영중
-        private List<String> features;  //특성
+        private String people;
+        private String proceed;
+        private List<String> features;
         private String startTime;
         private String endTime;
         private String preferSeat;
         private String word;
+        private Double longtitude;
+        private Double latitude;
     }
 
     @Builder
     @Data
     public static class SearchResponseDto{
         private List<CafeDto.CafeSearchResponseDto> searchCafes;
-        private List<CafeDto.CafeLocationResponseDto> locations;
         private PageDto pager;
 
-        public SearchResponseDto(List<CafeDto.CafeSearchResponseDto> searchCafes, List<CafeDto.CafeLocationResponseDto> locations, PageDto pager ){
+        public SearchResponseDto(List<CafeDto.CafeSearchResponseDto> searchCafes, PageDto pager ){
             this.searchCafes = searchCafes;
-            this.locations = locations;
             this.pager = pager;
         }
 

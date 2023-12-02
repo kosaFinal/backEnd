@@ -55,7 +55,7 @@ public class UserServiceImpl implements UsersService {
     @Override
     public UsersDto.UserSignupResponseDto signup(UsersDto.UserSignupRequestDto userSignupRequestDto) {
         String role ="";
-        if(userSignupRequestDto.getRole().equals("G")){
+        if(userSignupRequestDto.getRole().equals("USER")){
             role = "ROLE_USER";
         }
         else{

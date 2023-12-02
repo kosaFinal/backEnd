@@ -67,6 +67,10 @@ public class CafeDto {
         private String startTime;
         private String endTime;
         private String address;
+        private String cafeTel;
+        private Double longtitude;
+        private Double latitude;
+        private Double distance;
 
         public CafeSearchResponseDto(Cafe cafe,String cafeReqImg){
             this.cafeId = cafe.getCafeId();
@@ -75,25 +79,12 @@ public class CafeDto {
             this.startTime = cafe.getStartTime();
             this.endTime = cafe.getEndTime();
             this.address = cafe.getAddress();
-        }
-    }
-
-    @Data
-    public static class CafeLocationResponseDto{
-        private Double longtitude;
-        private Double latitude;
-        private String cafeName;
-        private String cafeReqImg;
-        private String cafeTel;
-
-        public CafeLocationResponseDto(Cafe cafe, String cafeReqImg){
+            this.cafeTel = cafe.getCafeTel();
             this.longtitude = cafe.getLongtitude();
             this.latitude = cafe.getLatitude();
-            this.cafeName = cafe.getCafeName();
-            this.cafeReqImg = cafeReqImg;
-            this.cafeTel = cafe.getCafeTel();
         }
     }
+
 
 /* 매니저 - 카페 조회 */
     @Data

@@ -30,10 +30,12 @@ public class SearchController {
             @RequestParam(value = "endTime",required = false) String endTime,
             @RequestParam(value = "preferSeat",required = false) String preferSeat,
             @RequestParam(value = "word",required = false)String word,
+            @RequestParam(value = "longtitude") Double longtitude,
+            @RequestParam(value = "latitude") Double latitude,
             @RequestParam(value = "pageNo", defaultValue = "1") int pageNo
     ){
         SearchDto.SearchRequestDto searchRequestDto = new SearchDto.SearchRequestDto(
-                cafeType,studyEnable,people,proceed,features,startTime,endTime,preferSeat,word
+                cafeType,studyEnable,people,proceed,features,startTime,endTime,preferSeat,word,longtitude,latitude
         );
         log.info(searchRequestDto.toString());
         log.info(String.valueOf(pageNo));
