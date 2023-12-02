@@ -449,6 +449,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .reserveStart(reservation.getReserveStart())
                 .reserveEnd(reservation.getReserveEnd())
                 .reserveDate(reservation.getReserveDate())
+                .status(reservation.getStatus())
                 .build();
     }
 

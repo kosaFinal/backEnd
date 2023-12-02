@@ -70,7 +70,7 @@ public class ReservationDto {
         private String reserveStart;
         private String reserveEnd;
         private String reserveDate;
-
+        private String status;
     }
 
     @Data
