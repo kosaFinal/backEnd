@@ -63,14 +63,14 @@
         select *
         from reservation
         where userId =  #{userId} and status in ('N','F')
-        order by createDate DESC
+        order by createDate DESC, reserveStart
     </select>
 
     <select id="getProceedReservations" resultType="reservation">
         select *
         from reservation
         where userId =  #{userId} and status in ('A','P')
-        order by createDate DESC
+        order by createDate DESC, reserveStart
     </select>
 
     <select id="getReservationRecent" resultType="reservation">
