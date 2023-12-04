@@ -86,10 +86,15 @@
 
     <select id="getReservationId" resultType="int">
         select reservationId
-        from reservation
-        where userId = #{userId}
-        and reserveDate = #{reserveDate}
-        and reserveStart = #{reserveStart}
+        from(
+            select reservationId
+            from reservation
+            where userId = #{userId}
+              and reserveDate = #{reserveDate}
+              and reserveStart = #{reserveStart}
+            order by createDate DESC
+            )
+        where ROWNUM = 1
     </select>
 
 </mapper>
